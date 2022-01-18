@@ -120,7 +120,7 @@ export default defineComponent({
         // 现价/市场价
         o['marketPrice'] = o.marketprice
         // 原价
-        o['productPrice'] = o.productprice
+        o['prevPrice'] = o.productprice
         // 成本价
         o['costPrice'] = o.costprice
         // 库存

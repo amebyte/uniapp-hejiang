@@ -17,8 +17,8 @@
                 <view class="img-box">
                   <image :src="item.thumb"></image>
                 </view>
-                <view class="pro-info line1">{{ item.title }}</view>
-                <view class="money font-color">新人价：￥{{ item.minprice }}</view>
+                <view class="pro-info line1">{{ item.productName }}</view>
+                <view class="money font-color">新人价：￥{{ item.marketPrice }}</view>
               </view>
             </block>
           </scroll-view>
@@ -32,14 +32,8 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import { fetchRecommendGoodsList } from '@/api/goods'
-import { goodsTypes } from '@/utils/constant'
 import { Tips } from '@/utils/util'
-type goodsType = {
-  id: string
-  thumb: string
-  title: string
-  minprice: number
-}
+import { goodsType } from '@/types'
 export default defineComponent({
   name: 'NewGoods',
   props: {
@@ -64,7 +58,7 @@ export default defineComponent({
       fetchRecommendGoodsList(params)
         .then((r) => {
           console.log('r', r)
-          newGoodsList.value = r.list
+          newGoodsList.value = r as Array<goodsType>
           console.log('newGoodsList', newGoodsList)
         })
         .catch((err) => console.log(err))

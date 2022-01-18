@@ -1,15 +1,28 @@
 import request from '@/utils/request'
+import { goodsType } from '@/types'
 
 /**
  * 精选课程
  *
  */
 export function fetchRecommendGoodsList(data) {
-  return request.get!(
-    '&r=goods.get_list&page=1&comefrom=wxapp&openid=sns_wa_&mid=&merchid=&authkey=&timestamp=1642046054349',
-    data,
-    { noAuth: true }
-  )
+  return new Promise((resolve, reject) => {
+    request.get!('&r=api/default/goods-list&page=1&cat_id=5', data, { noAuth: true })
+      .then((r) => {
+        const data: goodsType[] = []
+        const list = r.data.list as any
+        list.map((o) => {
+          data.push({
+            id: o.id,
+            thumb: o.cover_pic,
+            productName: o.name,
+            marketPrice: o.price,
+          })
+        })
+        resolve(data)
+      })
+      .catch((err) => reject(err))
+  })
 }
 
 /**
@@ -17,7 +30,7 @@ export function fetchRecommendGoodsList(data) {
  *
  */
 export function fetchGoodsList(data) {
-  return request.get!('/product/recommend', data, { noAuth: true })
+  return request.get!('&r=api/default/goods-list&page=1&cat_id=', data, { noAuth: true })
 }
 
 /**
