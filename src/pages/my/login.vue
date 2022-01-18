@@ -103,31 +103,6 @@ export default defineComponent({
         })
         .catch((err) => console.log(err))
     }
-
-    const getWxUser = (code, res) => {
-      let userInfo = res.userInfo
-      const data = {
-        principal: code,
-        avatarUrl: userInfo.userInfo.avatarUrl,
-        sex: userInfo.userInfo.gender,
-        nickName: userInfo.userInfo.nickName,
-      }
-      RoutineInstance.authUserInfo(data)
-        .then((res: any) => {
-          if (res.status === 'OK') {
-            uni.hideLoading()
-            getUserInfo()
-          }
-        })
-        .catch((res) => {
-          uni.hideLoading()
-          uni.showToast({
-            title: res,
-            icon: 'none',
-            duration: 2000,
-          })
-        })
-    }
     // #endif
     return {
       loginHandler,
