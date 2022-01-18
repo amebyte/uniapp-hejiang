@@ -69,7 +69,6 @@ export default defineComponent({
         .then((res) => {
           RoutineInstance.getCode()
             .then((code) => {
-              console.log('userInfo', res)
               goLogin(code, res)
             })
             .catch((res) => {
