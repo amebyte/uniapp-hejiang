@@ -27,7 +27,7 @@
     <view class="good-market-price">
       <view class="price line-through">
         <text class="rmb">¥</text>
-        <text class="num">{{ goodsInfo.productprice }}</text>
+        <text class="num">{{ goodsInfo.prevPrice }}</text>
       </view>
     </view>
 

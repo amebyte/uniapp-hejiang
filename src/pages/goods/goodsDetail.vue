@@ -65,7 +65,7 @@ export default defineComponent({
   },
   setup() {
     let state = reactive({
-      productId: '33',
+      productId: '',
       goodsInfo: {} as any,
       sliderImage: [],
       attr: {
@@ -83,13 +83,8 @@ export default defineComponent({
       fetchGoodsDetail({ id: state.productId })
         .then((r) => {
           console.log('r', r)
-          state.goodsInfo = normalizeGoodsInfo(r.goods)
+          state.goodsInfo = r
           state.sliderImage = state.goodsInfo.sliderImage
-          state.goodsInfo.content = state.goodsInfo.content.replace(
-            /<img/gi,
-            "<img class='richImg' style='width:auto!important;height:auto!important;max-height:100%;width:100%;'"
-          )
-          state.goodsInfo.content = state.goodsInfo.content.replace(/&nbsp;/g, '&ensp;')
         })
         .catch((err) => console.log('err', err))
     }
@@ -105,12 +100,6 @@ export default defineComponent({
           setDefaultAttrSelect(minPrice)
         })
         .catch((err) => console.log(err))
-    }
-
-    const normalizeGoodsInfo = (data) => {
-      data['productName'] = data.title
-      data['sliderImage'] = data.thumbs
-      return data
     }
 
     const normalizeGoodsSkus = (data) => {
@@ -356,7 +345,7 @@ export default defineComponent({
     })
 
     onLoad((options) => {
-      //   state.productId = options.productId!
+      state.productId = options.productId!
       console.log('options', options)
     })
 

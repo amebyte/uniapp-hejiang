@@ -3,4 +3,8 @@ export type goodsType = {
   thumb: string
   productName: string
   marketPrice: number
+  minprice?: number
+  prevPrice?: number
+  sliderImage?: string[]
+  content?: string
 }
