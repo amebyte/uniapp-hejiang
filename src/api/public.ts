@@ -8,7 +8,7 @@ import request from '@/utils/request'
  *	smsCode
  */
 export function fetchLogin(data) {
-  return request.post!('&r=wxapp.login', data, { noAuth: true }, true)
+  return request.post!('&r=api/passport/login', data, { noAuth: true }, true)
 }
 
 export function fetchAuth(data) {

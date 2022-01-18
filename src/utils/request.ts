@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { HEADER, HEADERPARAMS, TOKENNAME, HTTP_REQUEST_URL } from '@/config/app'
+import { HEADER, HEADERPARAMS, TOKENNAME, HTTP_REQUEST_URL, X_APP_PLATFORM, X_APP_VERSION } from '@/config/app'
 import { store } from '@/store'
 import Cache from '@/utils/cache'
 import { urlEncode } from '@/utils/util'
@@ -19,9 +19,13 @@ function baseRequest(
   const token = store.state.app.token
   const Url = HTTP_REQUEST_URL
   let header = JSON.parse(JSON.stringify(HEADER))
+
   if (params != undefined) {
-    header = HEADERPARAMS
+    header = JSON.parse(JSON.stringify(HEADERPARAMS))
   }
+
+  header['X-App-Platform'] = X_APP_PLATFORM
+  header['X-App-Version'] = X_APP_VERSION
 
   if (!noAuth) {
     if (!token) {
@@ -29,16 +33,9 @@ function baseRequest(
         msg: '未登录',
       })
     }
-    if (token && token !== 'null') header[TOKENNAME] = 'Bearer ' + token
+    if (token && token !== 'null') header[TOKENNAME] = token
   }
-  console.log('method', method)
-  //   if (method === 'POST') {
-  data['comefrom'] = 'wxapp'
-  data['openid'] = 'sns_wa_' + Cache.get('openid')
-  data['mid'] = ''
-  data['merchid'] = ''
-  data['authkey'] = Cache.get('authkey')
-  //   }
+
   if (params != undefined) {
     data = urlEncode(data)
   }
@@ -48,7 +45,7 @@ function baseRequest(
       mask: true,
     })
     uni.request({
-      url: Url + url + `&timestamp=${+(+new Date())}`,
+      url: Url + url,
       method: method || 'GET',
       header: header,
       data: data || {},

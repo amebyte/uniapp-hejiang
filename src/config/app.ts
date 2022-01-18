@@ -2,7 +2,7 @@ export const APP_NAME = '开卓教育'
 
 export const IMAGE_URL = 'https://mini-1304817606.file.myqcloud.com' // 静态资源的cos地址
 
-export const HTTP_REQUEST_URL = 'http://test2.amebyte.com/app/ewei_shopv2_api.php?i=2'
+export const HTTP_REQUEST_URL = 'https://mall.fsbaide.cn/web/index.php?_mall_id=1'
 
 export const HEADER = {
   'content-type': 'application/json',
@@ -12,7 +12,11 @@ export const HEADERPARAMS = {
   'content-type': 'application/x-www-form-urlencoded',
 }
 
-export const TOKENNAME = 'Authorization'
+export const TOKENNAME = 'X-Access-Token'
 
 // 缓存时间 0 永久
 export const EXPIRE = 0
+
+export const X_APP_PLATFORM = 'wxapp'
+
+export const X_APP_VERSION = '4.4.45'

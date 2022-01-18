@@ -1,5 +1,5 @@
 {
-  "name": "hello",
+  "name": "kaizhuo",
   "appid": "__UNI__4DCD124",
   "description": "",
   "versionName": "1.0.0",
@@ -50,7 +50,7 @@
   "quickapp": {},
   /* 小程序特有相关 */
   "mp-weixin": {
-    "appid": "wx0059c06ebfbd88ae",
+    "appid": "wx95fffaef14b2b29a",
     "setting": {
       "urlCheck": false
     },

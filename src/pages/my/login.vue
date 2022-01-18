@@ -17,6 +17,7 @@ import { fetchLogin, fetchAuth } from '@/api/public'
 import { RoutineInstance } from '@/libs/routine'
 import { Tips } from '@/utils/util'
 import Cache from '@/utils/cache'
+import { AppMutationTypes } from '@/store/modules/app/mutation-types'
 export default defineComponent({
   name: 'LoginPage',
   setup() {
@@ -45,7 +46,7 @@ export default defineComponent({
     const getUserInfo = () => {
       fetchUserInfo().then((res) => {
         uni.hideLoading()
-        store.commit('UPDATE_USERINFO', res.data)
+        store.commit(AppMutationTypes.SET_USER_INFO, res.data)
         Tips(
           {
             title: '登录成功',
@@ -68,7 +69,7 @@ export default defineComponent({
         .then((res) => {
           RoutineInstance.getCode()
             .then((code) => {
-              console.log('ress', res)
+              console.log('userInfo', res)
               goLogin(code, res)
             })
             .catch((res) => {
@@ -81,23 +82,17 @@ export default defineComponent({
     }
 
     const goLogin = (code, res) => {
-      fetchLogin({ code })
+      fetchLogin({
+        encryptedData: res.userInfo.encryptedData,
+        iv: res.userInfo.iv,
+        signature: res.userInfo.signature,
+        rawData: JSON.stringify(res.userInfo.userInfo),
+        code,
+      })
         .then((r) => {
-          console.log('r', r)
-          Cache.set('openid', r.openid)
-          Cache.set('session_key', r.session_key)
-          if (r.error === 0) {
-            fetchAuth({
-              data: res.userInfo.encryptedData,
-              iv: res.userInfo.iv,
-              sessionKey: r.session_key,
-            })
-              .then((re) => {
-                console.log('res', re)
-                store.commit('SET_USER_INFO', res.userInfo)
-                Cache.set('login_session_key', re.session_key)
-              })
-              .catch((err) => console.log(err))
+          if (r.code === 0) {
+            store.commit(AppMutationTypes.SET_TOKEN, r.data.access_token)
+            getUserInfo()
           } else {
             uni.showToast({
               title: `获取用户登录态失败:` + r.message,
