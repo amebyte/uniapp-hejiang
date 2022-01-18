@@ -10,7 +10,3 @@ import request from '@/utils/request'
 export function fetchLogin(data) {
   return request.post!('&r=api/passport/login', data, { noAuth: true }, true)
 }
-
-export function fetchAuth(data) {
-  return request.get!('&r=wxapp.auth', data, { noAuth: true })
-}
