@@ -7,4 +7,6 @@ export type goodsType = {
   prevPrice?: number
   sliderImage?: string[]
   content?: string
+  skus?: any[]
+  attrGroups?: any[]
 }

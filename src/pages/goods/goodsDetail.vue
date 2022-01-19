@@ -85,53 +85,12 @@ export default defineComponent({
           console.log('r', r)
           state.goodsInfo = r
           state.sliderImage = state.goodsInfo.sliderImage
-        })
-        .catch((err) => console.log('err', err))
-    }
-
-    const getGoodsPicker = () => {
-      fetchGoodsPicker({ id: state.productId })
-        .then((r) => {
-          console.log('r', r)
-          state.goodsInfo['goodsSkus'] = normalizeGoodsSkus(r.options)
-          state.attr.productAttr = normalizeAttrs(r.specs)
-          const minPrice = minHeap(r.options, 'marketprice')
+          state.attr.productAttr = state.goodsInfo.attrGroups
+          const minPrice = minHeap(state.goodsInfo.skus, 'marketPrice')
           console.log('minPrice', minPrice)
           setDefaultAttrSelect(minPrice)
         })
-        .catch((err) => console.log(err))
-    }
-
-    const normalizeGoodsSkus = (data) => {
-      return data.map((o) => {
-        // 预售价
-        o['presellPrice'] = o.presellprice
-        // 现价/市场价
-        o['marketPrice'] = o.marketprice
-        // 原价
-        o['prevPrice'] = o.productprice
-        // 成本价
-        o['costPrice'] = o.costprice
-        // 库存
-        o['stock'] = o.stock
-        o['skuUniqueIds'] = o.specs
-        return o
-      })
-    }
-
-    const normalizeAttrs = (skus) => {
-      return skus.map((o) => {
-        o['attrId'] = o.id
-        o['attrName'] = o.title
-        o['attrValues'] = o.items
-        o.attrValues.map((val) => {
-          val['isSelect'] = false
-          val['val'] = val.title
-          val['valId'] = val.id
-          return val
-        })
-        return o
-      })
+        .catch((err) => console.log('err', err))
     }
 
     /**
@@ -146,12 +105,11 @@ export default defineComponent({
       state.attr.productSelect.limits = data.limits
       state.attr.productSelect.cart_num = 1
       state.attrValue = ''
-      state.attrTxt = '请选择'
 
-      if (data.properties) {
-        const properties = JSON.parse(data.properties)
-        Object.keys(properties).forEach((v) => {
-          setAttrVal(properties[v], v)
+      if (data.attrOptions) {
+        state.attrTxt = createSelectedAttrTxt(data.attrOptions)
+        data.attrOptions.forEach((v) => {
+          setAttrVal(v.val, v.attrId)
         })
       }
     }
@@ -160,7 +118,6 @@ export default defineComponent({
      * 设置是否打开属性面板
      */
     const setIsOpenAttrWindow = (flag) => {
-      flag && getGoodsPicker()
       state.attr.isOpenAttrWindow = flag
     }
 
@@ -250,7 +207,7 @@ export default defineComponent({
       }
 
       const skuUniqueIds = createSkuUniqueIds(skus)
-      state.goodsInfo.goodsSkus.forEach((o) => {
+      state.goodsInfo.skus.forEach((o) => {
         if (o.skuUniqueIds === skuUniqueIds) {
           goodsItem['selectedSku'] = {
             thumb: createThumb(skus),
@@ -266,7 +223,7 @@ export default defineComponent({
     }
 
     const createSkuUniqueIds = (skus) => {
-      const skuUniqueIds = skus.reduce((prev, curr) => `${prev}_${curr.valId}`, '')
+      const skuUniqueIds = skus.reduce((prev, curr) => `${prev}:${curr.valId}`, '')
       return skuUniqueIds.slice(1)
     }
 
@@ -277,7 +234,8 @@ export default defineComponent({
 
     const createThumb = (skus) => {
       return skus.reduce((prev, curr) => {
-        if (curr.thumb !== '') prev = curr.thumb
+        // if (curr.thumb !== '') prev = curr.thumb  // 此选项是每个属性都会设置thumb，但要看后端系统支不支持
+        if (prev === '') prev = curr.thumb
         return prev
       }, '')
     }
