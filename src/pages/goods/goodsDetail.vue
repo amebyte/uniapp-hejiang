@@ -49,7 +49,7 @@ import GoodsContent from './components/GoodsContent.vue'
 import DetailFooterBar from './components/DetailFooterBar.vue'
 import GoodsCurriculum from './components/GoodsCurriculum.vue'
 import GoodsTeacher from './components/GoodsTeacher.vue'
-import { fetchGoodsDetail, fetchGoodsPicker } from '@/api/goods'
+import { fetchGoodsDetail } from '@/api/goods'
 import { fetchUserInfo } from '@/api/user'
 import { minHeap } from '@/utils/util'
 export default defineComponent({

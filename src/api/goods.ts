@@ -128,11 +128,3 @@ export function fetchGoodsDetail(data) {
       .catch((err) => console.log(err))
   })
 }
-
-/**
- * 商品属性
- *
- */
-export function fetchGoodsPicker(data) {
-  return request.get!('&r=goods.get_picker', data, { noAuth: true })
-}
