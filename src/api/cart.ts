@@ -5,7 +5,54 @@ import request from '@/utils/request'
  *
  */
 export function fetchCartList() {
-  return request.get!('&r=member.cart.get_cart', {}, { noAuth: true })
+  return new Promise((resolve, reject) => {
+    request.get!('&r=api/cart/list', {}, { noAuth: false })
+      .then((r) => {
+        if (r.code === 0) {
+          const normalizeCartList = (r) => {
+            const temp: any[] = []
+            r.data &&
+              r.data.list &&
+              r.data.list.forEach((v) => {
+                v.goods_list.forEach((val) => {
+                  temp.push({
+                    shopId: v.mch_id,
+                    shopName: v.name || '自营商品',
+                    id: val.id,
+                    productId: val.goods_id,
+                    // 预售价
+                    presellPrice: val.attrs.price,
+                    // 现价/市场价
+                    marketPrice: val.attrs.price,
+                    // 原价
+                    productPrice: val.attrs.price,
+                    // 成本价
+                    costPrice: val.attrs.price,
+                    // 库存
+                    stock: val.attrs.stock,
+                    skuName: normalizeSkuName(val.attrs.attr),
+                    skuId: val.attr_id,
+                    productName: val.goods.name,
+                    thumb: val.attrs.pic_url,
+                    cartNum: val.num,
+                  })
+                })
+              })
+            return temp
+          }
+
+          const normalizeSkuName = (attr) => {
+            const attrTxt = attr.reduce((prev, curr) => `${prev};${curr.attr_name}`, '')
+            return `已选择：${attrTxt.slice(1)}`
+          }
+
+          resolve(normalizeCartList(r))
+        } else {
+          reject(r)
+        }
+      })
+      .catch((err) => console.log(err))
+  })
 }
 
 /**
@@ -14,11 +61,11 @@ export function fetchCartList() {
  */
 export function fetchAddCart(data) {
   const params = {
-    id: data.id,
-    total: data.cartNum,
-    optionid: data.skuId,
+    goods_id: data.id,
+    num: data.cartNum,
+    attr: data.skuId,
   }
-  return request.post!('&r=member.cart.add', params, { noAuth: true }, true)
+  return request.post!('&r=api/cart/add', params, { noAuth: false }, true)
 }
 
 /**
@@ -26,12 +73,11 @@ export function fetchAddCart(data) {
  *
  */
 export function fetchUpdateCart(data) {
+  const editList = [{ goods_id: data.productId, num: data.cartNum, attr: data.skuId }]
   const params = {
-    id: data.id,
-    total: data.cartNum,
-    skuId: data.skuId,
+    list: JSON.stringify(editList),
   }
-  return request.post!('&r=member.cart.update', params, { noAuth: true }, true)
+  return request.post!('&r=api/cart/edit', params, { noAuth: false }, true)
 }
 
 /**
@@ -39,7 +85,10 @@ export function fetchUpdateCart(data) {
  *
  */
 export function fetchDeleteCart(data) {
-  const params = { ids: data }
-  console.log('params', params)
-  return request.post!('&r=member.cart.remove', params, { noAuth: true }, true)
+  const cart_id_list: any[] = []
+  data.forEach((item) => {
+    cart_id_list.push({ mch_id: item.shopId, id: item.id })
+  })
+  const params = { cart_id_list: JSON.stringify(cart_id_list) }
+  return request.post!('&r=api/cart/delete', params, { noAuth: false }, true)
 }

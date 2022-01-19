@@ -348,12 +348,12 @@ export default defineComponent({
      */
     const deleteAll = () => {
       let params: any[] = []
-      state.cartList.map((item) => {
+      state.cartList.forEach((item) => {
         if (item.children) {
           item.deleteSelected = state.isDeleteSelectAll
-          item.children.map((o) => {
+          item.children.forEach((o) => {
             if (o.deleteSelected) {
-              params.push(o.id)
+              params.push(o)
             }
           })
         }
@@ -433,6 +433,7 @@ export default defineComponent({
         id: item.id,
         cartNum: item.cartNum,
         skuId: item.skuId,
+        productId: item.productId,
       }
       updateCart(params)
     }
@@ -450,6 +451,7 @@ export default defineComponent({
         id: item.id,
         cartNum: item.cartNum,
         skuId: item.skuId,
+        productId: item.productId,
       }
       updateCart(params)
     }
@@ -471,6 +473,7 @@ export default defineComponent({
           id: item.id,
           cartNum: count,
           skuId: item.skuId,
+          productId: item.productId,
         }
         updateCart(params)
       }, 100)
@@ -482,7 +485,16 @@ export default defineComponent({
      * 滑动删除商品
      */
     const deleteByMove = (cartid) => {
-      const params = [cartid]
+      let params: any[] = []
+      state.cartList.forEach((item) => {
+        if (item.children) {
+          item.children.forEach((o) => {
+            if (o.id === cartid) {
+              params.push(o)
+            }
+          })
+        }
+      })
       deleteCart(params)
     }
 
@@ -522,7 +534,7 @@ export default defineComponent({
     const getCartList = () => {
       fetchCartList()
         .then((r) => {
-          initCart(r.merch_list)
+          initCart(r)
         })
         .catch((err) => console.log(err))
     }
@@ -531,47 +543,17 @@ export default defineComponent({
      * 购物车数据结构
      */
     const normalizeCart = (data) => {
-      let temp: any[] = []
-      data &&
-        data.forEach((v) => {
-          v.list.forEach((val) => {
-            temp.push({
-              ...v,
-              ...val,
-            })
-          })
-        })
-
       let cartsItemGroupData: any[] = []
-      temp.forEach((v) => {
-        const shopId = v.merchid
+      data.forEach((v) => {
+        const shopId = v.shopId
 
         const groupData = {
           shopId,
-          shopName: v.merchname || '自营商品',
+          shopName: v.shopName,
           selectedGoodsCount: 0, // 选中商品数量
           deleteGoodsCount: 0, // 选中要删除的商品数量
           selected: false, // 店铺商品全选状态
           deleteSelected: false, // 店铺全选删除状态
-        }
-
-        const cartItem = {
-          // 预售价
-          presellPrice: v.presellprice,
-          // 现价/市场价
-          marketPrice: v.marketprice,
-          // 原价
-          productPrice: v.productprice,
-          // 成本价
-          costPrice: v.costprice,
-          // 库存
-          id: v.id,
-          stock: v.stock,
-          skuName: v.optiontitle,
-          skuId: v.specs,
-          productName: v.title,
-          thumb: v.thumb,
-          cartNum: v.cart_number,
         }
 
         if (cartsItemGroupData.length > 0) {
@@ -579,7 +561,7 @@ export default defineComponent({
             cartsItemGroupData.forEach((o, j) => {
               if (o.shopId === shopId) {
                 cartsItemGroupData[j].children.push({
-                  ...cartItem,
+                  ...v,
                 })
               }
             })
@@ -588,7 +570,7 @@ export default defineComponent({
               ...groupData,
               children: [
                 {
-                  ...cartItem,
+                  ...v,
                 },
               ],
             })
@@ -598,7 +580,7 @@ export default defineComponent({
             ...groupData,
             children: [
               {
-                ...cartItem,
+                ...v,
               },
             ],
           })
