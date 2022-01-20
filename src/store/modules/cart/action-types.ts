@@ -1,0 +1,3 @@
+export enum CartActionTypes {
+  ACTION_SELECTED_CART_GOODS = 'ACTION_SELECTED_CART_GOODS',
+}

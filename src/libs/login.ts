@@ -22,7 +22,6 @@ export function _toLogin() {
   // #ifdef H5
   path = location.pathname + location.search
   // #endif
-  console.log('path', path)
   Cache.set(BACK_URL, path)
   uni.navigateTo({
     url: '/pages/my/login',

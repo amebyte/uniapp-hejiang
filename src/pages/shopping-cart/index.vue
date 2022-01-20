@@ -118,7 +118,8 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { useStore } from 'vuex'
+import { store } from '@/store'
+import { CartActionTypes } from '@/store/modules/cart/action-types'
 import { fetchCartList, fetchUpdateCart, fetchDeleteCart } from '@/api/cart'
 import moveBox from '@/components/move-box/index.vue'
 import { Tips, Debounce } from '@/utils/util'
@@ -378,50 +379,9 @@ export default defineComponent({
         return
       }
 
-      let first = true
-      let t: any[] = []
-      state.selectedGoodsItems.forEach((o) => {
-        if (first) {
-          first = false
-          t.push(o.productPageVO.deliveryMode)
-        } else {
-          if (t.includes(o.productPageVO.deliveryMode)) {
-            t.push(o.productPageVO.deliveryMode)
-          }
-        }
-      })
+      store.dispatch(CartActionTypes.ACTION_SELECTED_CART_GOODS, state.selectedGoodsItems)
 
-      if (t.length !== state.selectedGoodsTotal) {
-        Tips({
-          title: '不能同时选择自提和邮寄的商品~',
-        })
-        return
-      }
-
-      let internalFirst = true
-      let t2: any[] = []
-      state.selectedGoodsItems.forEach((o) => {
-        if (internalFirst) {
-          internalFirst = false
-          t2.push(o.internal)
-        } else {
-          if (t2.includes(o.internal)) {
-            t2.push(o.internal)
-          }
-        }
-      })
-
-      if (t2.length !== state.selectedGoodsTotal) {
-        Tips({
-          title: '不能同时选择普通商品和内购商品~',
-        })
-        return
-      }
-      const store = useStore()
-      store.dispatch('saveSelectedGoods', state.selectedGoodsItems)
-      console.log('toCreateOrder', state.selectedGoodsTotal)
-
-      Tips('/pages/users/order/create?orderType=')
+      Tips('/pages/users/order/create')
     }
 
     /**
