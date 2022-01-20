@@ -400,9 +400,9 @@ export default defineComponent({
         }
 
         if (cartsItemGroupData.length > 0) {
-          if (cartsItemGroupData.some((val) => val.shopId === shopId)) {
+          if (cartsItemGroupData.some((val) => val.mch_id === shopId)) {
             cartsItemGroupData.forEach((o, j) => {
-              if (o.shopId === shopId) {
+              if (o.mch_id === shopId) {
                 cartsItemGroupData[j].goods_list.push({
                   ...goodsItem,
                 })

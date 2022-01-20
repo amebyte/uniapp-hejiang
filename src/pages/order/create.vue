@@ -8,7 +8,7 @@
           <view class="striped"></view>
           <!--邮寄到家 start-->
           <view v-if="userAddress" class="address-info">
-            <image class="coordinates" src="../../../static/images/meviky/coordinates.svg" />
+            <i class="iconfont icon-address"></i>
             <view class="content">
               <view class="top">
                 <view class="name">{{ userAddress.name }}</view>
@@ -19,37 +19,42 @@
                 {{ userAddress.detailAddress }}
               </view>
               <navigator url="/pages/users/address/addr-manage">
-                <view class="more"><i class="iconfont icon-edit"></i></view>
+                <view class="more"><i class="iconfont icon-arrow-right"></i></view>
               </navigator>
             </view>
           </view>
           <view v-else class="empty-address" @click="toAddress">
             <view class="top">添加地址</view>
             <text class="txt-tips">（请用户尽量填写详细的收货地址）</text>
-            <view class="edit-more"><i class="iconfont icon-edit"></i></view>
+            <view class="edit-more"><i class="iconfont icon-arrow-right"></i></view>
           </view>
           <!--邮寄到家 end-->
         </view>
         <!--地址 end-->
         <!--购物车商品 start-->
         <view class="cart-goods-wrap">
-          <block v-for="(item, index) in cartTree" :key="index">
-            <view class="shop-name">{{ item.shopName || '' }}</view>
-            <block v-for="childItem in item.children" :key="childItem.id">
+          <block v-for="(mch, mchIndex) in previewData.mch_list" :key="mchIndex">
+            <view class="shop-name">{{ mch.mch.name || '' }}</view>
+            <block v-for="(subGoodsItem, subGoodsIndex) in mch.goods_list" :key="subGoodsIndex">
               <view class="goods-item">
                 <view class="photo">
-                  <image class="image" :src="childItem.productSkuVO.pic" />
+                  <image
+                    class="image"
+                    :src="subGoodsItem.goods_attr.pic_url ? subGoodsItem.goods_attr.pic_url : subGoodsItem.cover_pic"
+                  />
                 </view>
                 <view class="info">
                   <view class="name">
-                    {{ childItem.productSkuVO.prodName }}
+                    {{ subGoodsItem.name }}
                   </view>
                   <view class="attr">
-                    {{ childItem.productSkuVO.skuName }}
+                    <block v-for="(attrItem, attrIndex) in subGoodsItem.attr_list" :key="attrIndex">
+                      <text style="padding-right: 10rpx">{{ attrItem.attr_group_name }}:{{ attrItem.attr_name }}</text>
+                    </block>
                   </view>
                   <view class="price">
-                    <view class="l"> ￥{{ childItem.productSkuVO[priceKey] }} </view>
-                    <view class="r"> x {{ childItem.num }} </view>
+                    <view class="l"> ￥{{ subGoodsItem.total_original_price }} </view>
+                    <view class="r"> x {{ subGoodsItem.num }} </view>
                   </view>
                 </view>
               </view>
@@ -110,7 +115,7 @@
     </scroll-view>
     <view class="footer-bar">
       <view class="total-info"
-        >实付款：<text class="txt"> ￥{{ payTotalPrice }} </text></view
+        >实付款：<text class="txt"> ￥{{ previewData.total_price }} </text></view
       >
       <view class="pay-btn" @click="createOrder">提交订单</view>
     </view>
@@ -142,7 +147,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { mapGetters } from 'vuex'
 import { store } from '@/store'
-import { useMapState } from '@/hooks/useMapState'
+import { Tips } from '@/utils/util'
 // import { getUserAddress } from '@/api/address'
 import { fetchOrderPreview } from '@/api/order'
 // import { fetchMyAccumulatePoints } from '@/api/user'
@@ -175,6 +180,9 @@ export default defineComponent({
       submiting: false,
       discount: '', // 优惠，满减优惠
       accumulatePoints: 0, // 我的积分
+
+      previewData: {} as any,
+      loadingPreviewData: true,
     })
     const scroll = () => {}
     /**
@@ -329,7 +337,35 @@ export default defineComponent({
       const data = { form_data: JSON.stringify({ list: list, address_id: 0, send_type: '' }) }
       fetchOrderPreview(data)
         .then((r) => {
-          console.log('rrr', r)
+          state.loadingPreviewData = false
+          uni.hideLoading()
+          if (r.code === 0) {
+            if (r.data.allZiti && !r.data.address) {
+              r.data.address = {
+                name: '',
+                mobile: '',
+              }
+            }
+            for (let i in r.data.mch_list) {
+              r.data.mch_list[i].showCouponPicker = false
+              r.data.mch_list[i].noCoupons = false
+              r.data.mch_list[i].showInsertRows = false
+            }
+            state.previewData = r.data
+            // this.setDiyFormScrollStatus();
+            // this.checkCouponError();
+            // this.updateStoreDistance();
+            // this.updateGoodsCount();
+          } else {
+            uni.showModal({
+              title: '提示',
+              content: r.msg,
+              showCancel: false,
+              success: () => {
+                uni.navigateBack({})
+              },
+            })
+          }
         })
         .catch((err) => console.log(err))
     }
@@ -387,6 +423,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import '@/static/css/variable.scss';
 .create-order-wrapper {
   height: 100%;
   overflow-y: hidden;
@@ -399,11 +436,13 @@ export default defineComponent({
 
     width: 100%;
     height: 600rpx;
-    background: linear-gradient(180deg, #3ba5f8 0%, rgba(230, 1, 19, 0) 100%);
+    background: linear-gradient(180deg, #1aa86c 0%, rgba(230, 1, 19, 0) 100%);
   }
 
   .container {
     padding: 0 20rpx;
+    padding-top: 20rpx;
+    padding-bottom: 100rpx;
 
     .address-wrap {
       border-top: 1rpx solid #d1d1d1;
@@ -688,7 +727,7 @@ export default defineComponent({
       border-radius: 22px;
       font-size: 15px;
 
-      background-image: linear-gradient(135deg, #59b3ff 0%, #1c87f0 100%);
+      background-image: linear-gradient(135deg, $top-background-color 0%, $theme-font-color 100%);
 
       &.disabled {
         background-image: none;
