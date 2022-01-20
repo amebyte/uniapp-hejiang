@@ -213,7 +213,7 @@ export default defineComponent({
      * 跳转到用户地址
      */
     const toAddress = () => {
-      Tips('/pages/users/address/addr-manage')
+      Tips('/pages/my/address')
     }
     /**
      * 用户地址初始化

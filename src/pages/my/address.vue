@@ -46,7 +46,7 @@
         ><text class="iconfont icon-add-bold"></text>添加新地址
       </view>
       <view class="addressBnt wxbnt" @click="getWxAddress"
-        ><text class="iconfont icon-weixin2"></text>导入微信地址
+        ><text class="iconfont icon-wechat"></text>导入微信地址
       </view>
       <!-- #endif -->
       <!-- #ifdef H5-->
@@ -54,7 +54,7 @@
         ><text class="iconfont icon-add-bold"></text>添加新地址</view
       >
       <view v-if="$wechat.isWeixin()" class="addressBnt wxbnt" @click="getWxAddress">
-        <text class="iconfont icon-weixin2"></text>导入微信地址
+        <text class="iconfont icon-wechat"></text>导入微信地址
       </view>
       <!-- #endif -->
     </view>
