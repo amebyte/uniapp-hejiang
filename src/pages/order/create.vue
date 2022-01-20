@@ -31,9 +31,11 @@
           <!--邮寄到家 end-->
         </view>
         <!--地址 end-->
-        <!--购物车商品 start-->
-        <view class="cart-goods-wrap">
-          <block v-for="(mch, mchIndex) in previewData.mch_list" :key="mchIndex">
+
+        <!-- 循环商户列表start -->
+        <template v-for="(mch, mchIndex) in previewData.mch_list" :key="mchIndex">
+          <!--购物车商品 start-->
+          <view class="cart-goods-wrap">
             <view class="shop-name">{{ mch.mch.name || '' }}</view>
             <block v-for="(subGoodsItem, subGoodsIndex) in mch.goods_list" :key="subGoodsIndex">
               <view class="goods-item">
@@ -53,64 +55,67 @@
                     </block>
                   </view>
                   <view class="price">
-                    <view class="l"> ￥{{ subGoodsItem.total_original_price }} </view>
-                    <view class="r"> x {{ subGoodsItem.num }} </view>
+                    <view class="l"> ￥{{ subGoodsItem.unit_price }} x {{ subGoodsItem.num }}</view>
+                    <view class="r"> ￥{{ subGoodsItem.total_original_price }}</view>
                   </view>
                 </view>
               </view>
             </block>
-          </block>
-        </view>
-        <!--购物车商品 end-->
+          </view>
+          <!--购物车商品 end-->
 
-        <view class="label">
-          <view class="title">
-            <text class="txt">商品金额</text>
+          <view class="label">
+            <view class="title">
+              <text class="txt">商品金额</text>
+            </view>
+            <view class="value">
+              <text class="txt">¥：{{ mch.totalGoodsPrice }}</text>
+            </view>
           </view>
-          <view class="value">
-            <text class="txt">¥：{{ totalPrice }}</text>
+          <view class="label">
+            <view class="title">
+              <text class="txt">运费</text>
+            </view>
+            <view class="value">
+              <text class="txt highlight">¥：0.00</text>
+            </view>
           </view>
-        </view>
-        <view class="label">
-          <view class="title">
-            <text class="txt">运费</text>
+          <view v-if="discount" class="label">
+            <view class="title">
+              <text class="txt">满减优惠</text>
+            </view>
+            <view class="value">
+              <text class="txt highlight">¥：{{ discount }}</text>
+            </view>
           </view>
-          <view class="value">
-            <text class="txt highlight">¥：0.00</text>
+          <view class="label">
+            <view class="title">
+              <text class="txt">优惠劵</text>
+              <view class="coupon-use-num">{{ ableUseCoupons.length }}张可用</view>
+            </view>
+            <view class="value" @click="openCouponsWindow">
+              <text class="txt highlight">{{ choiceCoupon ? '-￥' + choiceCoupon.faceValue : '请选择优惠劵' }}</text>
+              <text class="iconfont icon-arrow-right-bold"></text>
+            </view>
           </view>
-        </view>
-        <view v-if="discount" class="label">
-          <view class="title">
-            <text class="txt">满减优惠</text>
+          <view class="label border-bottom">
+            <view class="title">
+              <text class="txt">可用积分</text>
+            </view>
+            <view class="value">
+              <text class="txt">{{ accumulatePoints ? accumulatePoints : '暂无积分可用' }}</text>
+            </view>
           </view>
-          <view class="value">
-            <text class="txt highlight">¥：{{ discount }}</text>
+          <view class="label orderLabelMargin">
+            <view class="remarks-title"> </view>
+            <view class="value">
+              共计{{ mch.goods_count }}件 小计：<text class="txt" style="color: #e60012">
+                ￥{{ mch.total_price }}
+              </text>
+            </view>
           </view>
-        </view>
-        <view class="label">
-          <view class="title">
-            <text class="txt">优惠劵</text>
-            <view class="coupon-use-num">{{ ableUseCoupons.length }}张可用</view>
-          </view>
-          <view class="value" @click="openCouponsWindow">
-            <text class="txt highlight">{{ choiceCoupon ? '-￥' + choiceCoupon.faceValue : '请选择优惠劵' }}</text>
-            <text class="iconfont icon-arrow-right-bold"></text>
-          </view>
-        </view>
-        <view class="label border-bottom">
-          <view class="title">
-            <text class="txt">可用积分</text>
-          </view>
-          <view class="value">
-            <text class="txt">{{ accumulatePoints ? accumulatePoints : '暂无积分可用' }}</text>
-          </view>
-        </view>
-        <view class="label orderLabelMargin">
-          <view class="remarks-title"> </view>
-          <view class="value">
-            共计{{ goodsTotalNumber }}件 合计：<text class="txt" style="color: #e60012"> ￥{{ payTotalPrice }} </text>
-          </view>
-        </view>
+        </template>
+        <!-- 循环商户列表 end-->
       </view>
     </scroll-view>
     <view class="footer-bar">
@@ -308,6 +313,19 @@ export default defineComponent({
       return payTotalPrice
     }
 
+    const updateGoodsCount = () => {
+      for (let i in state.previewData.mch_list) {
+        let count = 0
+        let totalGoodsPrice = 0
+        for (let j in state.previewData.mch_list[i].goods_list) {
+          count += parseInt(state.previewData.mch_list[i].goods_list[j].num)
+          totalGoodsPrice += Number(state.previewData.mch_list[i].goods_list[j].total_price)
+        }
+        state.previewData.mch_list[i].goods_count = count
+        state.previewData.mch_list[i].totalGoodsPrice = totalGoodsPrice.toFixed(2)
+      }
+    }
+
     const getOrderPreview = () => {
       const list = store.state.cart.previewOrderParam
       // 商户列表先做下排序，主商城必须在最前
@@ -355,7 +373,7 @@ export default defineComponent({
             // this.setDiyFormScrollStatus();
             // this.checkCouponError();
             // this.updateStoreDistance();
-            // this.updateGoodsCount();
+            updateGoodsCount()
           } else {
             uni.showModal({
               title: '提示',
@@ -608,13 +626,11 @@ export default defineComponent({
             flex-direction: row;
 
             .l {
-              font-family: HelveticaNeue;
-              font-size: 32rpx;
-              color: #ea3401;
-              font-weight: 600;
               flex: 1;
               display: flex;
               align-items: flex-end;
+              color: #666;
+              font-size: 24rpx;
             }
 
             .r {
@@ -624,7 +640,10 @@ export default defineComponent({
               justify-content: flex-end;
               align-items: flex-end;
               margin-right: 28rpx;
-              color: #666;
+              font-family: HelveticaNeue;
+              font-size: 28rpx;
+              color: #ea3401;
+              font-weight: 600;
             }
           }
         }
