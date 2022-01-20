@@ -381,7 +381,7 @@ export default defineComponent({
 
       store.dispatch(CartActionTypes.ACTION_SELECTED_CART_GOODS, state.selectedGoodsItems)
 
-      Tips('/pages/users/order/create')
+      Tips('/pages/order/create')
     }
 
     /**
