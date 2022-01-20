@@ -16,6 +16,7 @@ export function fetchCartList() {
               r.data.list.forEach((v) => {
                 v.goods_list.forEach((val) => {
                   temp.push({
+                    ...val,
                     shopId: v.mch_id,
                     shopName: v.name || '自营商品',
                     id: val.id,

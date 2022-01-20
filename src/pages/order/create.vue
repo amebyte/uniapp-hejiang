@@ -7,29 +7,27 @@
         <view class="address-wrap">
           <view class="striped"></view>
           <!--邮寄到家 start-->
-          <template v-if="currDeliveryType === transportMode.plain">
-            <view v-if="userAddress" class="address-info">
-              <image class="coordinates" src="../../../static/images/meviky/coordinates.svg" />
-              <view class="content">
-                <view class="top">
-                  <view class="name">{{ userAddress.name }}</view>
-                  <view class="phone">{{ userAddress.phoneNumber }}</view>
-                </view>
-                <view class="detail-address">
-                  {{ userAddress.province }}{{ userAddress.city }}{{ userAddress.region }}{{ userAddress.street }}
-                  {{ userAddress.detailAddress }}
-                </view>
-                <navigator url="/pages/users/address/addr-manage">
-                  <view class="more"><i class="iconfont icon-edit"></i></view>
-                </navigator>
+          <view v-if="userAddress" class="address-info">
+            <image class="coordinates" src="../../../static/images/meviky/coordinates.svg" />
+            <view class="content">
+              <view class="top">
+                <view class="name">{{ userAddress.name }}</view>
+                <view class="phone">{{ userAddress.phoneNumber }}</view>
               </view>
+              <view class="detail-address">
+                {{ userAddress.province }}{{ userAddress.city }}{{ userAddress.region }}{{ userAddress.street }}
+                {{ userAddress.detailAddress }}
+              </view>
+              <navigator url="/pages/users/address/addr-manage">
+                <view class="more"><i class="iconfont icon-edit"></i></view>
+              </navigator>
             </view>
-            <view v-else class="empty-address" @click="toAddress">
-              <view class="top">添加地址</view>
-              <text class="txt-tips">（请用户尽量填写详细的收货地址）</text>
-              <view class="edit-more"><i class="iconfont icon-edit"></i></view>
-            </view>
-          </template>
+          </view>
+          <view v-else class="empty-address" @click="toAddress">
+            <view class="top">添加地址</view>
+            <text class="txt-tips">（请用户尽量填写详细的收货地址）</text>
+            <view class="edit-more"><i class="iconfont icon-edit"></i></view>
+          </view>
           <!--邮寄到家 end-->
         </view>
         <!--地址 end-->
@@ -50,15 +48,7 @@
                     {{ childItem.productSkuVO.skuName }}
                   </view>
                   <view class="price">
-                    <view class="l">
-                      <block v-if="isPointsMode">
-                        {{ childItem.productSkuVO.integral }} 积分
-                        <block v-if="pointsMode === pointsExchangeMode.POINTS_AND_CASH">
-                          + ￥{{ childItem.productSkuVO[priceKey] }}
-                        </block>
-                      </block>
-                      <block v-else> ￥{{ childItem.productSkuVO[priceKey] }} </block>
-                    </view>
+                    <view class="l"> ￥{{ childItem.productSkuVO[priceKey] }} </view>
                     <view class="r"> x {{ childItem.num }} </view>
                   </view>
                 </view>
@@ -68,34 +58,14 @@
         </view>
         <!--购物车商品 end-->
 
-        <block v-if="isPointsMode">
-          <view v-if="pointsMode === pointsExchangeMode.POINTS_AND_CASH" class="label">
-            <view class="title">
-              <text class="txt">商品金额</text>
-            </view>
-            <view class="value">
-              <text class="txt">¥：{{ totalPrice }}</text>
-            </view>
+        <view class="label">
+          <view class="title">
+            <text class="txt">商品金额</text>
           </view>
-          <view class="label">
-            <view class="title">
-              <text class="txt">商品积分</text>
-            </view>
-            <view class="value">
-              <text class="txt">{{ totalIntegral }}</text>
-            </view>
+          <view class="value">
+            <text class="txt">¥：{{ totalPrice }}</text>
           </view>
-        </block>
-        <block v-else>
-          <view class="label">
-            <view class="title">
-              <text class="txt">商品金额</text>
-            </view>
-            <view class="value">
-              <text class="txt">¥：{{ totalPrice }}</text>
-            </view>
-          </view>
-        </block>
+        </view>
         <view class="label">
           <view class="title">
             <text class="txt">运费</text>
@@ -112,7 +82,7 @@
             <text class="txt highlight">¥：{{ discount }}</text>
           </view>
         </view>
-        <view v-if="orderType !== goodsTypes.FLASH_SALE && orderType !== goodsTypes.LIVE_SALE" class="label">
+        <view class="label">
           <view class="title">
             <text class="txt">优惠劵</text>
             <view class="coupon-use-num">{{ ableUseCoupons.length }}张可用</view>
@@ -133,33 +103,16 @@
         <view class="label orderLabelMargin">
           <view class="remarks-title"> </view>
           <view class="value">
-            共计{{ goodsTotalNumber }}件 合计：<text class="txt" style="color: #e60012">
-              <block v-if="isPointsMode">
-                {{ totalIntegral }} 积分
-                <block v-if="pointsMode === pointsExchangeMode.POINTS_AND_CASH"> + ￥{{ payTotalPrice }} </block>
-              </block>
-              <block v-else> ￥{{ payTotalPrice }} </block>
-            </text>
+            共计{{ goodsTotalNumber }}件 合计：<text class="txt" style="color: #e60012"> ￥{{ payTotalPrice }} </text>
           </view>
         </view>
       </view>
     </scroll-view>
     <view class="footer-bar">
       <view class="total-info"
-        >实付款：<text class="txt">
-          <block v-if="isPointsMode">
-            {{ totalIntegral }} 积分
-            <block v-if="pointsMode === pointsExchangeMode.POINTS_AND_CASH"> + ￥{{ payTotalPrice }} </block>
-          </block>
-          <block v-else> ￥{{ payTotalPrice }} </block>
-        </text></view
+        >实付款：<text class="txt"> ￥{{ payTotalPrice }} </text></view
       >
-      <block v-if="!payBtnVisible">
-        <view class="pay-btn disabled">提交订单</view>
-      </block>
-      <block v-else>
-        <view class="pay-btn" @click="createOrder">提交订单</view>
-      </block>
+      <view class="pay-btn" @click="createOrder">提交订单</view>
     </view>
     <!-- <drawerBottomSheet ref="drawerBottomSheet">
       <view slot="body">
@@ -188,6 +141,8 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { mapGetters } from 'vuex'
+import { store } from '@/store'
+import { useMapState } from '@/hooks/useMapState'
 // import { getUserAddress } from '@/api/address'
 // import { getMyCouponByGoods, orderCreate } from '@/api/order'
 // import { fetchMyAccumulatePoints } from '@/api/user'
@@ -203,6 +158,7 @@ export default defineComponent({
     // couponListItem,
   },
   setup() {
+    const goodsItems = store.state.cart.selectedCart
     const state = reactive({
       height: 0,
       userAddress: null, // 用户地址
@@ -327,17 +283,13 @@ export default defineComponent({
     const initCart = () => {
       let totalPrice = 0
       let totalNums = 0
-      let totalIntegral = 0
-      console.log('goodsItems', state.goodsItems)
-      state.goodsItems.forEach((v) => {
-        totalPrice += Number(v.productSkuVO[this.priceKey]) * Number(v.num)
-        totalIntegral += Number(v.productSkuVO.integral) * Number(v.num)
-        totalNums += Number(v.num)
+      goodsItems.forEach((v) => {
+        totalPrice += Number(v.marketPric) * Number(v.cartNum)
+        totalNums += Number(v.cartNum)
       })
 
-      state.totalPrice = totalPrice.toFixed(2)
+      state.totalPrice = Number(totalPrice.toFixed(2))
       state.payTotalPrice = setActivityDiscount(totalPrice.toFixed(2))
-      state.totalIntegral = totalIntegral
       state.goodsTotalNumber = totalNums
     }
 
@@ -347,6 +299,12 @@ export default defineComponent({
     const setActivityDiscount = (payTotalPrice) => {
       return payTotalPrice
     }
+
+    onShow(() => {
+      //   const goodsItem = store.state.cart.selectedCart
+      const previewOrderParam = store.state.cart.previewOrderParam
+      console.log('previewOrderParam', previewOrderParam)
+    })
 
     return {
       ...toRefs(state),
@@ -363,13 +321,13 @@ export default defineComponent({
   },
   onShow() {
     if (this.isLogin) {
-      this.initCart()
-      this.initUserAddress()
-      this.getMyAccumulatePoints()
+      //   this.initCart()
+      //   this.initUserAddress()
+      //   this.getMyAccumulatePoints()
       // 普通订单和满减订单的时候去获取优惠劵 || this.orderType === goodsTypes.PRICE_OFF 满减逻辑后端还没实现，暂时不开放
-      if (this.orderType === goodsTypes.PLAIN) {
-        this.getCoupon()
-      }
+      //   if (this.orderType === goodsTypes.PLAIN) {
+      //     this.getCoupon()
+      //   }
 
       // 获取字典配置是否能操作支付
       this.$store.dispatch('GET_PAYBTN_VISIBLE')
@@ -379,9 +337,9 @@ export default defineComponent({
     const _this = this
     console.log('options.orderType', options.orderType)
     this.isBuyNow = options.isBuyNow
-    this.orderType = options.orderType ? Number(options.orderType) : goodsTypes.PLAIN // 订单类型 0：普通 1：秒杀 2: 内购
+    // this.orderType = options.orderType ? Number(options.orderType) : goodsTypes.PLAIN // 订单类型 0：普通 1：秒杀 2: 内购
 
-    this.priceKey = util.normalizePriceField(this.orderType)
+    // this.priceKey = util.normalizePriceField(this.orderType)
 
     uni.getSystemInfo({
       success: function (res) {

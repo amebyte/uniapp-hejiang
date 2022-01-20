@@ -369,6 +369,70 @@ export default defineComponent({
     }
 
     /**
+     * 创建订单请求参数 [人人商城特有]
+     */
+    const createOrderParam = (data) => {
+      let cartsItemGroupData: any[] = []
+      data.forEach((v) => {
+        const shopId = v.shopId
+
+        const groupData = {
+          mch_id: shopId,
+        }
+
+        let goodsItem = {
+          id: v.goods_id,
+          attr: [] as any[],
+          send_type: v.send_type,
+          cover: v.attrs && v.attrs.pic_url ? v.attrs.pic_url : v.goods.cover_pic,
+          price: v.attrs.price,
+          num: v.cartNum,
+          sign: v.sign,
+          cart_id: v.id,
+          goods_attr_id: v.attr_id,
+        }
+        for (let n in v.attrs.attr) {
+          const attr = {
+            attr_id: v.attrs.attr[n].attr_id,
+            attr_group_id: v.attrs.attr[n].attr_group_id,
+          }
+          goodsItem.attr.push(attr)
+        }
+
+        if (cartsItemGroupData.length > 0) {
+          if (cartsItemGroupData.some((val) => val.shopId === shopId)) {
+            cartsItemGroupData.forEach((o, j) => {
+              if (o.shopId === shopId) {
+                cartsItemGroupData[j].goods_list.push({
+                  ...goodsItem,
+                })
+              }
+            })
+          } else {
+            cartsItemGroupData.push({
+              ...groupData,
+              goods_list: [
+                {
+                  ...goodsItem,
+                },
+              ],
+            })
+          }
+        } else {
+          cartsItemGroupData.push({
+            ...groupData,
+            goods_list: [
+              {
+                ...goodsItem,
+              },
+            ],
+          })
+        }
+      })
+      return cartsItemGroupData
+    }
+
+    /**
      * 底部创建订单
      */
     const toCreateOrder = () => {
@@ -380,6 +444,8 @@ export default defineComponent({
       }
 
       store.dispatch(CartActionTypes.ACTION_SELECTED_CART_GOODS, state.selectedGoodsItems)
+      store.dispatch(CartActionTypes.ACTION_PREVIEW_ORDER_PARAM, createOrderParam(state.selectedGoodsItems))
+      console.log('createOrderParam', createOrderParam(state.selectedGoodsItems))
 
       Tips('/pages/order/create')
     }

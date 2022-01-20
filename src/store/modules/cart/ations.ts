@@ -11,10 +11,14 @@ type AugmentedActionContext = {
 
 export interface Actions {
   [CartActionTypes.ACTION_SELECTED_CART_GOODS]({ commit }: AugmentedActionContext, data: any): void
+  [CartActionTypes.ACTION_PREVIEW_ORDER_PARAM]({ commit }: AugmentedActionContext, data: any): void
 }
 
 export const actions: ActionTree<CartState, RootState> & Actions = {
   [CartActionTypes.ACTION_SELECTED_CART_GOODS]({ commit }: AugmentedActionContext, data: any) {
     commit(CartMutationTypes.SET_SELECTED_CART_GOODS, data)
+  },
+  [CartActionTypes.ACTION_PREVIEW_ORDER_PARAM]({ commit }: AugmentedActionContext, data: any) {
+    commit(CartMutationTypes.SET_PREVIEW_ORDER_PARAM, data)
   },
 }
