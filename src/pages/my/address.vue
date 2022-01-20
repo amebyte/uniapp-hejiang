@@ -309,7 +309,7 @@ export default defineComponent({
 }
 
 .footer .addressBnt.wxbnt {
-  background-color: #fe960f;
+  background-color: #009688;
 }
 
 .no-data {
@@ -325,6 +325,6 @@ radio-group {
 }
 
 .bg-color {
-  background-color: #e93323 !important;
+  background-color: #1aa86c;
 }
 </style>

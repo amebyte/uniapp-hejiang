@@ -85,7 +85,6 @@
           "path": "address",
           "style": {
             "navigationBarTitleText": "收货地址",
-            "navigationBarBackgroundColor": "#102c24",
             "enablePullDownRefresh": false
           }
         },
