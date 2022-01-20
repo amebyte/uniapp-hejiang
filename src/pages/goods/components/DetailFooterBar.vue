@@ -25,7 +25,9 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, watchEffect } from 'vue'
+import { useStore, mapGetters } from 'vuex'
 import { fetchAddCart } from '@/api/cart'
+import { toLogin } from '@/libs/login'
 
 export default defineComponent({
   name: 'DetailFooterBar',
@@ -41,6 +43,9 @@ export default defineComponent({
   },
   emits: ['setIsOpenAttrWindow'],
   setup(props, { emit }) {
+    const store = useStore()
+    const isLogin = computed(mapGetters(['isLogin']).isLogin.bind({ $store: store }))
+    console.log('isLogin', isLogin.value)
     let cartCount = ref(0)
     let isFavorite = ref(false)
 
@@ -53,7 +58,11 @@ export default defineComponent({
      *
      */
     const openAttrWindow = () => {
-      emit('setIsOpenAttrWindow', true)
+      if (isLogin.value) {
+        emit('setIsOpenAttrWindow', true)
+      } else {
+        toLogin()
+      }
     }
     /**
      * 跳转首页

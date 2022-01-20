@@ -1,11 +1,11 @@
-import { useStore } from 'vuex'
+import { store } from '@/store'
 import { AppMutationTypes } from '@/store/modules/app/mutation-types'
 import Cache from '../utils/cache'
 import { Debounce } from '@/utils/util'
 // #ifdef H5
 import { isWeixin } from '@/utils'
 // #endif
-const store = useStore()
+
 import { LOGIN_STATUS, USER_INFO, EXPIRES_TIME, STATE_R_KEY, BACK_URL } from '../config/cache'
 
 function prePage() {

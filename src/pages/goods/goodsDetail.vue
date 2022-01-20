@@ -42,6 +42,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
+import { useStore, mapGetters } from 'vuex'
 import ProductDetailSwiper from '@/components/product-detail-swiper/index.vue'
 import AttrWindow from '@/components/attr-window/index.vue'
 import GoodsInfo from './components/GoodsInfo.vue'
@@ -64,6 +65,9 @@ export default defineComponent({
     GoodsTeacher,
   },
   setup() {
+    const store = useStore()
+    const isLogin = computed(mapGetters(['isLogin']).isLogin.bind({ $store: store }))
+    console.log('isLogin', isLogin.value)
     let state = reactive({
       productId: '',
       goodsInfo: {} as any,
@@ -289,17 +293,8 @@ export default defineComponent({
       console.log('openShare')
     }
 
-    const getUserInfo = () => {
-      fetchUserInfo()
-        .then((r) => {
-          state.cart_num = r.statics.cart
-        })
-        .catch((err) => console.log(err))
-    }
-
     onShow(() => {
       getGoodsDetail()
-      getUserInfo()
     })
 
     onLoad((options) => {
