@@ -144,7 +144,7 @@ import { mapGetters } from 'vuex'
 import { store } from '@/store'
 import { useMapState } from '@/hooks/useMapState'
 // import { getUserAddress } from '@/api/address'
-// import { getMyCouponByGoods, orderCreate } from '@/api/order'
+import { fetchOrderPreview } from '@/api/order'
 // import { fetchMyAccumulatePoints } from '@/api/user'
 // import { goodsTypes, priceFields, transportModeEnum, orderStatusEnum, pointsExchangeMode } from '@/utils/constant'
 // import util from '@/utils/util'
@@ -300,10 +300,45 @@ export default defineComponent({
       return payTotalPrice
     }
 
+    const getOrderPreview = () => {
+      const list = store.state.cart.previewOrderParam
+      // 商户列表先做下排序，主商城必须在最前
+      for (let i in list) {
+        if (parseInt(list[i].mch_id) === 0) {
+          const _mchItem = list[i]
+          list.splice(i, 1)
+          list.unshift(_mchItem)
+          break
+        }
+      }
+
+      for (let i in list) {
+        list[i].distance = 0
+        list[i].remark = ''
+        list[i].order_form = []
+        list[i].use_integral = 0
+        list[i].user_coupon_id = 0
+        for (let j in list[i].goods_list) {
+          list[i].goods_list[j].cart_id = list[i].goods_list[j].cart_id || 0
+        }
+        // if (this.plugin === 'booking') {
+        //     let store_id = this.bookStorage('get');
+        //     list[i]['store_id'] = store_id ? store_id : '';
+        // }
+      }
+      const data = { form_data: JSON.stringify({ list: list, address_id: 0, send_type: '' }) }
+      fetchOrderPreview(data)
+        .then((r) => {
+          console.log('rrr', r)
+        })
+        .catch((err) => console.log(err))
+    }
+
     onShow(() => {
+      getOrderPreview()
       //   const goodsItem = store.state.cart.selectedCart
-      const previewOrderParam = store.state.cart.previewOrderParam
-      console.log('previewOrderParam', previewOrderParam)
+      //   const previewOrderParam = store.state.cart.previewOrderParam
+      //   console.log('previewOrderParam', previewOrderParam)
     })
 
     return {
