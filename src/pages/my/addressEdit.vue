@@ -2,17 +2,14 @@
   <view class="container">
     <form @submit="formSubmit">
       <view class="p20 bg_fff h100">
-        <view class="form-item acea-row" @click="openCitySelect">
+        <view class="form-item acea-row">
           <view class="title">所在地区</view>
-          <text>{{
-            (areaInfo.province.name || '') +
-            ' ' +
-            (areaInfo.city.name || '') +
-            ' ' +
-            (areaInfo.area.name || '') +
-            ' ' +
-            (areaInfo.town.name || '')
-          }}</text>
+          <view style="flex: 1">
+            <app-area-picker
+              :ids="[form.province_id, form.city_id, form.district_id]"
+              @customevent="areaEvent"
+            ></app-area-picker>
+          </view>
         </view>
         <view class="form-item acea-row">
           <view class="title">详细地址</view>
@@ -66,31 +63,40 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import * as api from '@/api/address.js'
+import AppAreaPicker from './component/AppAreaPicker.vue'
+import * as api from '@/api/address'
 import { Tips } from '@/utils/util'
 export default defineComponent({
   name: 'AddressEidt',
+  components: {
+    AppAreaPicker,
+  },
   setup() {
     const state = reactive({
       form: {
+        location: '',
+        latitude: '',
+        longitude: '',
         id: '',
         name: '',
-        default: false,
-        detailAddress: '',
-        phoneNumber: '',
-        province: '', // 省
-        city: '', // 市
-        region: '', //  区
-        street: '', // 县
+        mobile: '',
+        address: '',
+        province_id: 0,
+        city_id: 0,
+        district_id: 0,
+        detail: '',
+        type: '',
       },
-      areaInfo: {
-        province: {},
-        city: {},
-        area: {},
-        town: {},
-      },
-      title: '---',
-      selected: [],
+      is_refund_address: 0,
+      detail_url: '',
+      list: [] as any[],
+      submit_status: false,
+      tt_area_show: false,
+      automatic: '',
+      provinceString: '',
+      cityString: '',
+      areaString: '',
+      focus: false,
     })
 
     /**
@@ -99,13 +105,6 @@ export default defineComponent({
      */
     const defaultChange = (e) => {
       state.form.default = e.detail.value
-    }
-
-    /**
-     * 打开地区选择
-     */
-    const openCitySelect = () => {
-      //   this.$refs.citySelect.show()
     }
 
     /**
@@ -172,31 +171,22 @@ export default defineComponent({
       }
     }
 
-    onLoad(() => {
-      // #ifdef APP-NVUE
-      const eventChannel = this.$scope.eventChannel // 兼容APP-NVUE
-      // #endif
+    const areaEvent = (data) => {
+      if (data) {
+        state.form.province_id = data.province.id
+        state.form.city_id = data.city.id
+        state.form.district_id = data.district.id
+        state.list = [data.province.name, data.city.name, data.district.name]
+      }
+    }
 
-      // #ifndef APP-NVUE
-      const eventChannel = this.getOpenerEventChannel()
-      // #endif
-      eventChannel.on('dataFromOpenerPage', (data) => {
-        console.log(data)
-        state.areaInfo.province.name = data.province
-        state.areaInfo.city.name = data.city
-        state.areaInfo.area.name = data.region
-        state.form.detailAddress = data.detailAddress
-        state.form.default = data.default
-        state.form.name = data.name
-        state.form.phoneNumber = data.phoneNumber
-        state.form.id = data.id
-      })
-    })
+    onLoad(() => {})
 
     return {
       ...toRefs(state),
       formSubmit,
       defaultChange,
+      areaEvent,
     }
   },
 })

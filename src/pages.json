@@ -89,6 +89,13 @@
           }
         },
         {
+          "path": "addressEdit",
+          "style": {
+            "navigationBarTitleText": "地址编辑",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
           "path": "login",
           "style": {
             "navigationBarTitleText": "登录",
