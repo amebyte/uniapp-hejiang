@@ -80,15 +80,7 @@
               <text class="txt highlight">¥：0.00</text>
             </view>
           </view>
-          <view v-if="discount" class="label">
-            <view class="title">
-              <text class="txt">满减优惠</text>
-            </view>
-            <view class="value">
-              <text class="txt highlight">¥：{{ discount }}</text>
-            </view>
-          </view>
-          <view class="label">
+          <view class="label" style="display: none">
             <view class="title">
               <text class="txt">优惠劵</text>
               <view class="coupon-use-num">{{ ableUseCoupons.length }}张可用</view>
@@ -96,14 +88,6 @@
             <view class="value" @click="openCouponsWindow">
               <text class="txt highlight">{{ choiceCoupon ? '-￥' + choiceCoupon.faceValue : '请选择优惠劵' }}</text>
               <text class="iconfont icon-arrow-right-bold"></text>
-            </view>
-          </view>
-          <view class="label border-bottom">
-            <view class="title">
-              <text class="txt">可用积分</text>
-            </view>
-            <view class="value">
-              <text class="txt">{{ accumulatePoints ? accumulatePoints : '暂无积分可用' }}</text>
             </view>
           </view>
           <view class="label orderLabelMargin">
@@ -182,7 +166,7 @@ export default defineComponent({
       goodsTotalNumber: 0, // 商品总数
       ableUseCoupons: [], // 可用的优惠劵
       couponsList: [], // 优惠劵,
-      choiceCoupon: null, // 选择的优惠劵
+      choiceCoupon: null as any, // 选择的优惠劵
       submiting: false,
       discount: '', // 优惠，满减优惠
       accumulatePoints: 0, // 我的积分
@@ -208,7 +192,7 @@ export default defineComponent({
      * @param {Object} item
      */
     const useCoupon = (item) => {
-      formatCoupons(item)
+      //   formatCoupons(item)
     }
     /**
      * 跳转到用户地址
@@ -216,103 +200,11 @@ export default defineComponent({
     const toAddress = () => {
       Tips('/pages/my/address')
     }
-    /**
-     * 用户地址初始化
-     */
-    const initUserAddress = () => {
-      getUserAddress()
-        .then((r) => {
-          const items = r.data.filter((item) => item.default)
-          if (items.length > 0) {
-            state.userAddress = items[0]
-          }
-        })
-        .catch((err) => console.log(err))
-    }
-    /**
-     * 优惠劵格式处理
-     */
-    const formatCoupons = (item) => {
-      if (!item.isAvailable) return
-      state.couponsList = state.couponsList.map((o) => {
-        if (item.couponId === o.couponId) {
-          o.isChoice = !o.isChoice
-        } else {
-          o.isChoice = false
-        }
-        return o
-      })
-
-      state.choiceCoupon = null
-
-      state.couponsList.some((o) => {
-        if (o.isChoice) {
-          state.choiceCoupon = o
-        }
-      })
-      updatePayTotalPrice()
-    }
-
-    /**
-     * 获取优惠劵
-     */
-    const getCoupon = () => {
-      setTimeout(() => {
-        getMyCouponByGoods({
-          items: state.paramGoodsItems,
-        })
-          .then((r) => {
-            if (r.status === 'OK') {
-              state.couponsList = normalizeCoupon(r.data.items)
-              state.ableUseCoupons = state.couponsList.filter((o) => o.isAvailable)
-              formatCoupons({
-                ...r.data.bestSuggest,
-              })
-            }
-          })
-          .catch((e) => console.log(e))
-      }, 0)
-    }
-
-    /**
-     * 根据选择的优惠劵更新总付款
-     */
-    const updatePayTotalPrice = () => {
-      if (state.choiceCoupon) {
-        if (state.choiceCoupon.minConsume <= state.totalPrice) {
-          const tempPrice = state.totalPrice - state.choiceCoupon.faceValue
-          state.payTotalPrice = tempPrice > 0 ? tempPrice.toFixed(2) : 0
-        }
-      }
-    }
 
     /**
      * 提交订单
      */
     const createOrder = () => {}
-
-    /**
-     * 购物车数据初始化
-     */
-    const initCart = () => {
-      let totalPrice = 0
-      let totalNums = 0
-      goodsItems.forEach((v) => {
-        totalPrice += Number(v.marketPric) * Number(v.cartNum)
-        totalNums += Number(v.cartNum)
-      })
-
-      state.totalPrice = Number(totalPrice.toFixed(2))
-      state.payTotalPrice = setActivityDiscount(totalPrice.toFixed(2))
-      state.goodsTotalNumber = totalNums
-    }
-
-    /**
-     * 满减优惠
-     */
-    const setActivityDiscount = (payTotalPrice) => {
-      return payTotalPrice
-    }
 
     const updateGoodsCount = () => {
       for (let i in state.previewData.mch_list) {
@@ -393,14 +285,12 @@ export default defineComponent({
     }
 
     onShow(() => {
-      setFormData()
       getOrderPreview()
-      //   const goodsItem = store.state.cart.selectedCart
-      //   const previewOrderParam = store.state.cart.previewOrderParam
-      //   console.log('previewOrderParam', previewOrderParam)
     })
 
     onLoad(() => {
+      console.log('onLoad')
+      setFormData()
       uni.getSystemInfo({
         success: function (res) {
           state.height = res.windowHeight
@@ -416,10 +306,7 @@ export default defineComponent({
       confirmCoupon,
       useCoupon,
       toAddress,
-      initUserAddress,
-      formatCoupons,
       createOrder,
-      setActivityDiscount,
     }
   },
 })
@@ -576,7 +463,7 @@ export default defineComponent({
           display: flex;
           flex-direction: column;
           flex: 1;
-
+          padding-right: 20rpx;
           .name {
             font-size: 28rpx;
             line-height: 30rpx;

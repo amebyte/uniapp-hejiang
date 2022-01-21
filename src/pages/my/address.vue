@@ -2,7 +2,7 @@
   <view>
     <view class="address-management" :class="addressList.length < 1 ? 'fff' : ''">
       <view v-for="item in addressList" :key="item.id" class="item borRadius14">
-        <view class="address">
+        <view class="address" @click="selectHandlerAddress(item)">
           <view class="consignee"
             >收货人：{{ item.name }}<text class="phone">{{ item.mobile }}</text></view
           >
@@ -60,7 +60,9 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { fetchAddressList, fetchChangeDefault, fetchDelAddress } from '@/api/address'
+import { store } from '@/store'
 import { Tips } from '@/utils/util'
+import { CartMutationTypes } from '@/store/modules/cart/mutation-types'
 
 export default defineComponent({
   name: 'AddressManage',
@@ -70,6 +72,7 @@ export default defineComponent({
       loadTitle: '加载更多',
       loading: false,
       apiLoading: false,
+      type: 0,
     })
 
     /**
@@ -158,6 +161,20 @@ export default defineComponent({
     }
 
     /**
+     * 选择地址
+     */
+    const selectHandlerAddress = (item) => {
+      const formData = store.state.cart.orderSubmitFromData
+      if (state.type === 1) {
+        formData.list[0].address_id = item.id
+      } else {
+        formData.address_id = item.id
+      }
+      store.commit(CartMutationTypes.SET_ORDER_SUBMIT_FROM_DATA, formData)
+      uni.navigateBack({})
+    }
+
+    /**
      * 获取微信地址
      */
     const getWxAddress = () => {
@@ -241,6 +258,7 @@ export default defineComponent({
       getWxAddress,
       delAddress,
       changeDefault,
+      selectHandlerAddress,
     }
   },
 })
