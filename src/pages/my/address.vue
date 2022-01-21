@@ -45,15 +45,15 @@
       <view class="addressBnt bg-color" @click="addAddress"
         ><text class="iconfont icon-add-bold"></text>添加新地址
       </view>
-      <view class="addressBnt wxbnt" @click="getWxAddress"
+      <view v-if="false" class="addressBnt wxbnt" @click="getWxAddress"
         ><text class="iconfont icon-wechat"></text>导入微信地址
       </view>
       <!-- #endif -->
       <!-- #ifdef H5-->
-      <view class="addressBnt bg-color" :class="$wechat.isWeixin() ? '' : 'on'" @click="addAddress"
+      <view class="addressBnt bg-color" @click="addAddress"
         ><text class="iconfont icon-add-bold"></text>添加新地址</view
       >
-      <view v-if="$wechat.isWeixin()" class="addressBnt wxbnt" @click="getWxAddress">
+      <view v-if="false" class="addressBnt wxbnt" @click="getWxAddress">
         <text class="iconfont icon-wechat"></text>导入微信地址
       </view>
       <!-- #endif -->
@@ -64,7 +64,8 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-// import * as api from '@/api/address'
+import { fetchUserAddress } from '@/api/address'
+import { Tips } from '@/utils/util'
 
 export default defineComponent({
   name: 'AddressManage',
@@ -76,13 +77,14 @@ export default defineComponent({
       apiLoading: false,
     })
 
-    // 获取地址列表
-    const getList = () => {
-      state.loading = true
-      api
-        .getUserAddress()
+    /**
+     * 获取地址列表
+     */
+    const getAddressList = () => {
+      fetchUserAddress()
         .then((res) => {
-          if (res.status === 'OK') state.addressList = res.data
+          console.log('res', res)
+          if (res.code === 0) state.addressList = res.data.list
           state.loadTitle = '到底了'
           state.loading = false
         })
@@ -90,7 +92,11 @@ export default defineComponent({
           state.loading = false
         })
     }
-    // 编辑列表
+
+    /**
+     * 编辑列表
+     * @param item
+     */
     const editAddress = (item) => {
       uni.navigateTo({
         url: './add',
@@ -100,21 +106,30 @@ export default defineComponent({
       })
     }
 
+    /**
+     * 删除地址
+     * @param id
+     */
     const delAddress = (id) => {
       api.delAddress(id).then((r) => {
-        if (r.status === 'OK') this.$util.Tips({ title: '删除成功', icon: 'success' })
-        getList()
+        if (r.code === 0) Tips({ title: '删除成功', icon: 'success' })
+        getAddressList()
       })
     }
-    // 添加
+
+    /**
+     * 跳转添加
+     */
     const addAddress = () => {
       uni.navigateTo({
-        url: '/pages/users/address/add',
+        url: '/pages/my/addressEdit',
       })
     }
-    // 获取微信地址
+
+    /**
+     * 获取微信地址
+     */
     const getWxAddress = () => {
-      let that = this
       // #ifdef MP-WEIXIN
       uni.authorize({
         scope: 'scope.address',
@@ -136,7 +151,7 @@ export default defineComponent({
             },
             fail: function (res) {
               if (res.errMsg == 'chooseAddress:cancel')
-                return that.$util.Tips({
+                return Tips({
                   title: '取消选择',
                 })
             },
@@ -152,7 +167,7 @@ export default defineComponent({
                   success: function (res) {},
                 })
               } else if (res.cancel) {
-                return that.$util.Tips({
+                return Tips({
                   title: '已取消！',
                 })
               }
@@ -163,24 +178,24 @@ export default defineComponent({
       // #endif
       // #ifdef H5
       // return
-      this.$wechat
-        .openAddress()
-        .then((res) => {
-          const item = {
-            province: res.provinceName,
-            city: res.cityName,
-            region: res.countyName,
-            detailAddress: res.detailInfo,
-            default: false,
-            name: res.userName,
-            phoneNumber: res.telNumber,
-            id: '',
-          }
-          editAddress(item)
-        })
-        .catch((err) => {
-          console.log('失败', err)
-        })
+      //   this.$wechat
+      //     .openAddress()
+      //     .then((res) => {
+      //       const item = {
+      //         province: res.provinceName,
+      //         city: res.cityName,
+      //         region: res.countyName,
+      //         detailAddress: res.detailInfo,
+      //         default: false,
+      //         name: res.userName,
+      //         phoneNumber: res.telNumber,
+      //         id: '',
+      //       }
+      //       editAddress(item)
+      //     })
+      //     .catch((err) => {
+      //       console.log('失败', err)
+      //     })
       // #endif
     }
     // 设置默认
@@ -195,6 +210,10 @@ export default defineComponent({
         })
       }
     }
+
+    onShow(() => {
+      getAddressList()
+    })
 
     return {
       ...toRefs(state),
