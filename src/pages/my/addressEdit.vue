@@ -14,11 +14,11 @@
         <view class="form-item acea-row">
           <view class="title">详细地址</view>
           <input
-            v-model="form.detailAddress"
+            v-model="form.detail"
             type="text"
             placeholder="请输入详细地址"
             placeholder-style="color:#ccc;"
-            name="detailAddress"
+            name="detail"
             placeholder-class="placeholder"
             :maxlength="50"
           />
@@ -38,11 +38,11 @@
         <view class="form-item acea-row">
           <view class="title">手机号码</view>
           <input
-            v-model="form.phoneNumber"
+            v-model="form.mobile"
             type="text"
             placeholder="请输入手机号码"
             placeholder-style="color:#ccc;"
-            name="phoneNumber"
+            name="mobile"
             placeholder-class="placeholder"
             :maxlength="20"
           />
@@ -64,7 +64,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import AppAreaPicker from './component/AppAreaPicker.vue'
-import * as api from '@/api/address'
+import { fetchEidtAddress } from '@/api/address'
 import { Tips } from '@/utils/util'
 export default defineComponent({
   name: 'AddressEidt',
@@ -85,7 +85,8 @@ export default defineComponent({
         city_id: 0,
         district_id: 0,
         detail: '',
-        type: '',
+        type: '' as any,
+        default: false,
       },
       is_refund_address: 0,
       detail_url: '',
@@ -111,63 +112,67 @@ export default defineComponent({
      * 保存
      * @param e
      */
-    const formSubmit = (e) => {
-      let that = this,
-        value = e.detail.value
-      if (!value.name)
-        return Tips({
-          title: '请填写收货人姓名',
-        })
-      if (!value.phoneNumber)
-        return Tips({
-          title: '请填写联系电话',
-        })
-      if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(value.phoneNumber))
-        return Tips({
-          title: '请输入正确的手机号码',
-        })
-      if (!value.detailAddress)
-        return Tips({
-          title: '请填写详细地址',
-        })
-      const params = {
-        city: state.areaInfo.city.name || state.form.city,
-        default: state.form.default,
-        detailAddress: state.form.detailAddress,
-        name: state.form.name,
-        phoneNumber: state.form.phoneNumber,
-        // postCode: this.form.postCode,
-        province: state.areaInfo.province.name || state.form.province,
-        region: state.areaInfo.area.name || state.form.region,
-        street: state.areaInfo.town.name || state.form.street,
-      }
-      if (!params.region)
-        return Tips({
-          title: '请选择所在地区',
-        })
+    const formSubmit = async (e) => {
+      try {
+        if (state.submit_status) return
+        let content
 
-      const done = (res) => {
-        if (res.code === 0) {
-          uni.navigateBack({})
-          Tips({
-            title: '保存成功',
-            icon: 'success',
-          })
-        } else {
-          Tips({
-            title: res.msg,
-          })
+        if (!state.form.detail) {
+          content = state.form.type == 1 ? '门牌号不能为空' : '详细地址不能为空'
         }
-      }
-      if (state.form.id) {
-        params.id = state.form.id
-        api.updateAddr(params).then((res) => {
-          done(res)
-        })
-      } else {
-        api.createAddress(params).then((res) => {
-          done(res)
-        })
+        if (!state.form.province_id && state.form.type == 0) {
+          content = '地区不能为空'
+        }
+        if (!state.form.mobile) {
+          content = '请输入手机号码'
+        }
+        if (!/^1(3|4|5|7|8|9|6)\d{9}$/i.test(state.form.mobile)) {
+          content = '请输入正确的手机号码'
+        }
+        if (!state.form.name) {
+          content = '姓名不能为空'
+        }
+        if (content) {
+          uni.showToast({
+            title: content,
+            icon: 'none',
+          })
+          return
+        }
+
+        state.submit_status = true
+
+        let para, url
+        if (state.is_refund_address > 0) {
+          let { id, name, mobile, detail } = state.form
+          para = {
+            form: JSON.stringify({
+              id,
+              name,
+              mobile,
+              address_detail: detail,
+              address: state.list,
+              is_default: 0,
+              remark: '',
+            }),
+          }
+        } else {
+          para = Object.assign({}, state.form)
+        }
+
+        const info = await fetchEidtAddress(para)
+
+        state.submit_status = false
+
+        if (info.code === 0) {
+          uni.showToast({ title: info.msg, icon: 'none' })
+          uni.navigateBack({ delta: 1 })
+        } else {
+          uni.showToast({ title: info.msg, icon: 'none' })
+        }
+      } catch (e: any) {
+        state.submit_status = false
+        throw new Error(e)
       }
     }
 
