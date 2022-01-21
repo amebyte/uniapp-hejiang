@@ -31,3 +31,11 @@ export function fetchEidtAddress(data) {
 export function fetchChangeDefault(data) {
   return request.post!('&r=api/user/address-default', data, {}, true)
 }
+
+/**
+ * 删除
+ * @returns
+ */
+export function fetchDelAddress(data) {
+  return request.post!('&r=api/user/address-destroy', data, {}, true)
+}

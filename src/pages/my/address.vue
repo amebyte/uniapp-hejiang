@@ -10,10 +10,10 @@
         </view>
         <view class="operation acea-row row-between-wrapper">
           <!-- #ifdef MP -->
-          <view class="radio" :class="item.is_default === '1' ? 'selected' : ''" @click.stop="changeDefault(item)">
+          <view class="radio" :class="item.is_default === '1' ? 'selected' : ''" @click="changeDefault(item)">
             <text v-if="item.is_default === '1'" class="iconfont icon-radio-checked"></text>
             <text v-else class="iconfont icon-radio-uncheck"></text>
-            <text>设为默认{{ item.is_default }}</text>
+            <text>设为默认</text>
           </view>
           <!-- #endif -->
           <view class="acea-row row-middle">
@@ -59,7 +59,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { fetchUserAddress, fetchChangeDefault } from '@/api/address'
+import { fetchUserAddress, fetchChangeDefault, fetchDelAddress } from '@/api/address'
 import { Tips } from '@/utils/util'
 
 export default defineComponent({
@@ -78,8 +78,10 @@ export default defineComponent({
     const getAddressList = () => {
       fetchUserAddress()
         .then((res) => {
-          console.log('res', res)
-          if (res.code === 0) state.addressList = res.data.list
+          if (res.code === 0) {
+            state.addressList = [] // 小程序BUG？
+            setTimeout(() => (state.addressList = res.data.list))
+          }
           state.loadTitle = '到底了'
           state.loading = false
         })
@@ -120,13 +122,9 @@ export default defineComponent({
      * @param item
      */
     const editAddress = (item) => {
-      console.log('item', item)
-      //   uni.navigateTo({
-      //     url: './add',
-      //     success: function (res) {
-      //       res.eventChannel.emit('dataFromOpenerPage', item)
-      //     },
-      //   })
+      uni.navigateTo({
+        url: `/pages/my/addressEdit?id=${item.id}&is_refund_address=${item.is_refund_address}&type=${item.type}`,
+      })
     }
 
     /**
@@ -134,9 +132,19 @@ export default defineComponent({
      * @param id
      */
     const delAddress = (id) => {
-      api.delAddress(id).then((r) => {
-        if (r.code === 0) Tips({ title: '删除成功', icon: 'success' })
-        getAddressList()
+      uni.showModal({
+        content: '确定删除收货地址',
+        success: function (res) {
+          if (res.confirm) {
+            fetchDelAddress({ id }).then((info) => {
+              if (info.code === 0) {
+                getAddressList()
+              } else {
+                uni.showToast({ title: info.msg, icon: 'none' })
+              }
+            })
+          }
+        },
       })
     }
 
@@ -239,9 +247,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-.radio-group {
-  width: 100%;
-}
+@import '@/static/css/variable.scss';
 
 .address-management {
   padding: 20rpx 30rpx;
@@ -280,6 +286,7 @@ export default defineComponent({
   font-size: 28rpx;
   font-weight: bold;
   margin-bottom: 8rpx;
+  color: $theme-font-color;
 }
 
 .address-management .item .address .consignee .phone {
@@ -289,7 +296,7 @@ export default defineComponent({
 .address-management .item .operation {
   height: 83rpx;
   font-size: 28rpx;
-  color: #282828;
+  color: $theme-font-color;
 }
 
 .address-management .item .operation .radio text {
@@ -297,7 +304,7 @@ export default defineComponent({
 }
 
 .address-management .item .operation .iconfont {
-  color: #2c2c2c;
+  color: $theme-font-color;
   font-size: 35rpx;
   vertical-align: -2rpx;
   margin-right: 10rpx;
@@ -312,14 +319,14 @@ export default defineComponent({
   position: fixed;
   width: 100%;
   background-color: #fff;
-  bottom: 0;
+  bottom: 30rpx;
   height: 106rpx;
   padding: 0 30rpx;
   box-sizing: border-box;
 }
 
 .footer .addressBnt {
-  width: 330rpx;
+  width: 100%;
   height: 76rpx;
   border-radius: 50rpx;
   text-align: center;
