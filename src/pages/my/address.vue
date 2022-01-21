@@ -1,33 +1,28 @@
 <template>
   <view>
     <view class="address-management" :class="addressList.length < 1 ? 'fff' : ''">
-      <radio-group v-if="addressList.length" class="radio-group" @change="radioChange">
-        <view v-for="(item, index) in addressList" :key="index" class="item borRadius14">
-          <view class="address">
-            <view class="consignee"
-              >收货人：{{ item.name }}<text class="phone">{{ item.mobile }}</text></view
-            >
-            <view>收货地址：{{ item.province }}{{ item.city }}{{ item.district }}</view>
+      <view v-for="item in addressList" :key="item.id" class="item borRadius14">
+        <view class="address">
+          <view class="consignee"
+            >收货人：{{ item.name }}<text class="phone">{{ item.mobile }}</text></view
+          >
+          <view>收货地址：{{ item.province }}{{ item.city }}{{ item.district }}</view>
+        </view>
+        <view class="operation acea-row row-between-wrapper">
+          <!-- #ifdef MP -->
+          <view class="radio" :class="item.is_default === '1' ? 'selected' : ''" @click.stop="changeDefault(item)">
+            <text v-if="item.is_default === '1'" class="iconfont icon-radio-checked"></text>
+            <text v-else class="iconfont icon-radio-uncheck"></text>
+            <text>设为默认{{ item.is_default }}</text>
           </view>
-          <view class="operation acea-row row-between-wrapper">
-            <!-- #ifndef MP -->
-            <radio class="radio" :value="index.toString()" :checked="item.default" style="transform: scale(0.8)">
-              <text>设为默认</text>
-            </radio>
-            <!-- #endif -->
-            <!-- #ifdef MP -->
-            <view>
-              <radio class="radio" :value="index" :checked="item.default" style="transform: scale(0.8)"> </radio>
-              <text>设为默认</text>
-            </view>
-            <!-- #endif -->
-            <view class="acea-row row-middle">
-              <view @click="editAddress(item)"><text class="iconfont icon-bianji"></text>编辑</view>
-              <view @click="delAddress(item.id)"><text class="iconfont icon-shanchu"></text>删除</view>
-            </view>
+          <!-- #endif -->
+          <view class="acea-row row-middle">
+            <view class="btn" @click="editAddress(item)"><text class="iconfont icon-edit"></text>编辑</view>
+            <view class="btn" @click="delAddress(item.id)"><text class="iconfont icon-delete"></text>删除</view>
           </view>
         </view>
-      </radio-group>
+      </view>
+
       <view v-if="addressList.length" class="loadingicon acea-row row-center-wrapper">
         <text class="loading iconfont icon-jiazai" :hidden="loading == false"></text>{{ loadTitle }}
       </view>
@@ -64,7 +59,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { fetchUserAddress } from '@/api/address'
+import { fetchUserAddress, fetchChangeDefault } from '@/api/address'
 import { Tips } from '@/utils/util'
 
 export default defineComponent({
@@ -94,16 +89,44 @@ export default defineComponent({
     }
 
     /**
+     * 更改默认
+     * @param item
+     */
+    const changeDefault = (item) => {
+      console.log('item', item)
+      const data = {
+        id: item.id,
+        type: item.type,
+        is_default: item.is_default === '1' ? 0 : 1,
+      }
+      fetchChangeDefault(data)
+        .then((r) => {
+          if (r.code === 0) {
+            Tips({
+              title: '设置成功',
+            })
+            getAddressList()
+          } else {
+            Tips({
+              title: '设置失败',
+            })
+          }
+        })
+        .catch((err) => console.log(err))
+    }
+
+    /**
      * 编辑列表
      * @param item
      */
     const editAddress = (item) => {
-      uni.navigateTo({
-        url: './add',
-        success: function (res) {
-          res.eventChannel.emit('dataFromOpenerPage', item)
-        },
-      })
+      console.log('item', item)
+      //   uni.navigateTo({
+      //     url: './add',
+      //     success: function (res) {
+      //       res.eventChannel.emit('dataFromOpenerPage', item)
+      //     },
+      //   })
     }
 
     /**
@@ -198,18 +221,6 @@ export default defineComponent({
       //     })
       // #endif
     }
-    // 设置默认
-    const radioChange = (e) => {
-      const item = state.addressList[e.detail.value]
-      item.default = true
-      if (!state.apiLoading) {
-        state.apiLoading = true
-        api.updateAddr(item).then((res) => {
-          // if(res.status === 'OK') {}
-          state.apiLoading = false
-        })
-      }
-    }
 
     onShow(() => {
       getAddressList()
@@ -217,10 +228,11 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      radioChange,
       addAddress,
+      editAddress,
       getWxAddress,
       delAddress,
+      changeDefault,
     }
   },
 })
@@ -345,5 +357,9 @@ radio-group {
 
 .bg-color {
   background-color: #1aa86c;
+}
+
+.btn {
+  padding-right: 20rpx;
 }
 </style>

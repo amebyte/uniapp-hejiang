@@ -47,7 +47,7 @@
             :maxlength="20"
           />
         </view>
-        <view class="form-item acea-row">
+        <view class="form-item acea-row" style="display: none">
           <view class="title">设为默认</view>
           <switch :checked="form.default" style="transform: scale(0.8)" type="checkbox" @change="defaultChange" />
         </view>
@@ -87,6 +87,7 @@ export default defineComponent({
         detail: '',
         type: '' as any,
         default: false,
+        is_default: 0,
       },
       is_refund_address: 0,
       detail_url: '',

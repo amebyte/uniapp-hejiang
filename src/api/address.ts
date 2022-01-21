@@ -23,3 +23,11 @@ export function fetchDistrict() {
 export function fetchEidtAddress(data) {
   return request.post!('&r=api/user/address-save', data, {}, true)
 }
+
+/**
+ * 新增和编辑
+ * @returns
+ */
+export function fetchChangeDefault(data) {
+  return request.post!('&r=api/user/address-default', data, {}, true)
+}
