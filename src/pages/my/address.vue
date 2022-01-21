@@ -5,9 +5,9 @@
         <view v-for="(item, index) in addressList" :key="index" class="item borRadius14">
           <view class="address">
             <view class="consignee"
-              >收货人：{{ item.name }}<text class="phone">{{ item.phoneNumber }}</text></view
+              >收货人：{{ item.name }}<text class="phone">{{ item.mobile }}</text></view
             >
-            <view>收货地址：{{ item.province }}{{ item.city }}{{ item.region }}{{ item.street }}</view>
+            <view>收货地址：{{ item.province }}{{ item.city }}{{ item.district }}</view>
           </view>
           <view class="operation acea-row row-between-wrapper">
             <!-- #ifndef MP -->
@@ -71,7 +71,7 @@ export default defineComponent({
   name: 'AddressManage',
   setup() {
     const state = reactive({
-      addressList: [],
+      addressList: [] as any[],
       loadTitle: '加载更多',
       loading: false,
       apiLoading: false,
