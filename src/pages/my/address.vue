@@ -6,7 +6,7 @@
           <view class="consignee"
             >收货人：{{ item.name }}<text class="phone">{{ item.mobile }}</text></view
           >
-          <view>收货地址：{{ item.province }}{{ item.city }}{{ item.district }}</view>
+          <view>收货地址：{{ item.province }}{{ item.city }}{{ item.district }}{{ item.detail }}</view>
         </view>
         <view class="operation acea-row row-between-wrapper">
           <!-- #ifdef MP -->
@@ -59,7 +59,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { fetchUserAddress, fetchChangeDefault, fetchDelAddress } from '@/api/address'
+import { fetchAddressList, fetchChangeDefault, fetchDelAddress } from '@/api/address'
 import { Tips } from '@/utils/util'
 
 export default defineComponent({
@@ -76,7 +76,7 @@ export default defineComponent({
      * 获取地址列表
      */
     const getAddressList = () => {
-      fetchUserAddress()
+      fetchAddressList()
         .then((res) => {
           if (res.code === 0) {
             state.addressList = [] // 小程序BUG？

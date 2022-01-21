@@ -20,7 +20,7 @@
 
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
-import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, PropType } from 'vue'
+import { reactive, defineComponent, toRefs, PropType, watch, onMounted } from 'vue'
 import Cache from '@/utils/cache'
 import { fetchDistrict } from '@/api/address'
 export default defineComponent({
@@ -112,7 +112,6 @@ export default defineComponent({
     }
 
     const init = (list) => {
-      console.log('list', list)
       const null_status = state.tempIds.length === 3 && state.tempIds[0] != 0
       const ids = null_status ? state.tempIds : [2, 3, 4]
       const multiIndex = getIndex(list, ids)
@@ -137,7 +136,6 @@ export default defineComponent({
     }
 
     const getIndex = (list, data) => {
-      console.log('data', data)
       let arr: any[] = []
       list.map((item, index) => {
         if (data[0] == item.id) arr.push(index)
@@ -153,7 +151,7 @@ export default defineComponent({
       return arr
     }
 
-    onLoad(() => {
+    onMounted(() => {
       before(init)
     })
 
@@ -171,5 +169,6 @@ export default defineComponent({
   display: flex;
   align-items: center;
   flex-direction: row;
+  justify-content: space-between;
 }
 </style>

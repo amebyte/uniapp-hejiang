@@ -1,11 +1,19 @@
 import request from '@/utils/request'
 
 /**
- * 获取用户信息
+ * 获取收货地址列表
  *
  */
-export function fetchUserAddress() {
+export function fetchAddressList() {
   return request.get!('&r=api/user/address&type=0&page=1', {})
+}
+
+/**
+ * 获取收货地址列表
+ *
+ */
+export function fetchAddressDetail(data) {
+  return request.get!('&r=api/user/address-detail', data)
 }
 
 /**

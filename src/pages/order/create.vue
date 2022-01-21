@@ -7,18 +7,18 @@
         <view class="address-wrap">
           <view class="striped"></view>
           <!--邮寄到家 start-->
-          <view v-if="userAddress" class="address-info">
+          <view v-if="previewData.address" class="address-info">
             <i class="iconfont icon-address"></i>
             <view class="content">
               <view class="top">
-                <view class="name">{{ userAddress.name }}</view>
-                <view class="phone">{{ userAddress.phoneNumber }}</view>
+                <view class="name">{{ previewData.address.name }}</view>
+                <view class="phone">{{ previewData.address.mobile }}</view>
               </view>
               <view class="detail-address">
-                {{ userAddress.province }}{{ userAddress.city }}{{ userAddress.region }}{{ userAddress.street }}
-                {{ userAddress.detailAddress }}
+                {{ previewData.address.province }}{{ previewData.address.city }}{{ previewData.address.district
+                }}{{ previewData.address.detail }}
               </view>
-              <navigator url="/pages/users/address/addr-manage">
+              <navigator url="/pages/my/address">
                 <view class="more"><i class="iconfont icon-arrow-right"></i></view>
               </navigator>
             </view>
@@ -155,6 +155,7 @@ import { store } from '@/store'
 import { Tips } from '@/utils/util'
 // import { getUserAddress } from '@/api/address'
 import { fetchOrderPreview } from '@/api/order'
+import { CartMutationTypes } from '@/store/modules/cart/mutation-types'
 // import { fetchMyAccumulatePoints } from '@/api/user'
 // import { goodsTypes, priceFields, transportModeEnum, orderStatusEnum, pointsExchangeMode } from '@/utils/constant'
 // import util from '@/utils/util'
@@ -326,7 +327,7 @@ export default defineComponent({
       }
     }
 
-    const getOrderPreview = () => {
+    const setFormData = () => {
       const list = store.state.cart.previewOrderParam
       // 商户列表先做下排序，主商城必须在最前
       for (let i in list) {
@@ -352,8 +353,11 @@ export default defineComponent({
         //     list[i]['store_id'] = store_id ? store_id : '';
         // }
       }
-      const data = { form_data: JSON.stringify({ list: list, address_id: 0, send_type: '' }) }
-      fetchOrderPreview(data)
+      store.commit(CartMutationTypes.SET_ORDER_SUBMIT_FROM_DATA, { list: list, address_id: 0, send_type: '' })
+    }
+
+    const getOrderPreview = () => {
+      fetchOrderPreview({ form_data: JSON.stringify(store.state.cart.orderSubmitFromData) })
         .then((r) => {
           state.loadingPreviewData = false
           uni.hideLoading()
@@ -389,10 +393,20 @@ export default defineComponent({
     }
 
     onShow(() => {
+      setFormData()
       getOrderPreview()
       //   const goodsItem = store.state.cart.selectedCart
       //   const previewOrderParam = store.state.cart.previewOrderParam
       //   console.log('previewOrderParam', previewOrderParam)
+    })
+
+    onLoad(() => {
+      uni.getSystemInfo({
+        success: function (res) {
+          state.height = res.windowHeight
+          //res.windowHeight:获取整个窗口高度为px，*2为rpx；98为头部占据的高度；
+        },
+      })
     })
 
     return {
@@ -407,35 +421,6 @@ export default defineComponent({
       createOrder,
       setActivityDiscount,
     }
-  },
-  onShow() {
-    if (this.isLogin) {
-      //   this.initCart()
-      //   this.initUserAddress()
-      //   this.getMyAccumulatePoints()
-      // 普通订单和满减订单的时候去获取优惠劵 || this.orderType === goodsTypes.PRICE_OFF 满减逻辑后端还没实现，暂时不开放
-      //   if (this.orderType === goodsTypes.PLAIN) {
-      //     this.getCoupon()
-      //   }
-
-      // 获取字典配置是否能操作支付
-      this.$store.dispatch('GET_PAYBTN_VISIBLE')
-    }
-  },
-  onLoad(options) {
-    const _this = this
-    console.log('options.orderType', options.orderType)
-    this.isBuyNow = options.isBuyNow
-    // this.orderType = options.orderType ? Number(options.orderType) : goodsTypes.PLAIN // 订单类型 0：普通 1：秒杀 2: 内购
-
-    // this.priceKey = util.normalizePriceField(this.orderType)
-
-    uni.getSystemInfo({
-      success: function (res) {
-        _this.height = res.windowHeight
-        //res.windowHeight:获取整个窗口高度为px，*2为rpx；98为头部占据的高度；
-      },
-    })
   },
 })
 </script>
@@ -478,12 +463,10 @@ export default defineComponent({
         display: flex;
         padding: 32rpx 0;
         position: relative;
+        padding-left: 20rpx;
 
-        .coordinates {
-          width: 50rpx;
-          height: 66rpx;
-          margin-right: 23rpx;
-          margin-left: 30rpx;
+        .icon-address {
+          color: $top-background-color;
         }
 
         .content {

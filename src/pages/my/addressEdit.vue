@@ -6,6 +6,7 @@
           <view class="title">所在地区</view>
           <view style="flex: 1">
             <app-area-picker
+              v-if="tt_area_show"
               :ids="[form.province_id, form.city_id, form.district_id]"
               @customevent="areaEvent"
             ></app-area-picker>
@@ -52,7 +53,7 @@
           <switch :checked="form.default" style="transform: scale(0.8)" type="checkbox" @change="defaultChange" />
         </view>
 
-        <view class="uni-btn-v">
+        <view class="btn">
           <button form-type="submit">保存</button>
         </view>
       </view>
@@ -64,7 +65,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import AppAreaPicker from './component/AppAreaPicker.vue'
-import { fetchEidtAddress } from '@/api/address'
+import { fetchEidtAddress, fetchAddressDetail } from '@/api/address'
 import { Tips } from '@/utils/util'
 export default defineComponent({
   name: 'AddressEidt',
@@ -186,7 +187,29 @@ export default defineComponent({
       }
     }
 
-    onLoad(() => {})
+    onLoad((options: any) => {
+      if (options.id > 0) {
+        fetchAddressDetail(options)
+          .then((info) => {
+            if (info.code === 0) {
+              if (options.is_refund_address > 0) {
+                const detail = info.data.detail
+                // getInfo(Object.assign({ detail: detail.address_detail }, detail))
+              } else {
+                state.form = info.data.list
+              }
+            } else {
+              uni.showToast({ title: info.msg, icon: 'none' })
+            }
+            state.tt_area_show = true
+          })
+          .catch(() => {
+            state.tt_area_show = true
+          })
+      } else {
+        state.tt_area_show = true
+      }
+    })
 
     return {
       ...toRefs(state),
@@ -224,5 +247,21 @@ export default defineComponent({
 
 .form-item .title {
   width: 180rpx;
+}
+.btn {
+  width: 100%;
+  height: 76rpx;
+  border-radius: 50rpx;
+  text-align: center;
+  line-height: 76rpx;
+  font-size: 30rpx;
+  color: #fff;
+  background-color: #1aa86c;
+  button {
+    height: 76rpx;
+    line-height: 76rpx;
+    color: #fff;
+    background-color: transparent;
+  }
 }
 </style>
