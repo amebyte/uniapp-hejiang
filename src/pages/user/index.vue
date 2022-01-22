@@ -16,7 +16,7 @@
               >{{ userInfo.memberLevelVO ? userInfo.memberLevelVO : 'LV0' }}
               <text class="iconfont icon-arrow-right-bold"></text
             ></view>
-            <view class="user-person">个人认证</view>
+            <view class="user-person">点击刷新</view>
           </view>
           <view class="user-right-bottom">
             <view v-if="userInfo.userMobile">{{ userInfo.userMobile || '' }}</view>
@@ -55,36 +55,29 @@
         </view>
       </view>
       <view class="box-content row">
-        <navigator url="/pages/users/order/index?status=1" class="box-item col-5">
-          <text class="iconfont icon-arrow-right"></text>
+        <navigator url="/pages/users/order/index?status=1" class="box-item col-4">
+          <text class="iconfont icon-pending-payment icon"></text>
           <text>待付款</text>
         </navigator>
-        <navigator url="/pages/users/order/index?status=2" class="box-item col-5">
-          <text class="iconfont icon-arrow-right"></text>
-          <text>待分享</text>
+        <navigator url="/pages/users/order/index?status=2" class="box-item col-4">
+          <text class="iconfont icon-wait-send icon"></text>
+          <text>待发货</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">
             {{ orderCounts.unauditedOrderCounts > 99 ? '99+' : orderCounts.unauditedOrderCounts }}
           </view>
         </navigator>
-        <navigator url="/pages/users/order/index?status=4" class="box-item col-5">
-          <text class="iconfont icon-arrow-right"></text>
+        <navigator url="/pages/users/order/index?status=4" class="box-item col-4">
+          <text class="iconfont icon-dispatched icon"></text>
           <text>待收货</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">
             {{ orderCounts.unauditedOrderCounts > 99 ? '99+' : orderCounts.unauditedOrderCounts }}
           </view>
         </navigator>
-        <navigator url="/pages/users/order/index?status=5" class="box-item col-5">
-          <text class="iconfont icon-arrow-right"></text>
-          <text>待提货</text>
+        <navigator url="/pages/users/order/index?status=5" class="box-item col-4">
+          <text class="iconfont icon-completed icon"></text>
+          <text>已完成</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">
             {{ orderCounts.unauditedOrderCounts > 99 ? '99+' : orderCounts.unauditedOrderCounts }}
-          </view>
-        </navigator>
-        <navigator url="/pages/users/order/index?status=6" class="box-item col-5">
-          <text class="iconfont icon-arrow-right"></text>
-          <text>已完成</text>
-          <view v-if="orderCounts.unsignedOrderCounts > 0" class="desc">
-            {{ orderCounts.unsignedOrderCounts > 99 ? '99+' : orderCounts.unsignedOrderCounts }}
           </view>
         </navigator>
       </view>
