@@ -91,7 +91,9 @@ class="scroll-v list" enable-back-to-top="true" scroll-y refresher-enabled
 	</view>
 </template>
 
-<script>
+<script lang="ts">
+import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
+import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 	// 缓存每页最多
 	const MAX_CACHE_DATA = 100;
 	// 缓存页签数量
