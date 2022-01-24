@@ -2,7 +2,7 @@ export const APP_NAME = '开卓教育'
 
 export const IMAGE_URL = 'https://mini-1304817606.file.myqcloud.com' // 静态资源的cos地址
 
-export const HTTP_REQUEST_URL = 'https://mall.fsbaide.cn/web/index.php?_mall_id=1'
+export const HTTP_REQUEST_URL = process.uniEnv.HTTP_REQUEST_URL
 
 export const HEADER = {
   'content-type': 'application/json',

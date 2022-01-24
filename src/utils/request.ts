@@ -17,7 +17,7 @@ function baseRequest(
   params: unknown
 ) {
   const token = store.state.app.token
-  const Url = HTTP_REQUEST_URL
+  const Url = HTTP_REQUEST_URL + '/web/index.php?_mall_id=1'
   let header = JSON.parse(JSON.stringify(HEADER))
 
   if (params != undefined) {

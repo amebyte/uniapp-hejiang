@@ -10,9 +10,8 @@
       <text class="txt">收藏</text>
     </view>
     <navigator class="item shopping-cart" url="/pages/shopping-cart/index" hover-class="none">
-      <text class="iconfont icon-shopping-cart">
-        <text v-if="cartCount > 0" class="good-number">{{ cartCount > 99 ? '99+' : cartCount }}</text>
-      </text>
+      <text class="iconfont icon-shopping-cart"></text>
+      <text v-if="cartCount > 0" class="good-number">{{ cartCount > 99 ? '99+' : cartCount }}</text>
       <text class="txt">购物车</text>
     </navigator>
     <view class="item btn">

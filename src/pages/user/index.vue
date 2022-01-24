@@ -155,7 +155,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { store } from '@/store'
-let isLogin = ref(true)
+let isLogin = ref(store.getters.isLogin)
 let userInfo = ref(store.state.app.userInfo)
 let orderCounts = ref({}) as any
 const toPage = (path) => {

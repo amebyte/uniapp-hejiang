@@ -14,7 +14,12 @@ export interface BannerState<T> {
   isLoaded: boolean
 }
 export const state: BannerState<imgUrlsType> = {
-  indexBanner: [], // 首页的banner列表
+  indexBanner: [
+    {
+      type: 'image',
+      src: 'https://mall.fsbaide.cn/web/uploads/thumbs/mall1/20211211/00fc5f803fac014cbbb0eaabfeba3b8e.png',
+    },
+  ], // 首页的banner列表
   seckillBanner: [], // 秒杀的banner列表
   groupBanner: [], // 拼团的banner列表
   fullMinussBanner: [], // 满减的banner列表

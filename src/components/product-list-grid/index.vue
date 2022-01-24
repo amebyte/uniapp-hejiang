@@ -28,7 +28,7 @@
 </template>
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { fetchRecommendGoodsList } from '@/api/goods'
 import { goodsType } from '@/types'
 let goodsList = ref<Array<goodsType>>([])
@@ -45,7 +45,7 @@ const getNewGoodsList = () => {
     })
     .catch((err) => console.log(err))
 }
-onLoad(() => {
+onMounted(() => {
   getNewGoodsList()
 })
 

@@ -6,19 +6,19 @@
     <!--头像和用户信息 start-->
     <view class="user-info-header" style="">
       <view class="user-avatar" @click="toPage('/pages/my/edit')">
-        <image :src="userInfo.pic" />
+        <image :src="userInfo.avatar" />
       </view>
       <view class="user-right">
         <view class="user-right-top">
           <text class="username">{{ userInfo.nickName }}</text>
           <view class="user-level"
-            >{{ userInfo.memberLevelVO ? userInfo.memberLevelVO : 'LV0' }}
+            >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
             <text class="iconfont icon-arrow-right-bold"></text
           ></view>
-          <view class="user-person">个人认证</view>
+          <view class="user-person">点击刷新</view>
         </view>
         <view class="user-right-bottom">
-          <view v-if="userInfo.userMobile">{{ userInfo.userMobile || '' }}</view>
+          <view v-if="userInfo.mobile">{{ userInfo.mobile || '' }}</view>
           <view v-else @click="toPage('/pages/my/setMobile')">设置手机号码</view>
         </view>
       </view>
@@ -47,13 +47,9 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import ProductListGrid from '@/components/product-list-grid/index.vue'
-let isLogin = ref(true)
-let userInfo = reactive({
-  pic: 'https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTJ8SiagBMUuLZ7USibVCmnJBvy87ib8gT8gl1wrCwwZRVDsv9a6t4lbGLHcoiacKDxjvgw0v374xE3UkQ/132',
-  nickName: 'coboy',
-  memberLevelVO: 'Lv1',
-  userMobile: '1382550699x',
-})
+import { store } from '@/store'
+let isLogin = ref(store.getters.isLogin)
+let userInfo = ref(store.state.app.userInfo)
 const toPage = (path) => {
   console.log('toPage')
 }

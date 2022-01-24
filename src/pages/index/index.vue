@@ -122,7 +122,7 @@ export default defineComponent({
     const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
       $store: store,
     })
-    fetchBanner()
+    // fetchBanner()
 
     const indexBanner = computed(() => store.state.banner.indexBanner)
 

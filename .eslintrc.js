@@ -31,5 +31,6 @@ module.exports = {
   globals: {
     uni: true,
     wx: true,
+    process: true,
   },
 }

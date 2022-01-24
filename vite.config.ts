@@ -13,4 +13,13 @@ export default defineConfig({
     ],
   },
   plugins: [uni()],
+  server: {
+    proxy: {
+      '/API': {
+        target: 'https://mall.fsbaide.cn/',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/API/, ''),
+      },
+    },
+  },
 })
