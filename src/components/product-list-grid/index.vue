@@ -6,10 +6,10 @@
           <image :src="item.thumb" mode="widthFix"></image>
         </view>
         <view class="text">
-          <view class="name line1">{{ item.title }}</view>
+          <view class="name line1">{{ item.productName }}</view>
           <view class="vip acea-row row-between-wrapper">
             <view class="money font-color"
-              >￥<text class="num">{{ item.minprice }}</text>
+              >￥<text class="num">{{ item.marketPrice }}</text>
             </view>
             <view class="add-cart">
               <text class="iconfont icon-add-cart-fill"></text>
@@ -30,12 +30,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import { fetchRecommendGoodsList } from '@/api/goods'
-type goodsType = {
-  id: string
-  thumb: string
-  title: string
-  minprice: number
-}
+import { goodsType } from '@/types'
 let goodsList = ref<Array<goodsType>>([])
 const getNewGoodsList = () => {
   const params = {
@@ -43,9 +38,9 @@ const getNewGoodsList = () => {
     pageSize: 10,
   }
   fetchRecommendGoodsList(params)
-    .then((r) => {
+    .then((r: any) => {
       console.log('r', r)
-      goodsList.value = r.list
+      goodsList.value = r
       console.log('newGoodsList', goodsList.value)
     })
     .catch((err) => console.log(err))

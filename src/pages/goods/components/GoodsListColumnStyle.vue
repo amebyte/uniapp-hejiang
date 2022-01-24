@@ -15,7 +15,7 @@
               <view class="label">藤茶采制</view>
               <view class="label r">线下课程</view>
             </view>
-            <view class="title">{{ item.title }}</view>
+            <view class="title">{{ item.productName }}</view>
             <view class="row">
               <view class="label">授课老师：</view>
               <view class="content">黄XX老师</view>
@@ -46,12 +46,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import { fetchRecommendGoodsList } from '@/api/goods'
-type goodsType = {
-  id: string
-  thumb: string
-  title: string
-  minprice: number
-}
+import { goodsType } from '@/types'
 let newGoodsList = ref<Array<goodsType>>([])
 const getNewGoodsList = () => {
   const params = {
@@ -59,9 +54,9 @@ const getNewGoodsList = () => {
     pageSize: 10,
   }
   fetchRecommendGoodsList(params)
-    .then((r) => {
+    .then((r: any) => {
       console.log('r', r)
-      newGoodsList.value = r.list
+      newGoodsList.value = r
       console.log('newGoodsList', newGoodsList)
     })
     .catch((err) => console.log(err))
