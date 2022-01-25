@@ -49,7 +49,7 @@
     <view class="user-order">
       <view class="box-header two_sides">
         <view>我的订单</view>
-        <view class="all" @click="toPage('/pages/users/order/index')">
+        <view class="all" @click="toPage('/pages/order/list')">
           <text>全部订单</text>
           <text class="iconfont icon-arrow-right"></text>
         </view>
@@ -159,7 +159,9 @@ let isLogin = ref(store.getters.isLogin)
 let userInfo = ref(store.state.app.userInfo)
 let orderCounts = ref({}) as any
 const toPage = (path) => {
-  console.log('toPage')
+  uni.navigateTo({
+    url: path,
+  })
 }
 const goLogin = () => {
   console.log('goLogin')

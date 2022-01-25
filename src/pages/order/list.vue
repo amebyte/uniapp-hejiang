@@ -106,14 +106,14 @@ const MAX_CACHE_DATA = 100
 // 缓存页签数量
 const MAX_CACHE_PAGE = 3
 
-import * as api from '@/api/user.js'
-import * as util from '@/utils/constant.js'
-import { Debounce } from '@/utils/validate.js'
+// import * as api from '@/api/user.js'
+// import * as util from '@/utils/constant.js'
+// import { Debounce } from '@/utils/validate.js'
 
 export default defineComponent({
   name: 'OrderList',
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       tabBars: [
         {
           title: '全部',
@@ -121,53 +121,58 @@ export default defineComponent({
         },
         {
           title: '待付款',
-          status: util.orderStatusEnum.PENDING_PAYMENT,
+          status: 1,
         },
         {
           title: '待分享',
-          status: util.orderStatusEnum.SHARE,
+          status: 2,
         },
         {
           title: '待发货',
-          status: util.orderStatusEnum.WAIT_SEND,
+          status: 3,
         },
         {
           title: '待收货',
-          status: util.orderStatusEnum.DISPATCHED,
+          status: 4,
         },
         {
           title: '待提货',
-          status: util.orderStatusEnum.PICK_UP_PENDING,
+          status: 5,
         },
         {
           title: '已完成',
-          status: util.orderStatusEnum.COMPLETED,
+          status: 6,
         },
       ],
       tabIndex: 0,
-      newsList: [],
+      newsList: [] as any[],
       scrollInto: '',
-
       // 刷新状态
       refeshloading: false,
       key: 0,
+    })
+
+    onLoad((options) => {
+      if (options.status) state.tabIndex = Number(options.status)
+      state.tabBars.forEach((tabBar) => {
+        state.newsList.push({
+          data: [],
+          isLoading: false,
+          pageNum: 0,
+          total: 0,
+          allData: false,
+          refreshText: '',
+          loadingText: '加载更多...',
+        })
+      })
+      getList(state.tabIndex)
+    })
+
+    return {
+      ...toRefs(state),
     }
   },
-  onLoad(o) {
-    if (o.status) this.tabIndex = Number(o.status)
-    this.tabBars.forEach((tabBar) => {
-      this.newsList.push({
-        data: [],
-        isLoading: false,
-        pageNum: 0,
-        total: 0,
-        allData: false,
-        refreshText: '',
-        loadingText: '加载更多...',
-      })
-    })
-    this.getList(this.tabIndex)
-  },
+
   computed: {
     orderStatus: (item) => {
       return {
@@ -560,7 +565,7 @@ export default defineComponent({
 
     text:nth-child(2) {
       flex: 0 0 auto;
-      color: $theme-color;
+      color: #333;
 
       .done {
         color: #666666;
@@ -571,7 +576,7 @@ export default defineComponent({
       }
 
       .toAudit {
-        color: $theme-color;
+        color: #333;
       }
     }
   }
