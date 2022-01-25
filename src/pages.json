@@ -67,6 +67,13 @@
             "navigationBarTitleText": "创建订单",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "list",
+          "style": {
+            "navigationBarTitleText": "订单列表",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     },
