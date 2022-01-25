@@ -104,10 +104,8 @@ import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, to
 	import {
 		Debounce
 	} from '@/utils/validate.js'
-	import orderPayMixin from '@/mixins/orderPayMixin'
 
-	export default {
-		mixins: [orderPayMixin],
+	export default defineComponent({
 		// 我的订单
 		data() {
 			return {
@@ -366,7 +364,7 @@ import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, to
 				this.getList(this.tabIndex, '', true)
 			}
 		}
-	}
+	})
 </script>
 <style lang="scss" scoped>
 	// @import url('@/uni.scss');
