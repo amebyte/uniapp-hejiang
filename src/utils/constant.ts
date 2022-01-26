@@ -11,3 +11,10 @@ export const goodsTypes = {
   POINTS_MALLS: 6, // 积分
   PRICE_OFF: 7, // 满减
 }
+
+/**
+ * 订单类型
+ */
+export const orderType = {
+    
+}

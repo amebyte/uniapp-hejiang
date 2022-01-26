@@ -27,21 +27,20 @@
         >
           <view v-for="(item, index2) in tab.data" :key="index2" class="list-item">
             <view class="item-number">
-              <text>订单编号：{{ item.code }}</text>
-              <text
-                :class="{ done: item.orderStat == 30, toSend: item.orderStat == 21, toAudit: item.orderStat == 10 }"
-                >{{ retrunStatusText(item.status) }}</text
-              >
+              <text>订单编号：{{ item.order_no }}</text>
+              <text :class="{ done: item.status === 1, toSend: item.status === 2, toAudit: item.status === 3 }">{{
+                renderStatus(item.status)
+              }}</text>
             </view>
             <view class="list-item-content" @click="toDetail(item.id)">
-              <view v-for="(i, n) in item.items" :key="n" class="">
+              <view v-for="(i, n) in item.detail" :key="n" class="">
                 <view class="flex">
                   <view class="product-img">
-                    <image :src="i.pic"></image>
+                    <image :src="i.goods_info.pic_url"></image>
                   </view>
                   <view class="list-item-content-right flex-sub">
                     <view class="product-name">
-                      {{ i.prodName }}
+                      {{ i.goods_info.name }}
                     </view>
                     <view v-if="i.skuName" class="product-tag">
                       {{ i.skuName }}
@@ -83,11 +82,6 @@
                 <view class="btn red" @click="toShare(item)">去分享</view>
               </template>
             </view>
-
-            <!-- {{item.creationDate}} -->
-            <!-- {{item.finallyTime}} -->
-
-            <!-- <media-item :options="item" @close="close(index1,index2)" @click="goDetail(item)"></media-item> -->
           </view>
           <view v-if="tab.isLoading || tab.data.length <= tab.total" class="loading-more">
             <text :key="key" class="loading-more-text">{{ tab.loadingText }}</text>
@@ -162,7 +156,7 @@ export default defineComponent({
         fetchOrderList(params)
           .then((res) => {
             activeTab.isLoading = false
-            if (res.status === 'OK') {
+            if (res.code === 0) {
               activeTab.data = activeTab.data.concat(res.data.list)
               activeTab.total = res.data.totalElements
               activeTab.pageNum++
@@ -196,43 +190,6 @@ export default defineComponent({
       }, 500)
     }
 
-    const getList2 = () => {
-      state.isRequest = false
-      fetchOrderList({
-        status: state.currentIndex,
-        keyword: state.search ? state.search.keyword : '',
-        dateArr: state.search ? JSON.stringify(state.search.dateArr) : JSON.stringify([]),
-        page: state.page,
-      })
-        .then((response) => {
-          console.log('response', response)
-          let { code, data, msg } = response
-          state.is_load_show = false
-          state.is_show = true
-          if (code === 0) {
-            let { list, pagination } = data
-            if (state.page !== 1) {
-              state.orders = state.orders.concat(list)
-            } else {
-              state.orders = list
-            }
-            state.page = list.length ? state.page + 1 : state.page
-            state.pagination = pagination
-            state.template_message = data.template_message
-          } else {
-            uni.showModal({
-              title: '',
-              content: msg,
-              showCancel: false,
-            })
-          }
-          state.isRequest = true
-        })
-        .catch(() => {
-          state.is_load_show = false
-        })
-    }
-
     const clickHandlerTab = (e) => {
       let index = e.target.dataset.current || e.currentTarget.dataset.current
       switchTab(index)
@@ -249,6 +206,10 @@ export default defineComponent({
       state.scrollInto = 'tab' + state.tabBars[index].status
     }, 5)
 
+    const renderStatus = (status) => {
+        
+    }
+
     onLoad((options) => {
       if (options.status) state.tabIndex = Number(options.status)
       state.tabBars.forEach((tabBar) => {
@@ -262,227 +223,19 @@ export default defineComponent({
           loadingText: '加载更多...',
         })
       })
-      getList()
+      getList(state.tabIndex)
     })
 
     return {
       ...toRefs(state),
       clickHandlerTab,
       onTabChange,
+      renderStatus,
     }
-  },
-
-  computed: {
-    orderStatus: (item) => {
-      return {
-        done: item.orderStat == 30,
-        toSend: item.orderStat == 21,
-        toAudit: item.orderStat == 10,
-      }
-    },
-  },
-  methods: {
-    retrunStatusText(n) {
-      return util.orderStatusEnum.descOfValue(n)
-    },
-    getList: Debounce(function (index, next, refresh) {
-      let activeTab = this.newsList[index]
-      if (refresh) {
-        activeTab.data = []
-        activeTab.pageNum = 0
-        activeTab.total = 0
-        activeTab.allData = false
-        activeTab.loadingText = '加载更多...'
-      }
-      if (!activeTab.allData) {
-        const params = {
-          subStatus: '',
-          pageNum: next ? activeTab.pageNum : 0,
-          pageSize: 10,
-        }
-        if (this.tabIndex) params.status = this.tabBars[this.tabIndex].status
-        api
-          .getOrderList(params)
-          .then((res) => {
-            activeTab.isLoading = false
-            if (res.status === 'OK') {
-              activeTab.data = activeTab.data.concat(res.data.list)
-              activeTab.total = res.data.totalElements
-              activeTab.pageNum++
-              this.refeshloading = false
-              if (activeTab.total <= activeTab.data.length || res.data.totalElements === 0) {
-                activeTab.allData = true
-                activeTab.loadingText = '没有更多了'
-                this.key++
-              }
-            } else {
-              this.refeshloading = false
-            }
-            uni.stopPullDownRefresh()
-          })
-          .catch(() => {
-            this.refeshloading = false
-            activeTab.isLoading = false
-            uni.stopPullDownRefresh()
-          })
-      }
-    }, 100),
-    ontabtap(e) {
-      let index = e.target.dataset.current || e.currentTarget.dataset.current
-      this.switchTab(index)
-    },
-    ontabchange(e) {
-      let index = e.target.current || e.detail.current
-      this.switchTab(index)
-    },
-    loadMore(e) {
-      setTimeout(() => {
-        this.getList(this.tabIndex, true)
-      }, 500)
-    },
-    switchTab: Debounce(function (index) {
-      if (this.tabIndex === index) {
-        return
-      }
-      if (this.newsList[index].data.length === 0) {
-        this.getList(index)
-      }
-      this.tabIndex = index
-      this.scrollInto = 'tab' + this.tabBars[index].status
-    }, 5),
-    // 取货码
-    toPickCodeDetail(id) {
-      uni.navigateTo({
-        url: './toPickCodeDetail?id=' + id,
-      })
-    },
-    // 详情页
-    toDetail(id) {
-      uni.navigateTo({
-        url: './detail?id=' + id,
-      })
-    },
-    // 去分享
-    toShare(item) {
-      console.log('item', item)
-      const groupBuyingDetailId = item.items[0].refProductId
-      uni.navigateTo({
-        url: `/pages/goods/groupBuying/statusDetail?groupBuyingDetailId=${groupBuyingDetailId}&type=${util.goodsTypes.GROUP_BUYING}&gId=${item.groupMemberId}`,
-      })
-    },
-    // 售后/退款
-    refund(id) {
-      const _this = this
-      uni.showModal({
-        title: '提示',
-        content: '是否真的要进行退款',
-        success: function (res) {
-          if (res.confirm) {
-            api.refund(id).then((res) => {
-              if (res.status === 'OK') {
-                _this.getList(_this.tabIndex, '', true)
-              }
-            })
-          } else if (res.cancel) {
-            // console.log('用户点击取消');
-          }
-        },
-      })
-    },
-    // 取消订单
-    cancelOrder(id) {
-      const _this = this
-      uni.showModal({
-        title: '提示',
-        content: '是否真的要取消订单',
-        success: function (res) {
-          if (res.confirm) {
-            api
-              .cancelOrder(id)
-              .then((res) => {
-                if (res.status === 'OK') {
-                  _this.getList(_this.tabIndex, '', true)
-                  _this.$util.Tips({
-                    title: '取消订单成功',
-                  })
-                } else {
-                  _this.$util.Tips({
-                    title: res.message,
-                  })
-                }
-              })
-              .catch((e) => {
-                _this.$util.Tips({
-                  title: e || 取消订单异常,
-                })
-              })
-          } else if (res.cancel) {
-            // console.log('用户点击取消');
-          }
-        },
-      })
-    },
-    // 删除订单
-    delOrder(id) {
-      const _this = this
-      uni.showModal({
-        title: '提示',
-        content: '是否确认删除',
-        success: function (res) {
-          if (res.confirm) {
-            api.delOrder(id).then((res) => {
-              if (res.status === 'OK') {
-                _this.getList(_this.tabIndex, '', true)
-              }
-            })
-          } else if (res.cancel) {
-            // console.log('用户点击取消');
-          }
-        },
-      })
-    },
-    // 去支付
-    payOrder(item) {
-      console.log(item)
-      const currPayOrder = {
-        orderId: item.id,
-        orderNo: item.code,
-        totalPrice: item.actualMoney,
-      }
-      this.generateWechatOrder(currPayOrder)
-    },
-    // 确认收货
-    sureReceipt(id) {
-      const _this = this
-      uni.showModal({
-        title: '提示',
-        content: '是否真的要进行确认收货',
-        success: function (res) {
-          if (res.confirm) {
-            api.sureReceipt(id).then((res) => {
-              if (res.status === 'OK') {
-                _this.getList(_this.tabIndex, '', true)
-                this.$util.Tips({
-                  title: '收货成功',
-                })
-              }
-            })
-          } else if (res.cancel) {
-            // console.log('用户点击取消');
-          }
-        },
-      })
-    },
-    // 下拉刷新
-    refresh() {
-      this.refeshloading = true
-      this.getList(this.tabIndex, '', true)
-    },
   },
 })
 </script>
 <style lang="scss" scoped>
-// @import url('@/uni.scss');
 .tabs {
   flex: 1;
   flex-direction: column;
@@ -507,10 +260,6 @@ export default defineComponent({
   /* #ifndef APP-PLUS */
   white-space: nowrap;
   /* #endif */
-  /* flex-wrap: nowrap; */
-  /* border-color: #cccccc;
-		border-bottom-style: solid;
-		border-bottom-width: 1px; */
 }
 
 .line-h {
@@ -692,14 +441,22 @@ export default defineComponent({
     min-width: 120rpx;
     width: 120rpx;
     height: 120rpx;
+    image {
+      width: 100%;
+      height: 100%;
+    }
   }
 
   .product-name {
-    // height: 50rpx;
-    // line-height: 50rpx;
-    color: #000;
+    color: #353535;
+    font-size: 26rpx;
+    word-break: break-all;
+    -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
-    lines: 1;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
   }
 
   .product-num {
