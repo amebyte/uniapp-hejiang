@@ -1,20 +1,19 @@
-/**
- * 商品类型
- */
-export const goodsTypes = {
-  PLAIN: 0, // 普通
-  FLASH_SALE: 1, // 秒杀
-  INTERNAL_PURCHASE: 2, // 内购
-  LIVE_SALE: 3, // 直播
-  NEW_USER_ONLY: 4, // 新用户专享
-  GROUP_BUYING: 5, // 拼团
-  POINTS_MALLS: 6, // 积分
-  PRICE_OFF: 7, // 满减
-}
+import Enum from './Enum'
 
 /**
  * 订单类型
  */
-export const orderType = {
-    
-}
+export const orderStatusEnum = new Enum({
+  PENDING_PAYMENT: [1, '待付款'],
+  WAIT_SEND: [2, '待发货'],
+  DISPATCHED: [3, '待收货'],
+  COMPLETED: [4, '已完成'],
+  PENDING_SHOPPING_EVALUATION: [5, '待评价'],
+  TRANSACTION_CLOSURE: [6, '交易关闭'],
+  APPLY_FOR_REFUND: [7, '申请退款'],
+  REFUNDING: [8, '退款中'],
+  REFUNDED: [9, '已退款'],
+  REFUND_FAILED: [10, '退款失败'],
+  PICK_UP_PENDING: [11, '待自提'],
+  REFUSE_REFUND: [12, '拒绝退款'],
+})
