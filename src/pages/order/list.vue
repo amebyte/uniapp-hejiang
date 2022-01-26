@@ -64,72 +64,70 @@
                 </view>
               </view>
             </view>
-            <view class="option flex justify-end">
-              <view class="main-right action-box-view">
-                <!-- 售后订单 -->
-                <template v-if="currentIndex == 5">
-                  <text :class="{ 'success-color': item.is_confirm == 1 ? true : false }">
-                    {{ item.status_text }}
-                  </text>
+            <view class="option flex justify-end action-box-view">
+              <!-- 售后订单 -->
+              <template v-if="currentIndex == 5">
+                <text :class="{ 'success-color': item.is_confirm == 1 ? true : false }">
+                  {{ item.status_text }}
+                </text>
+              </template>
+              <!-- 其它订单 -->
+              <template v-else>
+                <!-- 货到付款订单操作 start -->
+                <template v-if="item.pay_type == 2">
+                  <!-- 进行中的订单 不能进行订单操作 -->
+                  <template v-if="item.status == 1">
+                    <!-- 待收货-->
+                    <template v-if="item.is_confirm == 0">
+                      <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
+                      <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
+                        >确认收货
+                      </view>
+                    </template>
+                    <!-- 核销 -->
+                    <!-- 到店自提订单 在核销前有收款操作 -->
+                    <template v-if="item.send_type == 1 && item.is_confirm == 0 && item.cancel_status == 0">
+                      <view class="order-btn" @click="getClerkCode(item)">核销码</view>
+                    </template>
+                    <template v-if="item.action_status.is_show_comment == 1">
+                      <view class="order-btn" @click="appraise(item)">评价</view>
+                    </template>
+                  </template>
                 </template>
-                <!-- 其它订单 -->
+                <!-- 货到付款订单操作 end -->
+                <!-- 已支付订单操作 start -->
                 <template v-else>
-                  <!-- 货到付款订单操作 start -->
-                  <template v-if="item.pay_type == 2">
-                    <!-- 进行中的订单 不能进行订单操作 -->
-                    <template v-if="item.status == 1">
-                      <!-- 待收货-->
-                      <template v-if="item.is_confirm == 0">
-                        <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
-                        <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
-                          >确认收货
-                        </view>
-                      </template>
-                      <!-- 核销 -->
-                      <!-- 到店自提订单 在核销前有收款操作 -->
-                      <template v-if="item.send_type == 1 && item.is_confirm == 0 && item.cancel_status == 0">
-                        <view class="order-btn" @click="getClerkCode(item)">核销码</view>
-                      </template>
-                      <template v-if="item.action_status.is_show_comment == 1">
-                        <view class="order-btn" @click="appraise(item)">评价</view>
-                      </template>
-                    </template>
+                  <!-- 待付款 -->
+                  <template v-if="item.is_pay == 0">
+                    <view class="order-btn red" @click="cancel(item)">取消</view>
+                    <view class="order-btn grey" @click="orderPay(item)">付款</view>
                   </template>
-                  <!-- 货到付款订单操作 end -->
-                  <!-- 已支付订单操作 start -->
-                  <template v-else>
-                    <!-- 待付款 -->
-                    <template v-if="item.is_pay == 0">
-                      <view class="order-btn" @click="cancel(item)">取消</view>
-                      <view class="order-btn" @click="orderPay(item)">付款</view>
+                  <template v-if="item.status == 1">
+                    <!-- 核销 -->
+                    <!-- 到店自提订单 未支付不显示核销码 | 未支付 货到付款订单显示核销码 -->
+                    <template
+                      v-if="
+                        item.send_type == 1 &&
+                        item.is_confirm == 0 &&
+                        ((item.is_pay == 0 && item.pay_type == 2) || (item.is_pay == 1 && item.pay_type != 2))
+                      "
+                    >
+                      <view class="order-btn" @click="getClerkCode(item)">核销码</view>
                     </template>
-                    <template v-if="item.status == 1">
-                      <!-- 核销 -->
-                      <!-- 到店自提订单 未支付不显示核销码 | 未支付 货到付款订单显示核销码 -->
-                      <template
-                        v-if="
-                          item.send_type == 1 &&
-                          item.is_confirm == 0 &&
-                          ((item.is_pay == 0 && item.pay_type == 2) || (item.is_pay == 1 && item.pay_type != 2))
-                        "
+                    <!-- 待收货-->
+                    <template v-if="item.is_pay == 1 && item.is_confirm == 0 && item.sign != 'community'">
+                      <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
+                      <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
+                        >确认收货</view
                       >
-                        <view class="order-btn" @click="getClerkCode(item)">核销码</view>
-                      </template>
-                      <!-- 待收货-->
-                      <template v-if="item.is_pay == 1 && item.is_confirm == 0 && item.sign != 'community'">
-                        <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
-                        <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
-                          >确认收货</view
-                        >
-                      </template>
-                      <template v-if="item.action_status.is_show_comment == 1">
-                        <view class="order-btn" @click="appraise(item)">评价</view>
-                      </template>
+                    </template>
+                    <template v-if="item.action_status.is_show_comment == 1">
+                      <view class="order-btn" @click="appraise(item)">评价</view>
                     </template>
                   </template>
-                  <!-- 已支付订单操作 end -->
                 </template>
-              </view>
+                <!-- 已支付订单操作 end -->
+              </template>
             </view>
           </view>
           <view v-if="tab.isLoading || tab.data.length <= tab.total" class="loading-more">
@@ -255,8 +253,70 @@ export default defineComponent({
       state.scrollInto = 'tab' + state.tabBars[index].status
     }, 5)
 
-    const renderStatus = (status) => {
-      return orderStatusEnum.descOfValue(status)
+    // 下拉刷新
+    const refresh = () => {
+      state.refeshloading = true
+      getList(state.tabIndex, '', true)
+    }
+
+    const isShowExpressButton = (order) => {
+      if (order.is_send) {
+        if (order.detailExpress.length == 1 && order.detailExpress[0].send_type == 2 && order.send_type == 0) {
+          return false
+        }
+
+        if (order.is_confirm == 0) {
+          return true
+        }
+      }
+
+      return false
+    }
+
+    // 物流信息
+    const logistics = (orderDetail) => {
+      if (orderDetail.is_send == 1 && orderDetail.detailExpress.length == 0) {
+        // 兼容
+        let [id, express, express_no, customer_name, cover_pic] = [
+          orderDetail.id,
+          orderDetail.express,
+          orderDetail.express_no,
+          orderDetail.customer_name,
+          orderDetail.detail[0].goods_info.pic_url,
+        ]
+        uni.navigateTo({
+          url: `/pages/order/express-detail/express-detail?id=${id}&express=${express}&express_no=${express_no}&customer_name=${customer_name}&cover_pic=${cover_pic}`,
+        })
+      } else if (orderDetail.is_send == 1 && orderDetail.detailExpress.length == 1 && orderDetail.send_type != 2) {
+        let express = orderDetail.detailExpress[0].express
+        let express_no = orderDetail.detailExpress[0].express_no
+        let customer_name = orderDetail.detailExpress[0].customer_name
+        let cover_pic = orderDetail.detailExpress[0].expressRelation[0].orderDetail.goods_info.goods_attr.cover_pic
+        uni.navigateTo({
+          url:
+            `/pages/order/express-detail/express-detail?express=` +
+            express +
+            `&customer_name=` +
+            customer_name +
+            `&express_no=` +
+            express_no +
+            `&cover_pic=` +
+            cover_pic,
+        })
+      } else if (orderDetail.detailExpress.length >= 1) {
+        uni.navigateTo({
+          url: '/pages/order/express-list/express-list?order_id=' + orderDetail.id,
+        })
+      }
+    }
+
+    const getClerkCode = (e) => {}
+
+    // 订单评价
+    const appraise = (e) => {
+      uni.navigateTo({
+        url: `/pages/order/appraise/appraise?id=${e.id}`,
+      })
     }
 
     onLoad((options) => {
@@ -279,7 +339,12 @@ export default defineComponent({
       ...toRefs(state),
       clickHandlerTab,
       onTabChange,
-      renderStatus,
+      isShowExpressButton,
+      loadMore,
+      refresh,
+      logistics,
+      getClerkCode,
+      appraise,
     }
   },
 })
@@ -549,7 +614,7 @@ export default defineComponent({
 }
 
 .option {
-  .btn {
+  .order-btn {
     width: 160rpx;
     height: 60rpx;
     line-height: 60rpx;
