@@ -6,15 +6,15 @@
         :key="tab.status"
         class="uni-tab-item"
         :data-current="index"
-        @click="ontabtap"
+        @click="clickHandlerTab"
       >
         <text class="uni-tab-item-title" :class="tabIndex == index ? 'uni-tab-item-title-active' : ''">{{
-          tab.title
+          tab.name
         }}</text>
       </view>
     </scroll-view>
     <view class="line-h"></view>
-    <swiper :current="tabIndex" class="swiper-box" style="flex: 1" :duration="300" @change="ontabchange">
+    <swiper :current="tabIndex" class="swiper-box" style="flex: 1" :duration="300" @change="onTabChange">
       <swiper-item v-for="(tab, index1) in newsList" :key="index1" class="swiper-item">
         <scroll-view
           class="scroll-v list"
@@ -101,56 +101,153 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-// 缓存每页最多
-const MAX_CACHE_DATA = 100
-// 缓存页签数量
-const MAX_CACHE_PAGE = 3
-
-// import * as api from '@/api/user.js'
+import { fetchOrderList } from '@/api/order'
 // import * as util from '@/utils/constant.js'
-// import { Debounce } from '@/utils/validate.js'
+import { Debounce } from '@/utils/util'
 
 export default defineComponent({
   name: 'OrderList',
   setup() {
     const state = reactive({
       tabBars: [
-        {
-          title: '全部',
-          status: '',
-        },
-        {
-          title: '待付款',
-          status: 1,
-        },
-        {
-          title: '待分享',
-          status: 2,
-        },
-        {
-          title: '待发货',
-          status: 3,
-        },
-        {
-          title: '待收货',
-          status: 4,
-        },
-        {
-          title: '待提货',
-          status: 5,
-        },
-        {
-          title: '已完成',
-          status: 6,
-        },
+        { name: '全部', status: 0 },
+        { name: '待付款', status: 1 },
+        { name: '待发货', status: 2 },
+        { name: '待收货', status: 3 },
+        { name: '已完成', status: 4 },
       ],
       tabIndex: 0,
+
+      page: 1,
+      currentIndex: 0,
+      orders: [],
+      search: {
+        keyword: '',
+        dateArr: [],
+      },
+      pagination: null,
+      qr_code_url: '',
+      is_qrcode: false,
+      is_show: false,
+      is_load_show: false,
+      bgColor: '#f7f7f7',
+      isRequest: true, //防止数据重复加载
+      template_message: [],
+      recommend_list: [],
+
       newsList: [] as any[],
       scrollInto: '',
       // 刷新状态
       refeshloading: false,
       key: 0,
     })
+
+    const getList = Debounce(function (index, next, refresh) {
+      let activeTab = state.newsList[index]
+      if (refresh) {
+        activeTab.data = []
+        activeTab.pageNum = 0
+        activeTab.total = 0
+        activeTab.allData = false
+        activeTab.loadingText = '加载更多...'
+      }
+      if (!activeTab.allData) {
+        const params = {
+          subStatus: '',
+          pageNum: next ? activeTab.pageNum : 0,
+          pageSize: 10,
+          status: 0,
+        }
+        if (state.tabIndex) params.status = state.tabBars[state.tabIndex].status
+        fetchOrderList(params)
+          .then((res) => {
+            activeTab.isLoading = false
+            if (res.status === 'OK') {
+              activeTab.data = activeTab.data.concat(res.data.list)
+              activeTab.total = res.data.totalElements
+              activeTab.pageNum++
+              state.refeshloading = false
+              if (activeTab.total <= activeTab.data.length || res.data.totalElements === 0) {
+                activeTab.allData = true
+                activeTab.loadingText = '没有更多了'
+                state.key++
+              }
+            } else {
+              state.refeshloading = false
+            }
+            uni.stopPullDownRefresh()
+          })
+          .catch(() => {
+            state.refeshloading = false
+            activeTab.isLoading = false
+            uni.stopPullDownRefresh()
+          })
+      }
+    }, 100)
+
+    const onTabChange = (e) => {
+      let index = e.target.current || e.detail.current
+      switchTab(index)
+    }
+
+    const loadMore = (e) => {
+      setTimeout(() => {
+        getList(state.tabIndex, true)
+      }, 500)
+    }
+
+    const getList2 = () => {
+      state.isRequest = false
+      fetchOrderList({
+        status: state.currentIndex,
+        keyword: state.search ? state.search.keyword : '',
+        dateArr: state.search ? JSON.stringify(state.search.dateArr) : JSON.stringify([]),
+        page: state.page,
+      })
+        .then((response) => {
+          console.log('response', response)
+          let { code, data, msg } = response
+          state.is_load_show = false
+          state.is_show = true
+          if (code === 0) {
+            let { list, pagination } = data
+            if (state.page !== 1) {
+              state.orders = state.orders.concat(list)
+            } else {
+              state.orders = list
+            }
+            state.page = list.length ? state.page + 1 : state.page
+            state.pagination = pagination
+            state.template_message = data.template_message
+          } else {
+            uni.showModal({
+              title: '',
+              content: msg,
+              showCancel: false,
+            })
+          }
+          state.isRequest = true
+        })
+        .catch(() => {
+          state.is_load_show = false
+        })
+    }
+
+    const clickHandlerTab = (e) => {
+      let index = e.target.dataset.current || e.currentTarget.dataset.current
+      switchTab(index)
+    }
+
+    const switchTab = Debounce(function (index) {
+      if (state.tabIndex === index) {
+        return
+      }
+      if (state.newsList[index].data.length === 0) {
+        getList(index)
+      }
+      state.tabIndex = index
+      state.scrollInto = 'tab' + state.tabBars[index].status
+    }, 5)
 
     onLoad((options) => {
       if (options.status) state.tabIndex = Number(options.status)
@@ -165,11 +262,13 @@ export default defineComponent({
           loadingText: '加载更多...',
         })
       })
-      getList(state.tabIndex)
+      getList()
     })
 
     return {
       ...toRefs(state),
+      clickHandlerTab,
+      onTabChange,
     }
   },
 
