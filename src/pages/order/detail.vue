@@ -513,11 +513,12 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
+import { fetchOrderDetail } from '@/api/order'
 export default defineComponent({
   name: 'OrderDetail',
   setup() {
     const state = reactive({
-      order_id: null,
+      order_id: null as any,
       orderDetail: {
         detailExpressRelation: [],
         detailExpress: [],
@@ -527,9 +528,46 @@ export default defineComponent({
         goods_num: 0,
       },
       detail: [],
-      sign: '',
-      ecard: [],
+      sign: '' as any,
+      ecard: [] as any[],
       isShowFormGoods: false,
+    })
+
+    const getOrderDetail = () => {
+      fetchOrderDetail({
+        id: state.order_id,
+      })
+        .then((response) => {
+          state.is_show = true
+          if (response.code === 0) {
+            state.orderDetail = response.data.detail
+            state.ecard = [state.orderDetail.type_data.ecard[0]]
+            if (state.sign == 'composition') {
+              for (let i in state.orderDetail.composition_list) {
+                state.orderDetail.composition_list[i].show = false
+              }
+            }
+          } else {
+            uni.showModal({
+              title: '',
+              content: response.msg,
+              showCancel: false,
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
+
+    onShow(() => {
+      getOrderDetail()
+    })
+
+    onLoad((options) => {
+      console.log('options', options)
+      state.order_id = options.id
+      state.sign = options.sign
     })
 
     return {

@@ -5,5 +5,10 @@ export function fetchOrderPreview(data) {
 }
 
 export function fetchOrderList(data) {
-  return request.get!('&r=api/order/list', data, { noAuth: false }, true)
+  return request.get!('&r=api/order/list', data, { noAuth: false }, false)
+}
+
+export function fetchOrderDetail(data) {
+  console.log('data', data)
+  return request.get!('&r=api/order/detail', data, { noAuth: false }, false)
 }
