@@ -35,7 +35,7 @@
                 <view>{{ item.status_text }}</view>
               </template>
             </view>
-            <view class="list-item-content" @click="toDetail(item.id)">
+            <view class="list-item-content" @click="toDetail(item.id, item.sign)">
               <view v-for="(i, n) in item.detail" :key="n" class="">
                 <view class="flex">
                   <view class="product-img">
@@ -319,6 +319,15 @@ export default defineComponent({
       })
     }
 
+    /**
+     * 订单详情
+     */
+    const toDetail = (id, sign) => {
+      uni.navigateTo({
+        url: `/pages/order/detail?id=${id}&sign=${sign}`,
+      })
+    }
+
     onLoad((options) => {
       if (options.status) state.tabIndex = Number(options.status)
       state.tabBars.forEach((tabBar) => {
@@ -345,6 +354,7 @@ export default defineComponent({
       logistics,
       getClerkCode,
       appraise,
+      toDetail,
     }
   },
 })
