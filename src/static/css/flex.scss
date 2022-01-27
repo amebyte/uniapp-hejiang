@@ -1,0 +1,33 @@
+.dir-left-nowrap {
+    /* 主轴 排列方式从左侧开始 不换行*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.box-grow-0 {
+    /* flex 子元素固定宽度*/
+    min-width: 0;
+    -webkit-box-flex: 0;
+    -webkit-flex-grow: 0;
+    -ms-flex-positive: 0;
+    flex-grow: 0;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+}
+  
+.box-grow-1 {
+    /* flex 子元素等分 */
+    min-width: 0;
+    -webkit-box-flex: 1;
+    -webkit-flex-grow: 1;
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    -webkit-flex-shrink: 1;
+    -ms-flex-negative: 1;
+    flex-shrink: 1;
+}

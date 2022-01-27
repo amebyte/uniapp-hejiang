@@ -20,7 +20,7 @@ function baseRequest(
   const Url = HTTP_REQUEST_URL + '/web/index.php?_mall_id=1'
   let header = JSON.parse(JSON.stringify(HEADER))
 
-  if (params != undefined) {
+  if (params) {
     header = JSON.parse(JSON.stringify(HEADERPARAMS))
   }
 
@@ -36,7 +36,7 @@ function baseRequest(
     if (token && token !== 'null') header[TOKENNAME] = token
   }
 
-  if (params != undefined) {
+  if (params) {
     data = urlEncode(data)
   }
   return new Promise((reslove, reject) => {
