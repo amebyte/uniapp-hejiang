@@ -8,6 +8,37 @@
     flex-wrap: nowrap;
 }
 
+.dir-right-nowrap {
+    /* 主轴 排列方式从 右侧开始 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+    flex-wrap: nowrap;
+}
+
+.dir-right-wrap {
+    /* 主轴 排列方式从 右侧开始 换行*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.dir-top-wrap {
+    /* 主轴 排列方式从顶部开始  换行*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
 .box-grow-0 {
     /* flex 子元素固定宽度*/
     min-width: 0;

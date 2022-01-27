@@ -722,8 +722,8 @@ export default defineComponent({
 
 .preferential-box {
   background: #fff;
-  padding: 32#{rpx} 24#{rpx};
-  border-bottom: 1#{rpx} solid $uni-text-color;
+  padding: 32rpx 24rpx;
+  border-bottom: 1rpx solid #e2e2e2;
 }
 
 .preferential-box .item {
@@ -731,10 +731,9 @@ export default defineComponent({
 }
 
 .order-price-box {
-  height: 100#{rpx};
+  height: 100rpx;
   background: #fff;
-  padding: 32#{rpx} 24#{rpx};
-  //margin-bottom: 20#{rpx};
+  padding: 32rpx 24rpx;
 }
 
 .goods-box {
