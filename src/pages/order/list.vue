@@ -328,6 +328,8 @@ export default defineComponent({
       })
     }
 
+    const orderPay = () => {}
+
     onLoad((options) => {
       if (options.status) state.tabIndex = Number(options.status)
       state.tabBars.forEach((tabBar) => {
@@ -355,6 +357,7 @@ export default defineComponent({
       getClerkCode,
       appraise,
       toDetail,
+      orderPay,
     }
   },
 })
