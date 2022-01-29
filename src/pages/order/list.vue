@@ -330,6 +330,8 @@ export default defineComponent({
 
     const orderPay = () => {}
 
+    const cancel = () => {}
+
     onLoad((options) => {
       if (options.status) state.tabIndex = Number(options.status)
       state.tabBars.forEach((tabBar) => {
@@ -358,6 +360,7 @@ export default defineComponent({
       appraise,
       toDetail,
       orderPay,
+      cancel,
     }
   },
 })
