@@ -514,6 +514,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { fetchOrderDetail } from '@/api/order'
+import GoodsInfo from './component/GoodsInfo.vue'
 export default defineComponent({
   name: 'OrderDetail',
   setup() {
