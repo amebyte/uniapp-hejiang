@@ -63,28 +63,29 @@ export default defineComponent({
 })
 </script>
 <style scoped lang="scss">
+@import '@/static/css/variable.scss';
 .app-order-goods-info {
-  font-size: 24#{rpx};
+  font-size: 24rpx;
   width: 100%;
 
   .img {
-    width: 160#{rpx};
-    height: 160#{rpx};
-    margin-right: 20#{rpx};
+    width: 160rpx;
+    height: 160rpx;
+    margin-right: 20rpx;
     flex-shrink: 0;
   }
 
   .item-box {
     width: 100%;
-    margin-bottom: 24#{rpx};
+    margin-bottom: 24rpx;
   }
 
   .label {
-    color: $uni-general-color-two;
+    color: $theme-font-color;
   }
 
   .price {
-    color: $uni-important-color-black;
+    color: $theme-font-color;
 
     &.delete-price {
       text-decoration: line-through;
@@ -93,26 +94,26 @@ export default defineComponent({
 
   .composition-price {
     text-align: right;
-    font-size: #{22rpx};
+    font-size: 22rpx;
     color: #999999;
 
     text {
-      font-size: #{28rpx};
+      font-size: 28rpx;
       color: #353535;
-      margin-left: #{8rpx};
+      margin-left: 8rpx;
     }
   }
 
   .goods-num {
-    font-size: $uni-font-size-weak-one;
-    color: $uni-general-color-two;
+    font-size: 24rpx;
+    color: $theme-font-color;
   }
 
   .attr {
-    width: 450#{rpx};
-    margin: 10#{rpx} 0;
-    color: $uni-general-color-two;
-    font-size: $uni-font-size-weak-one;
+    width: 450rpx;
+    margin: 10rpx 0;
+    color: $theme-font-color;
+    font-size: 24rpx;
     word-break: break-all;
     text-overflow: ellipsis;
     display: -webkit-box;
@@ -121,13 +122,13 @@ export default defineComponent({
     overflow: hidden;
 
     text {
-      margin-right: 10#{rpx};
+      margin-right: 10rpx;
     }
   }
 
   .goods-name {
-    color: $uni-important-color-black;
-    font-size: $uni-font-size-general-two;
+    color: $theme-font-color;
+    font-size: 24rpx;
     word-break: break-all;
     text-overflow: ellipsis;
     display: -webkit-box;
