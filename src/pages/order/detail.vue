@@ -468,7 +468,15 @@
         <block v-else-if="orderDetail.sign !== 'teller' && formList && formList.length">
           <view class="order-label">其他信息</view>
           <view v-for="(formAll, i) in formList" :key="i" class="order-form order-list">
-            <view>其他信息</view>
+            <order-goods-info
+              v-for="(goods, j) in formAll"
+              v-if="isShowFormGoods"
+              :key="j"
+              style="width: 100%"
+              :goods="goods.goods_info"
+              :plugin-data="orderDetail.plugin_data"
+              :plugin-index="i"
+            ></order-goods-info>
             <view v-for="(formItem, k) in formAll[0]['form_data']" :key="k" class="order-form-box">
               <view v-if="formItem.key === 'img_upload'" class="dir-top-nowrap">
                 <view class="box-grow-0">{{ formItem.label }}：</view>
@@ -517,6 +525,9 @@ import { fetchOrderDetail } from '@/api/order'
 import GoodsInfo from './component/GoodsInfo.vue'
 export default defineComponent({
   name: 'OrderDetail',
+  components: {
+    OrderGoodsInfo: GoodsInfo,
+  },
   setup() {
     const state = reactive({
       order_id: null as any,
