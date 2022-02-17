@@ -534,17 +534,44 @@ export default defineComponent({
       orderDetail: {
         detailExpressRelation: [],
         detailExpress: [],
+        detail: {} as any,
       } as any,
       is_show: false,
       advance_order: {
         goods_num: 0,
       },
-      detail: [],
+      detail: [] as any[],
       sign: '' as any,
       ecard: [] as any[],
       isShowFormGoods: false,
     })
 
+    const formList = computed(() => {
+      const self = state
+      let orderDetail = self.orderDetail.detail
+      let newArr = {}
+      let form_ids = []
+
+      if (orderDetail && orderDetail.length) {
+        console.log('orderDetail', orderDetail)
+        for (let goods of orderDetail) {
+          if (goods.form_id !== '0') {
+            continue
+          }
+          console.log('xxxx')
+          if (form_ids.indexOf(goods.form_id) === -1) {
+            form_ids.push(goods.form_id)
+            newArr[goods.form_id] = [goods]
+          } else {
+            newArr[goods.form_id].push(goods)
+          }
+        }
+      }
+      console.log('newArr', newArr)
+      self.isShowFormGoods = form_ids.length > 0
+      return Object.values(newArr)
+    })
+    console.log('formList', formList.value)
     const getOrderDetail = () => {
       fetchOrderDetail({
         id: state.order_id,
@@ -584,6 +611,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      formList,
     }
   },
 })
