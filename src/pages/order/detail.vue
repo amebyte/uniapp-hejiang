@@ -635,30 +635,30 @@ page {
 }
 
 .order-label {
-  padding: #{32rpx} #{24rpx};
-  font-size: #{30rpx};
+  padding: 32rpx 24rpx;
+  font-size: 30rpx;
   color: #353535;
   font-weight: bold;
   background: #ffffff;
-  border-bottom: #{1rpx} solid #e2e2e2;
+  border-bottom: 1rpx solid #e2e2e2;
 }
 
 .goods-image {
-  margin-right: #{20rpx};
-  margin-bottom: #{20rpx};
+  margin-right: 20rpx;
+  margin-bottom: 20rpx;
 }
 
 .goods-num {
-  font-size: #{24rpx};
+  font-size: 24rpx;
   color: #999999;
-  margin: #{20rpx} 0;
+  margin: 20rpx 0;
 }
 
 .order-form {
   background: #ffffff;
 
   .order-form-box {
-    padding: #{5rpx} 0;
+    padding: 5rpx 0;
 
     span {
     }
