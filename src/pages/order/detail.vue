@@ -887,117 +887,117 @@ page {
   margin-bottom: 20rpx;
 
   .img {
-    width: 12#{rpx};
-    height: 24#{rpx};
+    width: 12rpx;
+    height: 24rpx;
   }
 
   .express-name {
-    margin-bottom: 15#{rpx};
+    margin-bottom: 15rpx;
   }
 
   .text {
     color: #353535;
-    font-size: #{28rpx};
+    font-size: 28rpx;
   }
 }
 
 .advance {
-  width: #{702rpx};
-  border-radius: #{16rpx};
+  width: 702rpx;
+  border-radius: 16rpx;
   background-color: #f7f7f7;
-  padding: #{32rpx 24rpx};
+  padding: 32rpx 24rpx;
 
   .title {
-    font-size: #{24rpx};
+    font-size: 24rpx;
     color: #ff4544;
-    margin-bottom: #{15rpx};
+    margin-bottom: 15rpx;
   }
 }
 
 .item-box {
-  border: #{1rpx} solid #c2c2c2;
-  padding: #{24rpx};
-  border-radius: #{16rpx};
-  width: #{702rpx};
+  border: 1rpx solid #c2c2c2;
+  padding: 24rpx;
+  border-radius: 16rpx;
+  width: 702rpx;
 }
 
 .ecard {
   background-color: #ffffff;
 
   .item {
-    padding: #{32upx 24upx 0 24upx};
+    padding: 32upx 24upx 0 24upx;
 
     .text {
-      font-size: #{23upx};
+      font-size: 23upx;
       line-height: 1.5;
-      padding-left: #{15upx};
+      padding-left: 15upx;
       word-break: break-all;
     }
   }
 
   .expand {
-    height: #{70upx};
-    margin-top: #{20upx};
-    border-top: #{1upx} solid #e2e2e2;
+    height: 70upx;
+    margin-top: 20upx;
+    border-top: 1upx solid #e2e2e2;
 
     > image {
-      width: #{20upx};
-      height: #{12upx};
+      width: 20upx;
+      height: 12upx;
     }
 
     > text {
-      font-size: #{23upx};
+      font-size: 23upx;
       color: #919191;
     }
   }
 }
 
 .instructions {
-  width: #{12upx};
-  height: #{22upx};
-  margin-left: #{18upx};
+  width: 12upx;
+  height: 22upx;
+  margin-left: 18upx;
 }
 
 .ecard-info {
-  height: #{90upx};
-  line-height: #{90upx};
+  height: 90upx;
+  line-height: 90upx;
   background-color: #ffffff;
-  padding: #{0 22upx};
-  margin-bottom: #{13upx};
+  padding: 0 22upx;
+  margin-bottom: 13upx;
 }
 
 .city-service {
   width: 100%;
-  margin-bottom: 10#{rpx};
+  margin-bottom: 10rpx;
 
   .await-man {
-    margin-left: #{12rpx};
-    font-size: #{28rpx};
+    margin-left: 12rpx;
+    font-size: 28rpx;
     color: #666666;
   }
 
   .info-box {
-    margin-left: #{12rpx};
+    margin-left: 12rpx;
 
     .info-label {
-      margin-bottom: #{10rpx};
+      margin-bottom: 10rpx;
       color: #999999;
-      font-size: #{28rpx};
+      font-size: 28rpx;
     }
   }
 
   .head {
-    width: #{75rpx};
-    height: #{75rpx};
+    width: 75rpx;
+    height: 75rpx;
   }
 
   .icon-box {
-    padding: 0 #{30rpx};
-    border-left: #{1rpx} solid #f7f7f7;
+    padding: 0 30rpx;
+    border-left: 1rpx solid #f7f7f7;
 
     .icon {
-      width: #{45rpx};
-      height: #{45rpx};
+      width: 45rpx;
+      height: 45rpx;
     }
   }
 }
