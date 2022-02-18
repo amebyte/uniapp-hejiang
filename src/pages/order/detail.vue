@@ -690,11 +690,11 @@ page {
   }
 
   .order-list-btn {
-    border: 1#{rpx} solid #bbbbbb;
-    border-radius: 30#{rpx};
-    padding: 10#{rpx} 30#{rpx};
+    border: 1rpx solid #bbbbbb;
+    border-radius: 30rpx;
+    padding: 10rpx 30rpx;
     display: inline-block;
-    margin-left: calc(100vw - #{170rpx});
+    margin-left: calc(100vw - 170rpx);
   }
 }
 
@@ -704,14 +704,14 @@ page {
 
 .express-box {
   background: #fff;
-  padding: 32#{rpx} 24#{rpx};
-  margin-bottom: 20#{rpx};
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
 }
 
 .address-box {
   background: #fff;
-  padding: 32#{rpx} 24#{rpx};
-  margin-bottom: 20#{rpx};
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
 
   .address {
     word-wrap: break-word;
@@ -719,13 +719,13 @@ page {
 }
 
 .address-box .text {
-  margin-top: 10#{rpx};
+  margin-top: 10rpx;
 }
 
 .delivery {
   .deliveryman {
-    width: #{72rpx};
-    height: #{72rpx};
+    width: 72rpx;
+    height: 72rpx;
     display: block;
     margin-right: #{24rpx};
   }
