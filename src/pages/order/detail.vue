@@ -523,6 +523,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { fetchOrderDetail } from '@/api/order'
 import GoodsInfo from './component/GoodsInfo.vue'
+import { uniCopy } from '@/utils/util'
 export default defineComponent({
   name: 'OrderDetail',
   components: {
@@ -572,6 +573,19 @@ export default defineComponent({
       return Object.values(newArr)
     })
     console.log('formList', formList.value)
+
+    const copyText = (orderNo) => {
+      uniCopy({
+        data: orderNo,
+        success: function () {
+          uni.showToast({
+            title: '复制成功',
+            icon: 'none',
+          })
+        },
+      })
+    }
+
     const getOrderDetail = () => {
       fetchOrderDetail({
         id: state.order_id,
@@ -612,6 +626,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       formList,
+      copyText,
     }
   },
 })
@@ -622,6 +637,7 @@ page {
 }
 </style>
 <style lang="scss" scoped>
+@import '@/static/css/variable.scss';
 .order-detail-box {
   font-size: $uni-font-size-base;
   color: $uni-text-color;
@@ -631,6 +647,9 @@ page {
   .status-text {
     padding-left: 20rpx;
     padding-top: 20rpx;
+    padding-bottom: 20rpx;
+    background-color: $top-background-color;
+    color: #fff;
   }
 }
 

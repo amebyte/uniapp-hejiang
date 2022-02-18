@@ -161,3 +161,31 @@ export const urlEncode = (param, key?, encode?) => {
   }
   return paramStr
 }
+
+export const uniCopy = function ({ data, success }) {
+  // #ifndef H5
+  uni.setClipboardData({
+    data: data,
+    success() {
+      success && success()
+    },
+  })
+  // #endif
+  // #ifdef H5
+  if (!document.queryCommandSupported('copy')) {
+    //为了兼容有些浏览器 queryCommandSupported 的判断
+    // 不支持
+  }
+  const textarea = document.createElement('textarea') as any
+  textarea.value = data
+  textarea.readOnly = 'readOnly'
+  document.body.appendChild(textarea)
+  textarea.select() // 选择对象
+  textarea.setSelectionRange(0, data.length) //核心
+  const result = document.execCommand('copy') // 执行浏览器复制命令
+  if (result) {
+    success && success()
+  }
+  textarea.remove()
+  // #endif
+}
