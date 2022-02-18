@@ -1,7 +1,7 @@
 <template>
   <view>
     <view v-if="is_show && orderDetail" class="order-detail-box">
-      <view>{{ orderDetail.status_text }}</view>
+      <view class="status-text">{{ orderDetail.status_text }}</view>
       <view>
         <template
           v-if="orderDetail.is_send == 1 && orderDetail.detailExpress.length == 1 && orderDetail.send_type != 2"
@@ -616,6 +616,11 @@ export default defineComponent({
   },
 })
 </script>
+<style>
+page {
+  background-color: #f7f7f7;
+}
+</style>
 <style lang="scss" scoped>
 .order-detail-box {
   font-size: $uni-font-size-base;
@@ -623,6 +628,10 @@ export default defineComponent({
   position: relative;
   width: 100%;
   height: 100%;
+  .status-text {
+    padding-left: 20rpx;
+    padding-top: 20rpx;
+  }
 }
 
 .order-label {
@@ -655,21 +664,21 @@ export default defineComponent({
     }
 
     image {
-      height: #{174rpx};
-      width: #{174rpx};
+      height: 174rpx;
+      width: 174rpx;
       display: block;
-      margin-top: #{15rpx};
+      margin-top: 15rpx;
     }
   }
 }
 
 .order-list {
   background: #ffffff;
-  padding: #{32rpx} #{24rpx};
-  margin-bottom: #{20rpx};
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
 
   > view {
-    margin-bottom: #{10rpx};
+    margin-bottom: 10rpx;
   }
 
   .text {
