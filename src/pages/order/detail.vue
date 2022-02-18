@@ -811,32 +811,32 @@ page {
         border: 2rpx solid #bbbbbb;
         font-size: 24rpx;
         color: #999999;
-        padding: 0 #{24rpx};
-        margin: #{12rpx} 0 #{16rpx};
-        height: #{56rpx};
-        line-height: #{54rpx};
-        border-radius: #{28rpx};
+        padding: 0 24rpx;
+        margin: 12rpx 0 16rpx;
+        height: 56rpx;
+        line-height: 54rpx;
+        border-radius: 28rpx;
 
         image {
-          width: #{22rpx};
-          height: #{12rpx};
-          margin-left: #{16rpx};
+          width: 22rpx;
+          height: 12rpx;
+          margin-left: 16rpx;
         }
       }
     }
 
     .goods-list {
-      padding: 0 #{24rpx};
+      padding: 0 24rpx;
     }
 
     .composition-title {
-      height: #{80rpx};
-      line-height: #{80rpx};
-      padding: 0 #{24rpx};
-      font-size: #{28rpx};
+      height: 80rpx;
+      line-height: 80rpx;
+      padding: 0 24rpx;
+      font-size: 28rpx;
       color: #353535;
-      margin-bottom: #{24rpx};
-      border-bottom: #{2rpx} solid #e2e2e2;
+      margin-bottom: 24rpx;
+      border-bottom: 2rpx solid #e2e2e2;
 
       .composition-type {
         color: #f39800;
@@ -846,45 +846,45 @@ page {
 }
 
 .goods-box .sale-server {
-  margin-top: 20#{rpx};
+  margin-top: 20rpx;
 }
 
 .goods-box .sale-box {
-  padding-bottom: 15#{rpx};
+  padding-bottom: 15rpx;
 }
 
 .goods-box .refund-status {
-  margin-top: 15#{rpx};
+  margin-top: 15rpx;
   color: $uni-text-color;
 }
 
 .action-box {
   background: #fff;
-  padding: 32#{rpx} 24#{rpx};
+  padding: 32rpx 24rpx;
 
   .cancel-text {
     font-size: $uni-text-color;
   }
 
   .btn {
-    border: 1#{rpx} solid #bbbbbb;
-    border-radius: 30#{rpx};
-    padding: 10#{rpx} 30#{rpx};
+    border: 1rpx solid #bbbbbb;
+    border-radius: 30rpx;
+    padding: 10rpx 30rpx;
   }
 }
 
 .detail-btn {
-  border: 1#{rpx} solid #bbbbbb;
-  border-radius: 30#{rpx};
-  padding: 10#{rpx} 30#{rpx};
+  border: 1rpx solid #bbbbbb;
+  border-radius: 30rpx;
+  padding: 10rpx 30rpx;
 }
 
 .e-box {
   width: 100%;
-  height: #{100rpx};
-  padding: 0 #{24rpx};
+  height: 100rpx;
+  padding: 0 24rpx;
   background: #ffffff;
-  margin-bottom: #{20rpx};
+  margin-bottom: 20rpx;
 
   .img {
     width: 12#{rpx};
