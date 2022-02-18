@@ -727,46 +727,46 @@ page {
     width: 72rpx;
     height: 72rpx;
     display: block;
-    margin-right: #{24rpx};
+    margin-right: 24rpx;
   }
 
   .delivery-tips {
     font-size: $uni-font-size-sm;
     color: $uni-text-color;
-    margin-bottom: #{16rpx};
+    margin-bottom: 16rpx;
   }
 
   .mr-16 {
-    margin-right: #{16rpx};
+    margin-right: 16rpx;
   }
 
   .delivery-mobile {
-    width: #{96rpx};
-    border-left: #{1rpx} solid #e2e2e2;
+    width: 96rpx;
+    border-left: 1rpx solid #e2e2e2;
 
     .mobile {
-      width: #{40rpx};
-      height: #{40rpx};
+      width: 40rpx;
+      height: 40rpx;
       display: block;
-      margin-right: #{16rpx};
+      margin-right: 16rpx;
     }
   }
 
   .content {
-    width: #{500rpx};
+    width: 500rpx;
   }
 }
 
 .order-info-box {
   background: #fff;
-  padding: 32#{rpx} 24#{rpx};
-  margin-bottom: 20#{rpx};
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
 }
 
 .store-info-box {
   background: #fff;
-  padding: 32#{rpx} 24#{rpx};
-  margin-bottom: 20#{rpx};
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
 }
 
 .preferential-box {
@@ -776,7 +776,7 @@ page {
 }
 
 .preferential-box .item {
-  margin: 5#{rpx} 0;
+  margin: 5rpx 0;
 }
 
 .order-price-box {
@@ -787,29 +787,29 @@ page {
 
 .goods-box {
   background: #fff;
-  padding: 32#{rpx} 24#{rpx};
-  margin-bottom: 20#{rpx};
+  padding: 32rpx 24rpx;
+  margin-bottom: 20rpx;
 
   &.composition {
     padding: 0;
-    padding-bottom: #{8rpx};
+    padding-bottom: 8rpx;
     margin-bottom: 0;
     background-color: #f7f7f7;
   }
 
   .composition-item {
-    margin-bottom: #{20rpx};
+    margin-bottom: 20rpx;
     background-color: #fff;
 
     .composition-open {
       text-align: center;
       background-color: #fff;
-      height: #{84rpx};
+      height: 84rpx;
 
       .composition-btn {
         display: inline-block;
-        border: #{2rpx} solid #bbbbbb;
-        font-size: #{24rpx};
+        border: 2rpx solid #bbbbbb;
+        font-size: 24rpx;
         color: #999999;
         padding: 0 #{24rpx};
         margin: #{12rpx} 0 #{16rpx};
