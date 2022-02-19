@@ -21,6 +21,7 @@
       :cart-num="cart_num"
       :create-cart-param="createCartParam"
       @setIsOpenAttrWindow="setIsOpenAttrWindow"
+      @setIsBuyNow="setIsBuyNow"
     />
     <!--底部导航栏 end-->
     <!--规格属性 start-->
@@ -299,13 +300,13 @@ export default defineComponent({
 
     onLoad((options) => {
       state.productId = options.productId!
-      console.log('options', options)
     })
 
     return {
       ...toRefs(state),
       detailFooterBarRef,
       setIsOpenAttrWindow,
+      setIsBuyNow,
       iptCartNum,
       changeCartNum,
       selectAttrVal,

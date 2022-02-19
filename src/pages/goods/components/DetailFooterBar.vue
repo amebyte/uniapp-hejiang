@@ -40,11 +40,11 @@ export default defineComponent({
       default: 0,
     },
   },
-  emits: ['setIsOpenAttrWindow'],
+  emits: ['setIsOpenAttrWindow', 'setIsBuyNow'],
   setup(props, { emit }) {
     const store = useStore()
     const isLogin = computed(mapGetters(['isLogin']).isLogin.bind({ $store: store }))
-    console.log('isLogin', isLogin.value)
+
     let cartCount = ref(0)
     let isFavorite = ref(false)
 
@@ -87,6 +87,7 @@ export default defineComponent({
      *
      */
     const buyNowAction = () => {
+      emit('setIsBuyNow', true)
       openAttrWindow()
     }
     /*
@@ -104,6 +105,12 @@ export default defineComponent({
         })
         .catch((err) => console.log(err))
     }
+    /**
+     * 立即购买
+     */
+    const buyNow = () => {
+      console.log('buyNow')
+    }
     return {
       cartCount,
       isFavorite,
@@ -112,6 +119,7 @@ export default defineComponent({
       joinCart,
       buyNowAction,
       addCart,
+      buyNow,
     }
   },
 })

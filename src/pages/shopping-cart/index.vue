@@ -442,12 +442,12 @@ export default defineComponent({
         })
         return
       }
-
+      console.log('state.selectedGoodsItems', state.selectedGoodsItems)
       store.dispatch(CartActionTypes.ACTION_SELECTED_CART_GOODS, state.selectedGoodsItems)
       store.dispatch(CartActionTypes.ACTION_PREVIEW_ORDER_PARAM, createOrderParam(state.selectedGoodsItems))
       console.log('createOrderParam', createOrderParam(state.selectedGoodsItems))
 
-      Tips('/pages/order/create')
+      //   Tips('/pages/order/create')
     }
 
     /**
