@@ -220,11 +220,23 @@ export default defineComponent({
             price: o.marketPrice,
             skuId: o.id,
             cartNum: state.attr.productSelect.cart_num,
+            attr: createAttrs(o.id),
           }
         }
       })
 
       return goodsItem
+    }
+
+    const createAttrs = (id) => {
+      console.log('state.goodsInfo', state.goodsInfo)
+      let attr = []
+      state.goodsInfo.attr.some((o) => {
+        if (o.id === id) {
+          attr = o
+        }
+      })
+      return attr
     }
 
     const createSkuUniqueIds = (skus) => {

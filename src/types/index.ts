@@ -9,4 +9,5 @@ export type goodsType = {
   content?: string
   skus?: any[]
   attrGroups?: any[]
+  attr?: any[]
 }

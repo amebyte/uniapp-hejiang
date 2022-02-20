@@ -99,7 +99,7 @@
             </view>
           </view>
         </template>
-        <!-- 循环商户列表 end-->
+        <!-- 循环商户列表 end -->
       </view>
     </scroll-view>
     <view class="footer-bar">

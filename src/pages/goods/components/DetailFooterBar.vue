@@ -25,8 +25,10 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, watchEffect } from 'vue'
 import { useStore, mapGetters } from 'vuex'
+import { CartActionTypes } from '@/store/modules/cart/action-types'
 import { fetchAddCart } from '@/api/cart'
 import { toLogin } from '@/libs/login'
+import { Tips } from '@/utils/util'
 
 export default defineComponent({
   name: 'DetailFooterBar',
@@ -109,7 +111,24 @@ export default defineComponent({
      * 立即购买
      */
     const buyNow = () => {
-      console.log('buyNow')
+      console.log('buyNow', props.createCartParam())
+      const goodsItem = props.createCartParam()
+      const mch_list = [
+        {
+          mch_id: 0,
+          goods_list: [
+            {
+              id: goodsItem.productId,
+              attr: goodsItem.selectedSku.attr.attr_list,
+              num: goodsItem.selectedSku.cartNum,
+              cat_id: 0,
+              goods_attr_id: goodsItem.selectedSku.skuId,
+            },
+          ],
+        },
+      ]
+      store.dispatch(CartActionTypes.ACTION_PREVIEW_ORDER_PARAM, mch_list)
+      Tips('/pages/order/create')
     }
     return {
       cartCount,
