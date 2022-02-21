@@ -367,7 +367,7 @@ export default {
       let data = {
         id: this.$store.state.payment.id,
         pay_type: this.$store.state.payment.payType,
-      }
+      } as any
       // #ifdef H5
       this.$storage.setStorageSync('WEB_URL', window.location.href + '&pay_id_weChart=' + data.id + '&isWechat=true')
       if (window.location.hash.indexOf('/pages/balance/recharge') > -1) {
