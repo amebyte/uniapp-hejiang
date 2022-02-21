@@ -137,9 +137,9 @@
 import { onPageScroll, onLoad, onUnload, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { mapGetters, mapState } from 'vuex'
-import AppRadio from '@/components/basic-component/app-radio/app-radio'
+import AppRadio from '@/components/app-radio/app-radio.vue'
 
-export default {
+export default defineComponent({
   name: 'AppPayment',
   components: { AppRadio },
   setup() {
@@ -700,7 +700,7 @@ export default {
       ...toRefs(state),
     }
   },
-}
+})
 </script>
 
 <style scoped lang="scss">
