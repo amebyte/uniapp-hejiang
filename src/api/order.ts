@@ -9,6 +9,13 @@ export function fetchOrderList(data) {
 }
 
 export function fetchOrderDetail(data) {
-  console.log('data', data)
   return request.get!('&r=api/order/detail', data, { noAuth: false }, false)
+}
+
+export function fetchOrderSubmit(data) {
+  return request.post!('&r=api/order/submit', data, { noAuth: false }, true)
+}
+
+export function fetchOrderPayOrderId(data) {
+  return request.post!('&r=api/order/pay-data', data, { noAuth: false }, true)
 }

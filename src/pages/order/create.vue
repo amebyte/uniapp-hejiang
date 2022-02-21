@@ -106,7 +106,7 @@
       <view class="total-info"
         >实付款：<text class="txt"> ￥{{ previewData.total_price }} </text></view
       >
-      <view class="pay-btn" @click="subscribe">提交订单</view>
+      <view class="pay-btn" @click="createOrder">提交订单</view>
     </view>
     <!-- <drawerBottomSheet ref="drawerBottomSheet">
       <view slot="body">
@@ -132,12 +132,12 @@
 </template>
 
 <script lang="ts">
-import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
+import { onPageScroll, onLoad, onUnload, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { store } from '@/store'
-import { Tips } from '@/utils/util'
+import { Tips, subscribe } from '@/utils/util'
 import Cache from '@/utils/cache'
-import { fetchOrderPreview } from '@/api/order'
+import { fetchOrderPreview, fetchOrderSubmit, fetchOrderPayOrderId } from '@/api/order'
 import { CartMutationTypes } from '@/store/modules/cart/mutation-types'
 
 export default defineComponent({
@@ -170,6 +170,7 @@ export default defineComponent({
       plugin: null,
       submitLock: false,
       p_pay_id: '', //重新提交处理
+      getPayDataTimer: null as any,
     })
     const scroll = () => {}
     /**
@@ -211,13 +212,11 @@ export default defineComponent({
     /**
      * 提交订单
      */
-    const createOrder = () => {}
-
-    const subscribe = () => {
+    const createOrder = () => {
       if (state.p_pay_id) {
-        pay({
-          id: state.p_pay_id,
-        })
+        // pay({
+        //   id: state.p_pay_id,
+        // })
         return true
       } else {
         state.p_pay_id = ''
@@ -253,12 +252,79 @@ export default defineComponent({
       }
       if (state.submitLock) return
       state.submitLock = true
-      this.$subscribe(state.previewData.template_message_list)
+      subscribe(state.previewData.template_message_list)
         .then((res) => {
           submit()
         })
         .catch(() => {
           submit()
+        })
+    }
+
+    const submit = () => {
+      uni.showLoading({
+        mask: true,
+        title: '提交中',
+      })
+
+      fetchOrderSubmit({ form_data: JSON.stringify(store.state.cart.orderSubmitFromData) })
+        .then((response) => {
+          if (response.code === 0) {
+            getPayOrderId(response.data.queue_id, response.data.token)
+          } else {
+            state.submitLock = false
+            uni.hideLoading()
+            uni.showModal({
+              title: '',
+              content: response.msg,
+              showCancel: false,
+            })
+          }
+        })
+        .catch((e) => {
+          state.submitLock = false
+          uni.hideLoading()
+          uni.showModal({
+            title: '提示',
+            content: e.errMsg,
+            showCancel: false,
+          })
+        })
+    }
+
+    const getPayOrderId = (queue_id, token) => {
+      fetchOrderPayOrderId({
+        queue_id: queue_id,
+        token: token,
+      })
+        .then((response) => {
+          if (response.code === 0) {
+            if (response.data.retry && response.data.retry === 1) {
+              state.getPayDataTimer = setTimeout(() => {
+                getPayOrderId(queue_id, token)
+              }, 1000)
+            } else {
+              uni.hideLoading()
+              // pay(response.data);
+            }
+          } else {
+            state.submitLock = false
+            uni.hideLoading()
+            uni.showModal({
+              title: '提示',
+              content: response.msg,
+              showCancel: false,
+            })
+          }
+        })
+        .catch((e) => {
+          state.submitLock = false
+          uni.hideLoading()
+          uni.showModal({
+            title: '提示',
+            content: e.errMsg,
+            showCancel: false,
+          })
         })
     }
 
@@ -356,6 +422,12 @@ export default defineComponent({
       })
     })
 
+    onUnload(() => {
+      if (state.getPayDataTimer) {
+        clearTimeout(state.getPayDataTimer)
+      }
+    })
+
     return {
       ...toRefs(state),
       scroll,
@@ -364,7 +436,6 @@ export default defineComponent({
       useCoupon,
       toAddress,
       createOrder,
-      subscribe,
     }
   },
 })
