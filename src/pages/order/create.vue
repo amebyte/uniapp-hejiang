@@ -106,7 +106,7 @@
       <view class="total-info"
         >实付款：<text class="txt"> ￥{{ previewData.total_price }} </text></view
       >
-      <view class="pay-btn" @click="createOrder">提交订单</view>
+      <view class="pay-btn" @click="subscribe">提交订单</view>
     </view>
     <!-- <drawerBottomSheet ref="drawerBottomSheet">
       <view slot="body">
@@ -134,17 +134,11 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { mapGetters } from 'vuex'
 import { store } from '@/store'
 import { Tips } from '@/utils/util'
-// import { getUserAddress } from '@/api/address'
+import Cache from '@/utils/cache'
 import { fetchOrderPreview } from '@/api/order'
 import { CartMutationTypes } from '@/store/modules/cart/mutation-types'
-// import { fetchMyAccumulatePoints } from '@/api/user'
-// import { goodsTypes, priceFields, transportModeEnum, orderStatusEnum, pointsExchangeMode } from '@/utils/constant'
-// import util from '@/utils/util'
-// import drawerBottomSheet from '@/components/drawerBottomSheet'
-// import couponListItem from '@/components/couponListItem'
 
 export default defineComponent({
   name: 'CreateOrder',
@@ -173,6 +167,9 @@ export default defineComponent({
 
       previewData: {} as any,
       loadingPreviewData: true,
+      plugin: null,
+      submitLock: false,
+      p_pay_id: '', //重新提交处理
     })
     const scroll = () => {}
     /**
@@ -201,10 +198,69 @@ export default defineComponent({
       Tips('/pages/my/address')
     }
 
+    const bookStorage = (type, store_id = '') => {
+      let key = '_book_storage_order_preview'
+      if (type === 'get') {
+        return Cache.get(key)
+      }
+      if (type === 'save') {
+        Cache.set(key, store_id ? store_id : 0)
+      }
+    }
+
     /**
      * 提交订单
      */
     const createOrder = () => {}
+
+    const subscribe = () => {
+      if (state.p_pay_id) {
+        pay({
+          id: state.p_pay_id,
+        })
+        return true
+      } else {
+        state.p_pay_id = ''
+      }
+      for (let i in store.state.cart.orderSubmitFromData.list) {
+        const item = store.state.cart.orderSubmitFromData.list[i]
+        if (!item.order_form_validate_result) continue
+        if (item.order_form_validate_result.hasError) {
+          uni.showModal({
+            title: '提示',
+            content: item.order_form_validate_result.errors[0].msg,
+            showCancel: false,
+          })
+          return
+        }
+      }
+      for (let i in store.state.cart.orderSubmitFromData.list) {
+        for (let j in store.state.cart.orderSubmitFromData.list[i].goods_list) {
+          const item = store.state.cart.orderSubmitFromData.list[i].goods_list[j]
+          if (!item.goods_form_validate_result) continue
+          if (item.goods_form_validate_result.hasError) {
+            uni.showModal({
+              title: '提示',
+              content: item.goods_form_validate_result.errors[0].msg,
+              showCancel: false,
+            })
+            return
+          }
+        }
+        if (state.plugin === 'booking' && store.state.cart.orderSubmitFromData.list[i]) {
+          bookStorage('save', store.state.cart.orderSubmitFromData.list[i].store_id)
+        }
+      }
+      if (state.submitLock) return
+      state.submitLock = true
+      this.$subscribe(state.previewData.template_message_list)
+        .then((res) => {
+          submit()
+        })
+        .catch(() => {
+          submit()
+        })
+    }
 
     const updateGoodsCount = () => {
       for (let i in state.previewData.mch_list) {
@@ -219,7 +275,8 @@ export default defineComponent({
       }
     }
 
-    const setFormData = () => {
+    const setFormData = (options) => {
+      state.plugin = options.plugin || null
       const list = store.state.cart.previewOrderParam
       // 商户列表先做下排序，主商城必须在最前
       for (let i in list) {
@@ -240,10 +297,10 @@ export default defineComponent({
         for (let j in list[i].goods_list) {
           list[i].goods_list[j].cart_id = list[i].goods_list[j].cart_id || 0
         }
-        // if (this.plugin === 'booking') {
-        //     let store_id = this.bookStorage('get');
-        //     list[i]['store_id'] = store_id ? store_id : '';
-        // }
+        if (state.plugin === 'booking') {
+          let store_id = bookStorage('get')
+          list[i]['store_id'] = store_id ? store_id : ''
+        }
       }
       store.commit(CartMutationTypes.SET_ORDER_SUBMIT_FROM_DATA, { list: list, address_id: 0, send_type: '' })
     }
@@ -288,9 +345,9 @@ export default defineComponent({
       getOrderPreview()
     })
 
-    onLoad(() => {
+    onLoad((options) => {
       console.log('onLoad')
-      setFormData()
+      setFormData(options)
       uni.getSystemInfo({
         success: function (res) {
           state.height = res.windowHeight
@@ -307,6 +364,7 @@ export default defineComponent({
       useCoupon,
       toAddress,
       createOrder,
+      subscribe,
     }
   },
 })

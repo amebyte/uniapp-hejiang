@@ -447,7 +447,7 @@ export default defineComponent({
       store.dispatch(CartActionTypes.ACTION_PREVIEW_ORDER_PARAM, createOrderParam(state.selectedGoodsItems))
       console.log('createOrderParam', createOrderParam(state.selectedGoodsItems))
 
-      //   Tips('/pages/order/create')
+      Tips('/pages/order/create')
     }
 
     /**
