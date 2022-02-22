@@ -5,7 +5,7 @@
       <view class="title">
         <view>支付方式</view>
         <view class="cancel" @click="cancel">
-          <image src="/static/image/icon/close.png"></image>
+          <i class="iconfont icon-close-bold"></i>
         </view>
       </view>
       <view class="pay-amount">支付金额 {{ payData.amount }} 元</view>
@@ -107,12 +107,7 @@
         </view>
       </view>
       <view class="footer">
-        <!--  #ifdef MP -->
-        <app-button type="important" :theme="getTheme" round @click="confirm">提交订单</app-button>
-        <!--  #endif-->
-        <!--  #ifdef H5 -->
-        <app-button type="important" :theme="getTheme" round @click.stop="confirm">提交订单</app-button>
-        <!--  #endif-->
+        <view class="pay-btn" @click="confirm">提交订单</view>
       </view>
     </view>
   </view>
@@ -694,6 +689,7 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
+@import '@/static/css/variable.scss';
 $bigPadding: 50rpx;
 $smallPadding: 25rpx;
 $middlePadding: 30rpx;
@@ -776,6 +772,16 @@ $iconWidth: 60rpx;
 
     .footer {
       padding: $bigPadding;
+      .pay-btn {
+        color: #fff;
+        height: 82rpx;
+        line-height: 82rpx;
+        text-align: center;
+        border-radius: 44rpx;
+        font-size: 30rpx;
+
+        background-image: linear-gradient(135deg, $top-background-color 0%, $theme-font-color 100%);
+      }
     }
   }
 }

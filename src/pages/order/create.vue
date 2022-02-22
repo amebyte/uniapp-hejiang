@@ -798,13 +798,6 @@ export default defineComponent({
     }
 
     .pay-btn {
-      // height: 100rpx;
-      // line-height: 100rpx;
-      // background: #ea3401;
-      // color: #fff;
-      // width: 220rpx;
-      // font-size: 32rpx;
-      // text-align: center;
       color: #fff;
       width: 114px;
       height: 41px;

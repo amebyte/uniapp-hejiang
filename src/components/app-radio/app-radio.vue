@@ -1,20 +1,7 @@
 <template>
   <view class="app-default" :style="{ width: `${width}rpx`, height: `${height}rpx` }" @click.stop="radioSelection">
-    <view
-      v-if="modelValue"
-      styke
-      class="app-default-active"
-      :style="{ 'background-color': sign ? '' : theme.background }"
-      :class="[{ 'round-active': type === 'round' }, sign ? theme + '-background' : '', theme]"
-    ></view>
-    <view
-      v-if="!modelValue"
-      class="app-default-border"
-      :class="{ 'round-border': type === 'round' }"
-      :style="{
-        borderColor: borderColor,
-      }"
-    ></view>
+    <text v-if="modelValue" class="iconfont icon-radio-checked"></text>
+    <text v-else class="iconfont icon-radio-uncheck"></text>
   </view>
 </template>
 
@@ -78,37 +65,11 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.round-active {
-  border-radius: 50%;
-}
-
-.round-border {
-  border-radius: 50%;
-}
-
+@import '@/static/css/variable.scss';
 .app-default {
   position: relative;
-}
-
-.app-default-active {
-  position: absolute;
-  background-image: url('../../../static/image/icon/yes-radio.png');
-  background-size: 100% 100%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-repeat: no-repeat;
-  width: #{40rpx};
-  height: #{40rpx};
-}
-
-.app-default-border {
-  position: absolute;
-  border: #{2rpx} solid #cccccc;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: #{40rpx};
-  height: #{40rpx};
+  .iconfont {
+    color: $theme-font-color;
+  }
 }
 </style>
