@@ -126,7 +126,7 @@
         <app-button type="important" :theme="getTheme" round @click="confirm">提交订单</app-button>
         <!--  #endif-->
         <!--  #ifdef H5 -->
-        <app-button type="important" :theme="getTheme" round @click.native.stop="confirm">提交订单</app-button>
+        <app-button type="important" :theme="getTheme" round @click.stop="confirm">提交订单</app-button>
         <!--  #endif-->
       </view>
     </view>
@@ -135,8 +135,9 @@
 
 <script lang="ts">
 import { onPageScroll, onLoad, onUnload, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
-import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
+import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, nextTick } from 'vue'
 import { mapGetters, mapState } from 'vuex'
+import { store } from '@/store'
 import AppRadio from '@/components/app-radio/app-radio.vue'
 
 export default defineComponent({
@@ -156,8 +157,10 @@ export default defineComponent({
       payPassword: '',
     })
 
+    const showPayment = computed(() => store.state.payment.showPayment)
+    const payData = computed(() => store.state.payment.payData)
     const getInputFocus = () => {
-      this.$nextTick(() => {
+      nextTick(() => {
         state.getFocus = true
       })
     }
@@ -203,14 +206,14 @@ export default defineComponent({
           }).then((response) => {
             uni.hideLoading()
             if (response.code === 0) {
-              state.payPassword = this.pay_password
+              state.payPassword = state.pay_password
               state.printPassword = false
               state.setPassword = false
               state.verifyPassword = false
               state.password = ''
               state.pay_password = ''
               state.verify_pay_password = ''
-              this.$store.commit('payment/showPayment', false)
+              store.commit('payment/showPayment', false)
               payByBalance()
             } else {
               state.password = ''
@@ -236,8 +239,8 @@ export default defineComponent({
     }
 
     const navPay = () => {
-      this.$store.commit('payment/showPayment', false)
-      this.$store.state.payment.reject({
+      store.commit('payment/showPayment', false)
+      store.state.payment.reject({
         errMsg: '5b03b6e009796c698d132908cb635fca',
       })
       uni.navigateTo({
@@ -247,7 +250,7 @@ export default defineComponent({
 
     const pay = (id) => {
       return new Promise((resolve, reject) => {
-        this.$store.commit('payment/setAll', {
+        store.commit('payment/setAll', {
           showPayment: false,
           payData: null,
           payType: null,
@@ -255,9 +258,9 @@ export default defineComponent({
           resolve: resolve,
           reject: reject,
         })
-        console.log('debug payment, setAll ok, id:', this.$store.state.payment.id)
-        console.log('debug payment, setAll ok, resolve:', this.$store.state.payment.resolve)
-        console.log('debug payment, setAll ok, reject:', this.$store.state.payment.reject)
+        console.log('debug payment, setAll ok, id:', store.state.payment.id)
+        console.log('debug payment, setAll ok, resolve:', store.state.payment.resolve)
+        console.log('debug payment, setAll ok, reject:', store.state.payment.reject)
         uni.showLoading({
           mask: true,
           title: '请求支付...',
@@ -272,17 +275,17 @@ export default defineComponent({
             uni.hideLoading()
             console.log('debug 1--->', response)
             if (response.code === 0) {
-              console.log('debug payment, set resolve 2,', this.$store.state.payment.resolve)
-              return this.showPaymentModal(response.data)
+              console.log('debug payment, set resolve 2,', store.state.payment.resolve)
+              return showPaymentModal(response.data)
             } else {
               response.errMsg = response.msg || ''
-              return this.$store.state.payment.reject(response.msg)
+              return store.state.payment.reject(response.msg)
             }
           })
           .catch((e) => {
             uni.hideLoading()
             e.errMsg = e.msg || ''
-            return this.$store.state.payment.reject(e)
+            return store.state.payment.reject(e)
           })
       })
     }
@@ -294,31 +297,31 @@ export default defineComponent({
           data.list[i].checked = false
         }
       }
-      this.$store.commit('payment/payData', data)
+      store.commit('payment/payData', data)
       if (data.amount === 0 || data.amount === 0.0 || data.amount === '0' || data.amount === '0.00') {
-        this.$store.commit('payment/payType', 'balance')
-        for (let i in this.$store.state.payment.payData.list) {
-          if (this.$store.state.payment.payData.list[i].key === 'balance') {
-            this.$store.state.payment.payData.list[i].checked = true
+        store.commit('payment/payType', 'balance')
+        for (let i in store.state.payment.payData.list) {
+          if (store.state.payment.payData.list[i].key === 'balance') {
+            store.state.payment.payData.list[i].checked = true
           } else {
-            this.$store.state.payment.payData.list[i].checked = false
+            store.state.payment.payData.list[i].checked = false
           }
         }
-        this.confirm()
+        confirm()
         return
       }
-      this.$store.commit('payment/showPayment', true)
+      store.commit('payment/showPayment', true)
     }
 
     const confirm = () => {
       console.log('payment confirm 1:')
-      console.log('debug payment, confirm 1,', this.$store.state.payment.resolve)
-      for (let i in this.$store.state.payment.payData.list) {
-        if (this.$store.state.payment.payData.list[i].checked) {
-          this.$store.commit('payment/payType', this.$store.state.payment.payData.list[i].key)
+      console.log('debug payment, confirm 1,', store.state.payment.resolve)
+      for (let i in store.state.payment.payData.list) {
+        if (store.state.payment.payData.list[i].checked) {
+          store.commit('payment/payType', store.state.payment.payData.list[i].key)
         }
       }
-      if (!this.$store.state.payment.payType) {
+      if (!store.state.payment.payType) {
         uni.showModal({
           title: '提示',
           content: '请选择支付方式',
@@ -326,27 +329,24 @@ export default defineComponent({
         })
         return
       }
-      this.$store.commit('payment/showPayment', false)
-      console.log('payment confirm 2:', this.$store.state.payment.payType)
-      console.log('debug payment, confirm 2,', this.$store.state.payment.resolve)
+      store.commit('payment/showPayment', false)
+      console.log('payment confirm 2:', store.state.payment.payType)
+      console.log('debug payment, confirm 2,', store.state.payment.resolve)
       return this.getPayData()
     }
 
     const cancel = () => {
-      this.$store.commit('payment/showPayment', false)
-      return this.$store.state.payment.reject({
+      store.commit('payment/showPayment', false)
+      return store.state.payment.reject({
         errMsg: '支付取消',
       })
     }
 
     const checkPayType = (index) => {
-      if (
-        this.$store.state.payment.payData.list[index].disabled ||
-        this.$store.state.payment.payData.list[index].checked
-      ) {
+      if (store.state.payment.payData.list[index].disabled || store.state.payment.payData.list[index].checked) {
         return false
       }
-      const payData = this.$store.state.payment.payData
+      const payData = store.state.payment.payData
       for (let i in payData.list) {
         if (i == index) {
           payData.list[i].checked = true
@@ -354,19 +354,19 @@ export default defineComponent({
           payData.list[i].checked = false
         }
       }
-      this.$store.commit('payment/payData', payData)
+      store.commit('payment/payData', payData)
     }
 
     const getPayData = () => {
-      console.log('debug payment, getPayData 1,', this.$store.state.payment.resolve)
+      console.log('debug payment, getPayData 1,', store.state.payment.resolve)
       uni.showLoading({
         mask: true,
         title: '请求支付...',
       })
       let _this = this
       let data = {
-        id: this.$store.state.payment.id,
-        pay_type: this.$store.state.payment.payType,
+        id: store.state.payment.id,
+        pay_type: store.state.payment.payType,
       } as any
       // #ifdef H5
       this.$storage.setStorageSync('WEB_URL', window.location.href + '&pay_id_weChart=' + data.id + '&isWechat=true')
@@ -379,7 +379,7 @@ export default defineComponent({
           data.url = window.location.href + '?isPay=ture'
         }
       }
-      data.url += `&isWechat=true&payType=${this.$store.state.payment.payType}`
+      data.url += `&isWechat=true&payType=${store.state.payment.payType}`
       if (!this.$jwx.isWechat()) {
         data.url += '&pay_id_weChart=' + data.id
       }
@@ -391,12 +391,12 @@ export default defineComponent({
         .then((response) => {
           uni.hideLoading()
           if (response.code === 0) {
-            switch (this.$store.state.payment.payType) {
+            switch (store.state.payment.payType) {
               case 'balance':
-                this.callBranch(response.data)
+                callBranch(response.data)
                 break
               case 'huodao':
-                this.callHuodao(response.data)
+                callHuodao(response.data)
                 break
               // #ifdef H5
               case 'wechat_h5':
@@ -409,12 +409,12 @@ export default defineComponent({
                   paySign: response.data.paySign,
                   webUrl: response.data.mweb_url,
                   success() {
-                    _this.$store.state.payment.resolve({
+                    store.state.payment.resolve({
                       errMsg: '支付成功',
                     })
                   },
                   fail(res) {
-                    _this.$store.state.payment.reject({
+                    store.state.payment.reject({
                       errMsg: res.msg,
                     })
                   },
@@ -425,9 +425,9 @@ export default defineComponent({
                   cancelText: '返回支付',
                   success(res) {
                     if (res.confirm) {
-                      _this.weChartPay(_this.$store.state.payment.id)
+                      weChartPay(store.state.payment.id)
                     } else if (res.cancel) {
-                      _this.$store.state.payment.reject({
+                      store.state.payment.reject({
                         errMsg: '支付取消',
                       })
                     }
@@ -445,12 +445,12 @@ export default defineComponent({
                     cancelText: '返回支付',
                     success(res) {
                       if (res.confirm) {
-                        _this.weChartPay(_this.$store.state.payment.id)
+                        weChartPay(store.state.payment.id)
                         // _this.$store.state.payment.resolve({
                         //     errMsg: '支付成功',
                         // });
                       } else if (res.cancel) {
-                        _this.$store.state.payment.reject({
+                        store.state.payment.reject({
                           errMsg: '支付取消',
                         })
                       }
@@ -463,19 +463,19 @@ export default defineComponent({
               // #endif
               default:
                 // #ifdef MP
-                console.log('debug payment, getPayData 2,', this.$store.state.payment.resolve)
-                this.callPlatformPayment(response.data)
+                console.log('debug payment, getPayData 2,', store.state.payment.resolve)
+                callPlatformPayment(response.data)
                 // #endif
                 break
             }
           } else {
-            return this.$store.state.payment.reject(response.msg)
+            return store.state.payment.reject(response.msg)
           }
         })
         .catch((e) => {
           uni.hideLoading()
           e.errMsg = e.msg || ''
-          return this.$store.state.payment.reject(e)
+          return store.state.payment.reject(e)
         })
     }
 
@@ -487,32 +487,32 @@ export default defineComponent({
         data.order_amount === '0' ||
         data.order_amount === '0.00'
       ) {
-        this.payByBalance()
+        payByBalance()
       } else {
         uni.showModal({
           title: '余额支付确认',
           content: `账户余额：${data.balance_amount}，支付金额：${data.order_amount}`,
           success: (e) => {
             if (e.confirm) {
-              for (let item of this.payData.list) {
+              for (let item of payData.value.list) {
                 if (item.key == 'balance') {
                   if (item.is_open_pay_password == 1) {
-                    this.payPassword = ''
-                    this.is_need_pay_password = item.is_pay_password
-                    this.password = ''
-                    this.$store.commit('payment/showPayment', true)
-                    this.printPassword = true
+                    state.payPassword = ''
+                    state.is_need_pay_password = item.is_pay_password
+                    state.password = ''
+                    store.commit('payment/showPayment', true)
+                    state.printPassword = true
                     setTimeout(() => {
-                      this.getFocus = true
+                      state.getFocus = true
                     }, 800)
                   } else {
-                    this.payByBalance()
+                    payByBalance()
                   }
                   break
                 }
               }
             } else {
-              return this.$store.state.payment.reject({
+              return store.state.payment.reject({
                 errMsg: '支付取消.',
               })
             }
@@ -522,26 +522,26 @@ export default defineComponent({
     }
 
     const verifyPayPassword = () => {
-      if (this.password.length < 6) {
+      if (state.password.length < 6) {
         return false
       }
-      this.payPassword = this.password.toString().substring(0, 6)
+      state.payPassword = state.password.toString().substring(0, 6)
       this.$request({
         url: this.$api.member.verify_password,
         data: {
-          pay_password: this.payPassword,
+          pay_password: state.payPassword,
         },
         method: 'post',
       })
         .then((response) => {
-          this.password = ''
+          state.password = ''
           uni.hideLoading()
           if (response.code === 0) {
-            this.$store.commit('payment/showPayment', false)
-            this.payByBalance()
+            store.commit('payment/showPayment', false)
+            payByBalance()
           } else {
-            this.password = ''
-            this.payPassword = ''
+            state.password = ''
+            state.payPassword = ''
             uni.showModal({
               title: '提示',
               content: response.msg,
@@ -552,7 +552,7 @@ export default defineComponent({
         .catch((e) => {
           uni.hideLoading()
           e.errMsg = e.msg || ''
-          return this.$store.state.payment.reject(e)
+          return store.state.payment.reject(e)
         })
     }
 
@@ -562,9 +562,9 @@ export default defineComponent({
         title: '支付中...',
       })
       let para = {
-        id: this.$store.state.payment.id,
-        pay_password: this.payPassword ? this.payPassword : '',
-        is_need_pay_password: this.is_need_pay_password,
+        id: store.state.payment.id,
+        pay_password: state.payPassword ? state.payPassword : '',
+        is_need_pay_password: state.is_need_pay_password,
       }
       this.$request({
         url: this.$api.payment.pay_buy_balance,
@@ -573,19 +573,19 @@ export default defineComponent({
         .then((response) => {
           uni.hideLoading()
           if (response.code === 0) {
-            this.$store.commit('payment/showPayment', false)
-            return this.$store.state.payment.resolve({
+            store.commit('payment/showPayment', false)
+            return store.state.payment.resolve({
               errMsg: '支付成功',
             })
           } else {
-            return this.$store.state.payment.reject({
+            return store.state.payment.reject({
               errMsg: response.msg,
             })
           }
         })
         .catch((e) => {
           e.errMsg = e.msg || ''
-          return this.$store.state.payment.reject(e)
+          return store.state.payment.reject(e)
         })
     }
 
@@ -597,17 +597,17 @@ export default defineComponent({
       this.$request({
         url: this.$api.payment.pay_buy_huodao,
         data: {
-          id: this.$store.state.payment.id,
+          id: store.state.payment.id,
         },
       })
         .then((response) => {
           uni.hideLoading()
           if (response.code === 0) {
-            return this.$store.state.payment.resolve({
+            return store.state.payment.resolve({
               errMsg: '支付成功',
             })
           } else {
-            return this.$store.state.payment.reject({
+            return store.state.payment.reject({
               errMsg: response.msg,
             })
           }
@@ -615,13 +615,13 @@ export default defineComponent({
         .catch((e) => {
           uni.hideLoading()
           e.errMsg = e.msg || ''
-          return this.$store.state.payment.reject(e)
+          return store.state.payment.reject(e)
         })
     }
 
     // #ifdef MP
     const callPlatformPayment = (data) => {
-      console.log('debug payment, callPlatformPayment 1,', this.$store.state.payment.resolve)
+      console.log('debug payment, callPlatformPayment 1,', store.state.payment.resolve)
       let paymentProvider = null as any
       // #ifdef MP-WEIXIN
       paymentProvider = ['wxpay']
@@ -638,17 +638,17 @@ export default defineComponent({
       uni.requestPayment({
         provider: paymentProvider,
         success: (e) => {
-          console.log('debug payment, callPlatformPayment 3,', this.$store.state.payment.resolve)
+          console.log('debug payment, callPlatformPayment 3,', store.state.payment.resolve)
           console.log('success:', e)
           // #ifndef MP-ALIPAY
-          return this.$store.state.payment.resolve(e)
+          return store.state.payment.resolve(e)
           // #endif
           // #ifdef MP-ALIPAY
           // eslint-disable-next-line no-unreachable
           if (e.resultCode === 9000 || e.resultCode === '9000') {
-            return this.$store.state.payment.resolve(e)
+            return store.state.payment.resolve(e)
           } else {
-            return this.$store.state.payment.reject({
+            return store.state.payment.reject({
               errMsg: e.memo,
             })
           }
@@ -659,9 +659,9 @@ export default defineComponent({
           if (e.errMsg && cancelMsgList.indexOf(e.errMsg) >= 0) {
             e.errMsg = '取消支付'
           }
-          console.log('debug payment, callPlatformPayment 4,', this.$store.state.payment.resolve)
+          console.log('debug payment, callPlatformPayment 4,', store.state.payment.resolve)
           console.log('fail:', e)
-          return this.$store.state.payment.reject(e)
+          return store.state.payment.reject(e)
         },
         ...data,
       })
@@ -680,7 +680,7 @@ export default defineComponent({
       }).then((res) => {
         if (res.code === 0) {
           if (res.data.status === 1) {
-            this.$store.state.payment.resolve({
+            store.state.payment.resolve({
               errMsg: '支付成功',
             })
             uni.redirectTo({
@@ -698,6 +698,12 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      showPayment,
+      payData,
+      getInputFocus,
+      cancel,
+      confirm,
+      checkPayType,
     }
   },
 })
