@@ -19,3 +19,7 @@ export function fetchOrderSubmit(data) {
 export function fetchOrderPayOrderId(data) {
   return request.post!('&r=api/order/pay-data', data, { noAuth: false }, true)
 }
+
+export function fetchOrderPayments(data) {
+  return request.get!('&r=api/payment/get-payments', data, { noAuth: false }, false)
+}

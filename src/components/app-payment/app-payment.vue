@@ -1,6 +1,6 @@
 <!-- 全局支付组件 -->
 <template>
-  <view class="app-payment main-center cross-center" :class="showPayment ? 'show' : ''">
+  <view class="app-payment" :class="showPayment ? 'show' : ''">
     <view v-if="payData" class="modal">
       <view class="title">
         <view>支付方式</view>
@@ -42,26 +42,11 @@
               <view class="password-btn main-center cross-center">
                 <view @click="payByBalance">暂不设置</view>
                 <view class="line"></view>
-                <view
-                  :style="{ color: getTheme.color }"
-                  @click="
-                    setPassword = !setPassword
-                    password = ''
-                  "
-                  >确认</view
-                >
+                <view :style="{ color: getTheme.color }">确认</view>
               </view>
             </view>
             <view v-else-if="printPassword" class="password-view">
-              <image
-                class="password-close"
-                src="/static/image/icon/icon-close.png"
-                @click="
-                  printPassword = false
-                  setPassword = false
-                  verifyPassword = false
-                "
-              ></image>
+              <image class="password-close" src="/static/image/icon/icon-close.png"></image>
               <view class="password-title">请{{ verifyPassword ? '确认' : '输入' }}余额支付密码</view>
               <!-- #ifdef MP-ALIPAY -->
               <input
@@ -138,7 +123,9 @@ import { onPageScroll, onLoad, onUnload, onShow, onHide, onReachBottom } from '@
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, nextTick } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { store } from '@/store'
+import { PaymentMutationTypes } from '@/store/modules/payment/mutation-types'
 import AppRadio from '@/components/app-radio/app-radio.vue'
+import { fetchOrderPayments } from '@/api/order'
 
 export default defineComponent({
   name: 'AppPayment',
@@ -250,7 +237,7 @@ export default defineComponent({
 
     const pay = (id) => {
       return new Promise((resolve, reject) => {
-        store.commit('payment/setAll', {
+        store.commit(PaymentMutationTypes.SET_ALL, {
           showPayment: false,
           payData: null,
           payType: null,
@@ -265,12 +252,8 @@ export default defineComponent({
           mask: true,
           title: '请求支付...',
         })
-        this.$request({
-          url: this.$api.payment.get_payments,
-          data: {
-            id: id,
-          },
-        })
+
+        fetchOrderPayments({ id })
           .then((response) => {
             uni.hideLoading()
             console.log('debug 1--->', response)
@@ -297,9 +280,9 @@ export default defineComponent({
           data.list[i].checked = false
         }
       }
-      store.commit('payment/payData', data)
+      store.commit(PaymentMutationTypes.SET_PAY_DATA, data)
       if (data.amount === 0 || data.amount === 0.0 || data.amount === '0' || data.amount === '0.00') {
-        store.commit('payment/payType', 'balance')
+        store.commit(PaymentMutationTypes.SET_PAY_TYPE, 'balance')
         for (let i in store.state.payment.payData.list) {
           if (store.state.payment.payData.list[i].key === 'balance') {
             store.state.payment.payData.list[i].checked = true
@@ -310,7 +293,7 @@ export default defineComponent({
         confirm()
         return
       }
-      store.commit('payment/showPayment', true)
+      store.commit(PaymentMutationTypes.SET_SHOW_PAYMENT, true)
     }
 
     const confirm = () => {
@@ -318,7 +301,7 @@ export default defineComponent({
       console.log('debug payment, confirm 1,', store.state.payment.resolve)
       for (let i in store.state.payment.payData.list) {
         if (store.state.payment.payData.list[i].checked) {
-          store.commit('payment/payType', store.state.payment.payData.list[i].key)
+          store.commit(PaymentMutationTypes.SET_PAY_TYPE, store.state.payment.payData.list[i].key)
         }
       }
       if (!store.state.payment.payType) {
@@ -329,14 +312,14 @@ export default defineComponent({
         })
         return
       }
-      store.commit('payment/showPayment', false)
+      store.commit(PaymentMutationTypes.SET_SHOW_PAYMENT, false)
       console.log('payment confirm 2:', store.state.payment.payType)
       console.log('debug payment, confirm 2,', store.state.payment.resolve)
-      return this.getPayData()
+      return getPayData()
     }
 
     const cancel = () => {
-      store.commit('payment/showPayment', false)
+      store.commit(PaymentMutationTypes.SET_SHOW_PAYMENT, false)
       return store.state.payment.reject({
         errMsg: '支付取消',
       })
@@ -354,7 +337,7 @@ export default defineComponent({
           payData.list[i].checked = false
         }
       }
-      store.commit('payment/payData', payData)
+      store.commit(PaymentMutationTypes.SET_PAY_DATA, payData)
     }
 
     const getPayData = () => {
@@ -700,6 +683,7 @@ export default defineComponent({
       ...toRefs(state),
       showPayment,
       payData,
+      pay,
       getInputFocus,
       cancel,
       confirm,
@@ -710,13 +694,13 @@ export default defineComponent({
 </script>
 
 <style scoped lang="scss">
-$bigPadding: #{50rpx};
-$smallPadding: #{25rpx};
-$middlePadding: #{30rpx};
-$smallFont: #{24rpx};
-$lineWidth: #{1rpx};
-$modalWidth: #{600rpx};
-$iconWidth: #{60rpx};
+$bigPadding: 50rpx;
+$smallPadding: 25rpx;
+$middlePadding: 30rpx;
+$smallFont: 24rpx;
+$lineWidth: 1rpx;
+$modalWidth: 600rpx;
+$iconWidth: 60rpx;
 
 .app-payment {
   background: rgba(0, 0, 0, 0.5);
@@ -729,6 +713,10 @@ $iconWidth: #{60rpx};
   visibility: hidden;
   opacity: 0;
   transition: 150ms;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   .modal {
     background: #fff;
@@ -767,6 +755,8 @@ $iconWidth: #{60rpx};
     .pay-type-item {
       border-bottom: $lineWidth solid #e2e2e2;
       padding: $smallPadding 0;
+      display: flex;
+      align-items: center;
 
       .pay-type-icon {
         width: $iconWidth;

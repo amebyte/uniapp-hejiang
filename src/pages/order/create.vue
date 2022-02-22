@@ -128,6 +128,7 @@
         </view>
       </view>
     </drawerBottomSheet> -->
+    <AppPayment ref="appPaymentRef" />
   </view>
 </template>
 
@@ -139,10 +140,12 @@ import { Tips, subscribe } from '@/utils/util'
 import Cache from '@/utils/cache'
 import { fetchOrderPreview, fetchOrderSubmit, fetchOrderPayOrderId } from '@/api/order'
 import { CartMutationTypes } from '@/store/modules/cart/mutation-types'
+import AppPayment from '@/components/app-payment/app-payment.vue'
 
 export default defineComponent({
   name: 'CreateOrder',
   components: {
+    AppPayment,
     // drawerBottomSheet,
     // couponListItem,
   },
@@ -171,7 +174,11 @@ export default defineComponent({
       submitLock: false,
       p_pay_id: '', //重新提交处理
       getPayDataTimer: null as any,
+      showPayResult: true,
     })
+
+    const appPaymentRef = ref(null)
+
     const scroll = () => {}
     /**
      * 打开优惠劵窗口
@@ -214,9 +221,9 @@ export default defineComponent({
      */
     const createOrder = () => {
       if (state.p_pay_id) {
-        // pay({
-        //   id: state.p_pay_id,
-        // })
+        pay({
+          id: state.p_pay_id,
+        })
         return true
       } else {
         state.p_pay_id = ''
@@ -305,7 +312,7 @@ export default defineComponent({
               }, 1000)
             } else {
               uni.hideLoading()
-              // pay(response.data);
+              pay(response.data)
             }
           } else {
             state.submitLock = false
@@ -325,6 +332,66 @@ export default defineComponent({
             content: e.errMsg,
             showCancel: false,
           })
+        })
+    }
+
+    const pay = (data) => {
+      state.p_pay_id = data.id
+      ;(appPaymentRef.value as any)
+        .pay(data.id)
+        .then((res) => {
+          if (state.showPayResult) {
+            // uni.redirectTo({
+            //   url: `/pages/order-submit/pay-result?payment_order_union_id=${
+            //     data.id
+            //   }&order_page_url=${encodeURIComponent(this.orderPageUrl)}`,
+            // })
+          } else {
+            let page_url = this.orderPageUrl
+            if (page_url.indexOf('?') === -1) {
+              page_url += '?'
+            } else {
+              page_url += '&'
+            }
+
+            delete data.id
+
+            page_url += `pay_data=${JSON.stringify(data)}`
+
+            uni.redirectTo({
+              url: page_url,
+            })
+          }
+        })
+        .catch((e) => {
+          if (this.payCancelUrl) {
+            let page_url = this.payCancelUrl
+            if (page_url.indexOf('?') === -1) {
+              page_url += '?'
+            } else {
+              page_url += '&'
+            }
+            page_url += `pay_data=${JSON.stringify(data)}`
+            uni.redirectTo({
+              url: page_url,
+            })
+          } else {
+            if (e.errMsg === '5b03b6e009796c698d132908cb635fca') {
+              //重新发起支付
+              state.submitLock = false
+            } else {
+              uni.showModal({
+                title: '提交失败',
+                content: e.errMsg,
+                showCancel: false,
+                success: () => {
+                  uni.redirectTo({
+                    url: this.orderPageUrl,
+                  })
+                },
+              })
+            }
+          }
         })
     }
 
@@ -430,6 +497,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      appPaymentRef,
       scroll,
       openCouponsWindow,
       confirmCoupon,
