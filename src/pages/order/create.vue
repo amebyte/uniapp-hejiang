@@ -175,6 +175,8 @@ export default defineComponent({
       p_pay_id: '', //重新提交处理
       getPayDataTimer: null as any,
       showPayResult: true,
+      payCancelUrl: '',
+      orderPageUrl: '',
     })
 
     const appPaymentRef = ref(null)
@@ -344,10 +346,10 @@ export default defineComponent({
             // uni.redirectTo({
             //   url: `/pages/order-submit/pay-result?payment_order_union_id=${
             //     data.id
-            //   }&order_page_url=${encodeURIComponent(this.orderPageUrl)}`,
+            //   }&order_page_url=${encodeURIComponent(state.orderPageUrl)}`,
             // })
           } else {
-            let page_url = this.orderPageUrl
+            let page_url = state.orderPageUrl
             if (page_url.indexOf('?') === -1) {
               page_url += '?'
             } else {
@@ -364,8 +366,8 @@ export default defineComponent({
           }
         })
         .catch((e) => {
-          if (this.payCancelUrl) {
-            let page_url = this.payCancelUrl
+          if (state.payCancelUrl) {
+            let page_url = state.payCancelUrl
             if (page_url.indexOf('?') === -1) {
               page_url += '?'
             } else {
@@ -386,7 +388,7 @@ export default defineComponent({
                 showCancel: false,
                 success: () => {
                   uni.redirectTo({
-                    url: this.orderPageUrl,
+                    url: state.orderPageUrl,
                   })
                 },
               })
@@ -410,6 +412,7 @@ export default defineComponent({
 
     const setFormData = (options) => {
       state.plugin = options.plugin || null
+      state.orderPageUrl = options.orderPageUrl || '/pages/order/list'
       const list = store.state.cart.previewOrderParam
       // 商户列表先做下排序，主商城必须在最前
       for (let i in list) {

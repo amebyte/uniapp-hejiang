@@ -1,5 +1,9 @@
 <template>
   <view class="login-wrap">
+    <view class="header">
+      <view class="image"></view>
+      <view class="name">开卓教育商城</view>
+    </view>
     <view class="login-submit-wrap">
       <view class="login-button" @click="loginHandler">
         <button hover-class="hover-button">微信账号一键登录</button>
@@ -111,6 +115,32 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
+@import '@/static/css/variable.scss';
+page {
+  background-color: $background-color;
+}
+
 .login-wrap {
+  .header {
+    height: 400rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #00796b;
+    .image {
+      width: 107rpx;
+      height: 107rpx;
+      background-color: #c8e6c9;
+      border-radius: 50%;
+    }
+    .name {
+      padding-top: 20rpx;
+      font-size: 32rpx;
+      font-family: PingFang SC;
+      font-weight: bold;
+      color: #ffffff;
+    }
+  }
 }
 </style>

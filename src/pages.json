@@ -112,8 +112,8 @@
         {
           "path": "login",
           "style": {
-            "navigationBarTitleText": "登录",
-            "navigationBarBackgroundColor": "#102c24",
+            "navigationBarTitleText": "授权登录",
+            "navigationBarBackgroundColor": "#00796B",
             "enablePullDownRefresh": false
           }
         }
