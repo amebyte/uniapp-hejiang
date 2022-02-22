@@ -118,9 +118,10 @@ import { onPageScroll, onLoad, onUnload, onShow, onHide, onReachBottom } from '@
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, nextTick } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { store } from '@/store'
+import Cache from '@/utils/cache'
 import { PaymentMutationTypes } from '@/store/modules/payment/mutation-types'
 import AppRadio from '@/components/app-radio/app-radio.vue'
-import { fetchOrderPayments } from '@/api/order'
+import { fetchOrderPayments, fetchOrderPayData } from '@/api/order'
 
 export default defineComponent({
   name: 'AppPayment',
@@ -341,13 +342,13 @@ export default defineComponent({
         mask: true,
         title: '请求支付...',
       })
-      let _this = this
+
       let data = {
         id: store.state.payment.id,
         pay_type: store.state.payment.payType,
       } as any
       // #ifdef H5
-      this.$storage.setStorageSync('WEB_URL', window.location.href + '&pay_id_weChart=' + data.id + '&isWechat=true')
+      Cache.set('WEB_URL', window.location.href + '&pay_id_weChart=' + data.id + '&isWechat=true')
       if (window.location.hash.indexOf('/pages/balance/recharge') > -1) {
         data.url = window.location.href.split('#')[0] + '#/pages/balance/recharge?isPay=ture'
       } else {
@@ -362,19 +363,14 @@ export default defineComponent({
         data.url += '&pay_id_weChart=' + data.id
       }
       // #endif
-      this.$request({
-        url: this.$api.payment.pay_data,
-        data: data,
-      })
+
+      fetchOrderPayData(data)
         .then((response) => {
           uni.hideLoading()
           if (response.code === 0) {
             switch (store.state.payment.payType) {
               case 'balance':
                 callBranch(response.data)
-                break
-              case 'huodao':
-                callHuodao(response.data)
                 break
               // #ifdef H5
               case 'wechat_h5':
@@ -411,32 +407,6 @@ export default defineComponent({
                     }
                   },
                 })
-                break
-              case 'alipay_h5':
-                if (this.$jwx.isWechat()) {
-                  _AP.pay(response.data.url)
-                } else {
-                  window.location.href = response.data.url
-                  uni.showModal({
-                    content: '确定已完成支付？',
-                    confirmText: '确定',
-                    cancelText: '返回支付',
-                    success(res) {
-                      if (res.confirm) {
-                        weChartPay(store.state.payment.id)
-                        // _this.$store.state.payment.resolve({
-                        //     errMsg: '支付成功',
-                        // });
-                      } else if (res.cancel) {
-                        store.state.payment.reject({
-                          errMsg: '支付取消',
-                        })
-                      }
-                    },
-                    fail() {},
-                  })
-                }
-                console.log('debug payment, alipay_h5')
                 break
               // #endif
               default:
