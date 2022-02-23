@@ -135,9 +135,27 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
+import { store } from '@/store'
 export default defineComponent({
   name: 'PayResult',
-  setup() {},
+  setup() {
+    const appImg = store.state.mallConfig.__wxapp_img
+    const getTheme = store.state.mallConfig.theme_color
+    const state = reactive({
+      payment_order_union_id: null,
+      result: null as any,
+      redirectUrl: null,
+      recommendGoodsList: null,
+      shareCheck: false,
+      orderPageUrl: false,
+      community: false,
+    })
+    return {
+      ...toRefs(state),
+      appImg,
+      getTheme,
+    }
+  },
 })
 </script>
 <style lang="scss">
