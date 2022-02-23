@@ -1,0 +1,4 @@
+export enum MallConfigMutationTypes {
+  SET_MUT_MALL_CONFIG = 'SET_MUT_MALL_CONFIG',
+  SET_MUT_MALL_HEIGHT = 'SET_MUT_MALL_HEIGHT',
+}
