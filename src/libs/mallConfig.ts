@@ -46,7 +46,7 @@ const getConfigFormServer = (resolve?, reject?) => {
 }
 
 export default {
-  getConfig(options) {
+  getConfig() {
     return new Promise((resolve, reject) => {
       if (mallConfig) {
         return resolve(mallConfig)

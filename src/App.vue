@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
+import { store } from '@/store'
+import { MallConfigActionTypes } from '@/store/modules/mallConfig/action-types'
 onLaunch(() => {
+  store.dispatch(MallConfigActionTypes.ACTION_MALL_GET_CONFIG)
   console.log('App Launch')
 })
 onShow(() => {
