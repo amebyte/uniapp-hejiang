@@ -150,10 +150,22 @@ export default defineComponent({
       orderPageUrl: false,
       community: false,
     })
+    const redirectTo = (url) => {
+      uni.redirectTo({
+        url: url,
+      })
+    }
+    const reLaunch = (url) => {
+      uni.reLaunch({
+        url: url,
+      })
+    }
     return {
       ...toRefs(state),
       appImg,
       getTheme,
+      redirectTo,
+      reLaunch,
     }
   },
 })
