@@ -5,7 +5,7 @@ import request from '@/utils/request'
  *
  */
 export function fetchBannerList(data) {
-  return request?.get?.('/banner/getBanner', data, {
+  return request.get!('/banner/getBanner', data, {
     noAuth: true,
   })
 }
