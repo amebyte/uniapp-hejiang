@@ -6,17 +6,13 @@
     </view>
     <view class="item nav-member" :class="navMask ? 'out' : ''">
       <text class="desc">会员中心</text>
-      <navigator
-        class="navigator iconfont icon-member-empty"
-        open-type="switchTab"
-        url="/pages/member/index/index"
-      ></navigator>
+      <navigator class="navigator iconfont icon-member-empty" url="/pages/my/memberCenter"></navigator>
     </view>
     <view class="item nav-shopping-cart" :class="navMask ? 'out' : ''">
       <text class="desc">购物车</text>
-      <navigator class="navigator iconfont icon-shopping-cart-mini" url="/pages/member/index/index"></navigator>
+      <navigator class="navigator iconfont icon-shopping-cart-mini" url="/pages/shopping-cart/index"></navigator>
     </view>
-    <view class="item nav-btn" @click="navToggle">
+    <view class="item nav-btn" :class="navMask ? 'nav-btn-on' : ''" @click="navToggle">
       <text v-if="!navMask">快捷</text>
       <text v-if="!navMask">导航</text>
       <text v-if="navMask" class="iconfont icon-close-bold"></text>
@@ -28,7 +24,6 @@ import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, to
 const navMask = ref(false)
 const navToggle = () => {
   navMask.value = !navMask.value
-  console.log('navMask', navMask.value)
 }
 </script>
 <style lang="scss">
@@ -79,6 +74,9 @@ const navToggle = () => {
         display: block;
         line-height: 30rpx;
       }
+    }
+    &.nav-btn-on {
+      background-color: #f55;
     }
     &.nav-home {
       bottom: 282rpx;
