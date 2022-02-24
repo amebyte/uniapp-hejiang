@@ -5,7 +5,7 @@ import { goodsType } from '@/types'
  * 精选课程
  *
  */
-export function fetchRecommendGoodsList(data) {
+export function fetchRecommendGoodsList2(data) {
   return new Promise((resolve, reject) => {
     request.get!('&r=api/default/goods-list&page=1&cat_id=5', data, { noAuth: true })
       .then((r) => {
@@ -27,6 +27,14 @@ export function fetchRecommendGoodsList(data) {
       })
       .catch((err) => console.log(err))
   })
+}
+
+/**
+ * 推荐商品
+ *
+ */
+export function fetchRecommendGoodsList(data) {
+  return request.get!('&r=api/goods/new-recommend', data, { noAuth: true })
 }
 
 /**

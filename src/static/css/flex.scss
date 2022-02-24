@@ -6,9 +6,29 @@
     -webkit-flex-direction: row;
     flex-direction: row;
     flex-wrap: nowrap;
-}
-
-.dir-right-nowrap {
+  }
+  
+  .dir-left-wrap {
+    /* 主轴 排列方式从左侧开始 换行*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .dir-left-wrap-reverse {
+    /* 主轴 排列方式从左侧开始 换行 第一行在下方*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+  }
+  
+  .dir-right-nowrap {
     /* 主轴 排列方式从 右侧开始 */
     display: -webkit-box;
     display: -webkit-flex;
@@ -16,9 +36,9 @@
     -webkit-flex-direction: row-reverse;
     flex-direction: row-reverse;
     flex-wrap: nowrap;
-}
-
-.dir-right-wrap {
+  }
+  
+  .dir-right-wrap {
     /* 主轴 排列方式从 右侧开始 换行*/
     display: -webkit-box;
     display: -webkit-flex;
@@ -26,9 +46,30 @@
     -webkit-flex-direction: row;
     flex-direction: row;
     flex-wrap: wrap;
-}
-
-.dir-top-wrap {
+  }
+  
+  .dir-right-wrap-reverse {
+    /* 主轴 排列方式从 右侧开始 换行 第一行在下方*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    flex-wrap: wrap-reverse;
+  }
+  
+  .dir-top-nowrap {
+    /* 主轴 排列方式从顶部开始 不换行 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+  
+  .dir-top-wrap {
     /* 主轴 排列方式从顶部开始  换行*/
     display: -webkit-box;
     display: -webkit-flex;
@@ -37,9 +78,165 @@
     -webkit-flex-direction: column;
     flex-direction: column;
     flex-wrap: wrap;
-}
-
-.box-grow-0 {
+  }
+  
+  .dir-top-wrap-reverse {
+    /* 主轴 排列方式从顶部开始 不换行换行 第一行在下方*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    flex-wrap: wrap-reverse;
+  }
+  
+  .dir-bottom-nowrap {
+    /* 主轴 排列方式从底部开始 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column-reverse;
+    flex-direction: column-reverse;
+    flex-wrap: nowrap;
+  }
+  
+  .dir-bottom-wrap {
+    /* 主轴 排列方式从底部开始 不换行 换行*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    flex-wrap: wrap;
+  }
+  
+  .dir-bottom-wrap-reverse {
+    /* 主轴 排列方式从底部开始 不换行换行 第一行在下方*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    flex-wrap: wrap-reverse;
+  }
+  
+  .main-left {
+    /* 主轴 左对齐 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-start;
+    justify-content: flex-start;
+  }
+  
+  .main-right {
+    /* 主轴 右对齐 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
+  }
+  
+  .main-between {
+    /* 主轴 两端对齐 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-between;
+    justify-content: space-between;
+  }
+  
+  .main-center {
+    /* 主轴 居中对齐 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+  }
+  
+  .main-around {
+    /* 主轴 项目位于各行之前、之间、之后都留有空白的容器内*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-justify-content: space-around;
+    justify-content: space-around;
+  }
+  
+  .cross-top {
+    /* 交叉轴 起点对齐 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: flex-start;
+    align-items: flex-start;
+  }
+  
+  .cross-bottom {
+    /* 交叉轴 终点对齐 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: end;
+    -webkit-align-items: flex-end;
+    -ms-flex-align: end;
+    -ms-grid-row-align: flex-end;
+    align-items: flex-end;
+  }
+  
+  .cross-baseline {
+    /* 交叉轴 第一行文字基线对齐 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: baseline;
+    align-items: baseline;
+  }
+  
+  .cross-center {
+    /* 交叉轴 居中对齐 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+  }
+  
+  .cross-stretch {
+    /* 交叉轴 高度并排铺满 高度不固定*/
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: stretch;
+    align-items: stretch;
+  }
+  
+  .flex-wrap {
+    /* 流模式 第一行在上方 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+  }
+  
+  .flex-wrap-reverse {
+    /* 流模式 第一行在下方 */
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-wrap: wrap-reverse;
+    flex-wrap: wrap-reverse;
+  }
+  
+  .box-grow-0 {
     /* flex 子元素固定宽度*/
     min-width: 0;
     -webkit-box-flex: 0;
@@ -49,9 +246,9 @@
     -webkit-flex-shrink: 0;
     -ms-flex-negative: 0;
     flex-shrink: 0;
-}
+  }
   
-.box-grow-1 {
+  .box-grow-1 {
     /* flex 子元素等分 */
     min-width: 0;
     -webkit-box-flex: 1;
@@ -61,4 +258,10 @@
     -webkit-flex-shrink: 1;
     -ms-flex-negative: 1;
     flex-shrink: 1;
-}
+  }
+  
+  .inline-flex {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+  }
+  

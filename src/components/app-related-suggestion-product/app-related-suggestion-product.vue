@@ -3,7 +3,7 @@
     <view v-if="isRecommend" class="app-top dir-left-nowrap main-center cross-center">
       <view class="app-content dir-left-nowrap main-between cross-center">
         <view class="app-line"></view>
-        <view v-if="showIcon" class="app-icon-love image-cover image-no-rep"></view>
+        <view v-if="showIcon" class="app-icon-love iconfont icon-love"></view>
         <text class="app-text">{{ text }}</text>
         <view class="app-line"></view>
       </view>
@@ -191,9 +191,7 @@ export default defineComponent({
         background-color: #bbbbbb;
       }
       .app-icon-love {
-        width: 24rpx;
-        height: 24rpx;
-        background-image: url('../../../static/image/icon/icon-favorite.png');
+        color: #999;
       }
       .app-text {
         font-size: 24rpx;
