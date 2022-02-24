@@ -140,7 +140,7 @@ import { fetchOrderPayResult } from '@/api/order'
 export default defineComponent({
   name: 'PayResult',
   setup() {
-    console.log('store.state.mallConfig.__wxapp_img', store.state.mallConfig.__wxapp_img)
+    console.log('store.state.mallConfig.__wxapp_img', store.state)
     const appImg = computed(() => store.state.mallConfig.__wxapp_img)
     const getTheme = store.state.mallConfig.theme_color
     const state = reactive({

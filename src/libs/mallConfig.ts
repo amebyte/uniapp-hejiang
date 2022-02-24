@@ -57,7 +57,7 @@ export default {
           isFirstAppRun = false
           getConfigFormServer()
         }
-        return resolve(mallConfig)
+        return resolve(JSON.parse(mallConfig))
       } else {
         getConfigFormServer(resolve, reject)
       }

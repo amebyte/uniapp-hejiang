@@ -8,6 +8,7 @@ export type Mutations<S = MallConfigState> = {
 }
 export const mutations: MutationTree<MallConfigState> & Mutations = {
   [MallConfigMutationTypes.SET_MUT_MALL_CONFIG](state: MallConfigState, data: any) {
+    console.log('datadatadata', data)
     for (const item in data) {
       if (item === 'navbar') {
         for (let i = 0; i < data[item].navs.length; i++) {
