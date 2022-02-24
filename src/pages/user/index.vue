@@ -55,25 +55,25 @@
         </view>
       </view>
       <view class="box-content row">
-        <navigator url="/pages/users/order/index?status=1" class="box-item col-4">
+        <navigator url="/pages/order/list?status=1" class="box-item col-4">
           <text class="iconfont icon-pending-payment icon"></text>
           <text>待付款</text>
         </navigator>
-        <navigator url="/pages/users/order/index?status=2" class="box-item col-4">
+        <navigator url="/pages/order/list?status=2" class="box-item col-4">
           <text class="iconfont icon-wait-send icon"></text>
           <text>待发货</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">
             {{ orderCounts.unauditedOrderCounts > 99 ? '99+' : orderCounts.unauditedOrderCounts }}
           </view>
         </navigator>
-        <navigator url="/pages/users/order/index?status=4" class="box-item col-4">
+        <navigator url="/pages/order/list?status=3" class="box-item col-4">
           <text class="iconfont icon-dispatched icon"></text>
           <text>待收货</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">
             {{ orderCounts.unauditedOrderCounts > 99 ? '99+' : orderCounts.unauditedOrderCounts }}
           </view>
         </navigator>
-        <navigator url="/pages/users/order/index?status=5" class="box-item col-4">
+        <navigator url="/pages/order/list?status=4" class="box-item col-4">
           <text class="iconfont icon-completed icon"></text>
           <text>已完成</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">

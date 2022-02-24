@@ -501,19 +501,21 @@
             </view>
           </view>
         </block>
-        <block
-          v-if="
-            (orderDetail.is_pay == 1 || orderDetail.pay_type == 2) &&
-            orderDetail.is_send == 0 &&
-            orderDetail.status == 1 &&
-            orderDetail.detailExpressRelation.length == 0 &&
-            orderDetail.cancel_status != 1
-          "
-        >
-          <view v-if="orderDetail.sign != 'gift'" class="action-box dir-left-nowrap main-right">
-            <view class="box-grow-0 btn" @click="cancel(orderDetail)">申请退款</view>
-          </view>
-        </block>
+        <template v-if="false">
+          <block
+            v-if="
+              (orderDetail.is_pay == 1 || orderDetail.pay_type == 2) &&
+              orderDetail.is_send == 0 &&
+              orderDetail.status == 1 &&
+              orderDetail.detailExpressRelation.length == 0 &&
+              orderDetail.cancel_status != 1
+            "
+          >
+            <view v-if="orderDetail.sign != 'gift'" class="action-box dir-left-nowrap main-right">
+              <view class="box-grow-0 btn" @click="cancel(orderDetail)">申请退款</view>
+            </view>
+          </block>
+        </template>
       </view>
     </view>
   </view>
