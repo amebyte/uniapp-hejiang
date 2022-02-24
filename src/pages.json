@@ -69,6 +69,13 @@
           }
         },
         {
+          "path": "payResult",
+          "style": {
+            "navigationBarTitleText": "提交完成",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
           "path": "list",
           "style": {
             "navigationBarTitleText": "订单列表",

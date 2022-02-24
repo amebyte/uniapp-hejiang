@@ -343,11 +343,11 @@ export default defineComponent({
         .pay(data.id)
         .then((res) => {
           if (state.showPayResult) {
-            // uni.redirectTo({
-            //   url: `/pages/order-submit/pay-result?payment_order_union_id=${
-            //     data.id
-            //   }&order_page_url=${encodeURIComponent(state.orderPageUrl)}`,
-            // })
+            uni.redirectTo({
+              url: `/pages/order/payResult?payment_order_union_id=${data.id}&order_page_url=${encodeURIComponent(
+                state.orderPageUrl
+              )}`,
+            })
           } else {
             let page_url = state.orderPageUrl
             if (page_url.indexOf('?') === -1) {

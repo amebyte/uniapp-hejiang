@@ -134,22 +134,40 @@
 </template>
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
-import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
+import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed } from 'vue'
 import { store } from '@/store'
+import { fetchOrderPayResult } from '@/api/order'
 export default defineComponent({
   name: 'PayResult',
   setup() {
     const appImg = store.state.mallConfig.__wxapp_img
     const getTheme = store.state.mallConfig.theme_color
     const state = reactive({
-      payment_order_union_id: null,
+      payment_order_union_id: null as any,
       result: null as any,
       redirectUrl: null,
       recommendGoodsList: null,
       shareCheck: false,
-      orderPageUrl: false,
+      orderPageUrl: null as any,
       community: false,
     })
+
+    const showGift = computed(() => {
+      if (!state.result || state.community) {
+        return false
+      }
+      let { send_data, user_coupon_list, card_list } = state.result
+      if (
+        (send_data && send_data.send_integral_num > 0) ||
+        (send_data && send_data.send_balance > 0) ||
+        (user_coupon_list && user_coupon_list.length) ||
+        (card_list && card_list.length)
+      ) {
+        return true
+      }
+      return false
+    })
+
     const redirectTo = (url) => {
       uni.redirectTo({
         url: url,
@@ -160,8 +178,36 @@ export default defineComponent({
         url: url,
       })
     }
+
+    const loadData = () => {
+      fetchOrderPayResult({
+        payment_order_union_id: state.payment_order_union_id,
+      })
+        .then((response) => {
+          if (response.code === 0) {
+            state.result = response.data
+            state.shareCheck = state.result.shareCheck
+            if (state.result.order_page_url) {
+              state.orderPageUrl = state.result.order_page_url
+            }
+          }
+        })
+        .catch(() => {})
+    }
+
+    onLoad((options) => {
+      state.payment_order_union_id = options.payment_order_union_id
+      state.orderPageUrl = decodeURIComponent(options.order_page_url || '/pages/order/index/index?status=0')
+      if (options.order_page_url === '/plugins/community/order/order') {
+        state.orderPageUrl = state.orderPageUrl + '?is_user=1'
+        state.community = true
+      }
+      loadData()
+    })
+
     return {
       ...toRefs(state),
+      showGift,
       appImg,
       getTheme,
       redirectTo,
