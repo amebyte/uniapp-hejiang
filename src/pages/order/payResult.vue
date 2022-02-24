@@ -140,7 +140,8 @@ import { fetchOrderPayResult } from '@/api/order'
 export default defineComponent({
   name: 'PayResult',
   setup() {
-    const appImg = store.state.mallConfig.__wxapp_img
+    console.log('store.state.mallConfig.__wxapp_img', store.state.mallConfig.__wxapp_img)
+    const appImg = computed(() => store.state.mallConfig.__wxapp_img)
     const getTheme = store.state.mallConfig.theme_color
     const state = reactive({
       payment_order_union_id: null as any,
@@ -217,6 +218,145 @@ export default defineComponent({
 })
 </script>
 <style lang="scss">
+.return-btn {
+  height: 72rpx;
+  line-height: 70rpx;
+  border: 2rpx solid;
+  border-radius: 1000rpx;
+  padding: 0 32rpx;
+  font-size: $uni-font-size-base;
+}
+
+.return-btn:active {
+  box-shadow: inset 0 0 100rpx rgba(0, 0, 0, 0.15);
+}
+
+.return-btn.small {
+  height: 60rpx;
+  line-height: 58rpx;
+  padding: 0 24rpx;
+  font-size: 24rpx;
+  color: #ffffff;
+}
+
+.mb-12 {
+  margin-bottom: 12rpx;
+}
+
+.mb-24 {
+  margin-bottom: 24rpx;
+}
 .pay-result-wraper {
+  text-align: center;
+  background: #fff;
+  padding: 36rpx;
+  &.over-page {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+  .top-pic {
+    width: 220rpx;
+    height: 172rpx;
+  }
+
+  .pay-price {
+    color: $uni-text-color-taupe;
+  }
+
+  .default-border {
+    border-color: $uni-text-color-grey;
+  }
+
+  .btn-wrap {
+    padding: 36rpx;
+  }
+
+  .gift {
+    position: relative;
+    padding: 24rpx;
+    border-radius: 20rpx;
+    background: #ffbe6a;
+
+    .background {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 102rpx;
+      z-index: 0;
+    }
+
+    .title {
+      text-align: center;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 24rpx;
+    }
+
+    .gift-scroll {
+      max-height: 400rpx;
+    }
+
+    .item {
+      background: #fff;
+      margin-bottom: 24rpx;
+      border-radius: 18rpx;
+      padding: 18rpx;
+      min-height: 160rpx;
+
+      > view:nth-of-type(1) {
+        min-width: 180rpx;
+      }
+
+      > view:nth-of-type(2) {
+        text-align: left;
+        margin-left: 10rpx;
+      }
+    }
+
+    .item:last-child {
+      margin-bottom: 0;
+    }
+
+    .coupon-discount,
+    .coupon-discount-unit,
+    .coupon-price-unit,
+    .coupon-price {
+      color: $uni-important-color;
+      line-height: 1;
+    }
+
+    .coupon-discount-unit,
+    .coupon-price-unit {
+      line-height: 1.15;
+    }
+
+    .coupon-price,
+    .coupon-discount {
+      font-size: 48rpx;
+    }
+
+    .hongbao-img,
+    .integral-img,
+    .card-img {
+      width: 80rpx;
+      height: 80rpx;
+      border-radius: 1000rpx;
+    }
+
+    .coupon-name,
+    .card-name {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .send-data-desc,
+    .coupon-desc {
+      font-size: $uni-font-size-sm;
+      color: $uni-text-color-taupe;
+    }
+  }
 }
 </style>
