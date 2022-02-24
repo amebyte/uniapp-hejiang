@@ -145,7 +145,7 @@ export default defineComponent({
     const getTheme = store.state.mallConfig.theme_color
     const state = reactive({
       payment_order_union_id: null as any,
-      result: null as any,
+      result: {} as any,
       redirectUrl: null,
       recommendGoodsList: null,
       shareCheck: false,
@@ -170,6 +170,7 @@ export default defineComponent({
     })
 
     const redirectTo = (url) => {
+      console.log('url', url)
       uni.redirectTo({
         url: url,
       })
@@ -198,7 +199,7 @@ export default defineComponent({
 
     onLoad((options) => {
       state.payment_order_union_id = options.payment_order_union_id
-      state.orderPageUrl = decodeURIComponent(options.order_page_url || '/pages/order/index/index?status=0')
+      state.orderPageUrl = decodeURIComponent(options.order_page_url || '/pages/order/list')
       if (options.order_page_url === '/plugins/community/order/order') {
         state.orderPageUrl = state.orderPageUrl + '?is_user=1'
         state.community = true
@@ -262,6 +263,14 @@ export default defineComponent({
 
   .pay-price {
     color: $uni-text-color-taupe;
+  }
+
+  .dir-left-nowrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
   }
 
   .default-border {
