@@ -60,7 +60,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed, watch } from 'vue'
-import { mapState, mapGetters } from 'vuex'
+import { store } from '@/store'
 
 export default defineComponent({
   name: 'AppRelatedSuggestionProduct',
@@ -112,8 +112,14 @@ export default defineComponent({
       goods_list: [] as any[],
     })
 
+    const appSetting = store.state.mallConfig.mall.setting
+    const appImg = store.state.mallConfig.__wxapp_img.mall
+    const isShowGoodsName = store.state.mallConfig.mall.setting.is_show_goods_name
+    const isShowSalesNum = store.state.mallConfig.mall.setting.is_show_sales_num
+    const isListUnderlinePrice = store.state.mallConfig.mall.setting.is_list_underline_price
+    const isVideo = store.state.mallConfig.mall.setting.is_goods_video
     const routeJump = (data) => {
-      if (data.video_url && this.getVideo == 1) {
+      if (data.video_url && isVideo == 1) {
         // #ifdef MP
         uni.navigateTo({
           url: `/pages/goods/video?goods_id=${data.id}&sign=${props.sign}`,
@@ -153,6 +159,11 @@ export default defineComponent({
     return {
       ...toRefs(state),
       routeJump,
+      appSetting,
+      appImg,
+      isShowGoodsName,
+      isShowSalesNum,
+      isListUnderlinePrice,
     }
   },
   watch: {
