@@ -11,7 +11,6 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed, watch } from 'vue'
 export default defineComponent({
   name: 'AppNoGoods',
-
   props: {
     background: {
       type: String,

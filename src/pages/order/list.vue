@@ -25,114 +25,121 @@
           @refresherrefresh="refresh"
           @scrolltolower="loadMore(tab)"
         >
-          <view v-for="(item, index2) in tab.data" :key="index2" class="list-item">
-            <view class="item-number">
-              <text>订单编号：{{ item.order_no }}</text>
-              <template v-if="item.status == 0">
-                <text v-if="item.sign == 'pintuan'">{{ item.is_pay == 1 ? '拼团中' : '待付款' }}</text>
-              </template>
-              <template v-else>
-                <view>{{ item.status_text }}</view>
-              </template>
-            </view>
-            <view class="list-item-content" @click="toDetail(item.id, item.sign)">
-              <view v-for="(i, n) in item.detail" :key="n" class="">
-                <view class="flex">
-                  <view class="product-img">
-                    <image :src="i.goods_info.pic_url"></image>
-                  </view>
-                  <view class="list-item-content-right flex-sub">
-                    <view class="product-name">
-                      {{ i.goods_info.name }}
+          <template v-if="tab.data.length > 0">
+            <view v-for="(item, index2) in tab.data" :key="index2" class="list-item">
+              <view class="item-number">
+                <text>订单编号：{{ item.order_no }}</text>
+                <template v-if="item.status == 0">
+                  <text v-if="item.sign == 'pintuan'">{{ item.is_pay == 1 ? '拼团中' : '待付款' }}</text>
+                </template>
+                <template v-else>
+                  <view>{{ item.status_text }}</view>
+                </template>
+              </view>
+              <view class="list-item-content" @click="toDetail(item.id, item.sign)">
+                <view v-for="(i, n) in item.detail" :key="n" class="">
+                  <view class="flex">
+                    <view class="product-img">
+                      <image :src="i.goods_info.pic_url"></image>
                     </view>
-                    <view class="product-tag">
-                      <text v-for="attr in i.goods_info.attr_list" :key="attr.id"
-                        >{{ attr.attr_group_name }},{{ attr.attr_name }}</text
-                      >
-                    </view>
-                    <view class="product-num">
-                      <text class="font-color">￥{{ i.total_price }}</text>
-                      <text>x{{ i.num }}</text>
-                    </view>
-                    <view class="product-price">
-                      <text class="l"
-                        >总价：¥{{ item.total_price }}，优惠：¥{{ item.total_price - item.total_price }}
-                      </text>
-                      <text class="r">实付款：¥{{ item.total_pay_price }}</text>
+                    <view class="list-item-content-right flex-sub">
+                      <view class="product-name">
+                        {{ i.goods_info.name }}
+                      </view>
+                      <view class="product-tag">
+                        <text v-for="attr in i.goods_info.attr_list" :key="attr.id"
+                          >{{ attr.attr_group_name }},{{ attr.attr_name }}</text
+                        >
+                      </view>
+                      <view class="product-num">
+                        <text class="font-color">￥{{ i.total_price }}</text>
+                        <text>x{{ i.num }}</text>
+                      </view>
+                      <view class="product-price">
+                        <text class="l"
+                          >总价：¥{{ item.total_price }}，优惠：¥{{ item.total_price - item.total_price }}
+                        </text>
+                        <text class="r">实付款：¥{{ item.total_pay_price }}</text>
+                      </view>
                     </view>
                   </view>
                 </view>
               </view>
-            </view>
-            <view class="option flex justify-end action-box-view">
-              <!-- 售后订单 -->
-              <template v-if="currentIndex == 5">
-                <text :class="{ 'success-color': item.is_confirm == 1 ? true : false }">
-                  {{ item.status_text }}
-                </text>
-              </template>
-              <!-- 其它订单 -->
-              <template v-else>
-                <!-- 货到付款订单操作 start -->
-                <template v-if="item.pay_type == 2">
-                  <!-- 进行中的订单 不能进行订单操作 -->
-                  <template v-if="item.status == 1">
-                    <!-- 待收货-->
-                    <template v-if="item.is_confirm == 0">
-                      <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
-                      <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
-                        >确认收货
-                      </view>
-                    </template>
-                    <!-- 核销 -->
-                    <!-- 到店自提订单 在核销前有收款操作 -->
-                    <template v-if="item.send_type == 1 && item.is_confirm == 0 && item.cancel_status == 0">
-                      <view class="order-btn" @click="getClerkCode(item)">核销码</view>
-                    </template>
-                    <template v-if="item.action_status.is_show_comment == 1">
-                      <view class="order-btn" @click="appraise(item)">评价</view>
-                    </template>
-                  </template>
+              <view class="option flex justify-end action-box-view">
+                <!-- 售后订单 -->
+                <template v-if="currentIndex == 5">
+                  <text :class="{ 'success-color': item.is_confirm == 1 ? true : false }">
+                    {{ item.status_text }}
+                  </text>
                 </template>
-                <!-- 货到付款订单操作 end -->
-                <!-- 已支付订单操作 start -->
+                <!-- 其它订单 -->
                 <template v-else>
-                  <!-- 待付款 -->
-                  <template v-if="item.is_pay == 0">
-                    <view class="order-btn red" @click="cancel(item)">取消</view>
-                    <view class="order-btn grey" @click="orderPay(item)">付款</view>
-                  </template>
-                  <template v-if="item.status == 1">
-                    <!-- 核销 -->
-                    <!-- 到店自提订单 未支付不显示核销码 | 未支付 货到付款订单显示核销码 -->
-                    <template
-                      v-if="
-                        item.send_type == 1 &&
-                        item.is_confirm == 0 &&
-                        ((item.is_pay == 0 && item.pay_type == 2) || (item.is_pay == 1 && item.pay_type != 2))
-                      "
-                    >
-                      <view class="order-btn" @click="getClerkCode(item)">核销码</view>
+                  <!-- 货到付款订单操作 start -->
+                  <template v-if="item.pay_type == 2">
+                    <!-- 进行中的订单 不能进行订单操作 -->
+                    <template v-if="item.status == 1">
+                      <!-- 待收货-->
+                      <template v-if="item.is_confirm == 0">
+                        <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
+                        <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
+                          >确认收货
+                        </view>
+                      </template>
+                      <!-- 核销 -->
+                      <!-- 到店自提订单 在核销前有收款操作 -->
+                      <template v-if="item.send_type == 1 && item.is_confirm == 0 && item.cancel_status == 0">
+                        <view class="order-btn" @click="getClerkCode(item)">核销码</view>
+                      </template>
+                      <template v-if="item.action_status.is_show_comment == 1">
+                        <view class="order-btn" @click="appraise(item)">评价</view>
+                      </template>
                     </template>
-                    <!-- 待收货-->
-                    <template v-if="item.is_pay == 1 && item.is_confirm == 0 && item.sign != 'community'">
-                      <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
-                      <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
-                        >确认收货</view
+                  </template>
+                  <!-- 货到付款订单操作 end -->
+                  <!-- 已支付订单操作 start -->
+                  <template v-else>
+                    <!-- 待付款 -->
+                    <template v-if="item.is_pay == 0">
+                      <view class="order-btn red" @click="cancel(item)">取消</view>
+                      <view class="order-btn grey" @click="orderPay(item)">付款</view>
+                    </template>
+                    <template v-if="item.status == 1">
+                      <!-- 核销 -->
+                      <!-- 到店自提订单 未支付不显示核销码 | 未支付 货到付款订单显示核销码 -->
+                      <template
+                        v-if="
+                          item.send_type == 1 &&
+                          item.is_confirm == 0 &&
+                          ((item.is_pay == 0 && item.pay_type == 2) || (item.is_pay == 1 && item.pay_type != 2))
+                        "
                       >
-                    </template>
-                    <template v-if="item.action_status.is_show_comment == 1">
-                      <view class="order-btn" @click="appraise(item)">评价</view>
+                        <view class="order-btn" @click="getClerkCode(item)">核销码</view>
+                      </template>
+                      <!-- 待收货-->
+                      <template v-if="item.is_pay == 1 && item.is_confirm == 0 && item.sign != 'community'">
+                        <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
+                        <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
+                          >确认收货</view
+                        >
+                      </template>
+                      <template v-if="item.action_status.is_show_comment == 1">
+                        <view class="order-btn" @click="appraise(item)">评价</view>
+                      </template>
                     </template>
                   </template>
+                  <!-- 已支付订单操作 end -->
                 </template>
-                <!-- 已支付订单操作 end -->
-              </template>
+              </view>
             </view>
-          </view>
-          <view v-if="tab.isLoading || tab.data.length <= tab.total" class="loading-more">
-            <text :key="key" class="loading-more-text">{{ tab.loadingText }}</text>
-          </view>
+            <view v-if="tab.isLoading || tab.data.length <= tab.total" class="loading-more">
+              <text :key="key" class="loading-more-text">{{ tab.loadingText }}</text>
+            </view>
+          </template>
+          <template v-if="tab.data.length === 0">
+            <view class="no-list">
+              <AppNoGoods background="#f7f7f7" :title="'暂无相关订单'" color="#999999" :is-image="1" />
+            </view>
+          </template>
         </scroll-view>
       </swiper-item>
     </swiper>
@@ -145,9 +152,13 @@ import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, to
 import { fetchOrderList } from '@/api/order'
 import { orderStatusEnum } from '@/utils/constant'
 import { Debounce } from '@/utils/util'
+import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 
 export default defineComponent({
   name: 'OrderList',
+  components: {
+    AppNoGoods,
+  },
   setup() {
     const state = reactive({
       tabBars: [
@@ -370,7 +381,7 @@ export default defineComponent({
   flex: 1;
   flex-direction: column;
   overflow: hidden;
-  background-color: #ffffff;
+  background-color: #f7f7f7;
   /* #ifndef APP-PLUS */
   // height: calc(100vh - 44px);
   height: calc(100vh);
@@ -428,7 +439,6 @@ export default defineComponent({
   // height: calc(100% - 80rpx);
   /* #endif */
   padding: 0 10rpx;
-  background-color: #f1f1f1;
 }
 
 .swiper-item {
@@ -522,9 +532,10 @@ export default defineComponent({
 
 .list {
   height: calc(100% - 80rpx);
-  background-color: #eee;
-  // padding: 0 20rpx;
-  // margin: 0 20rpx;
+}
+
+.no-list {
+  margin-top: 120rpx;
 }
 
 .list-item {
