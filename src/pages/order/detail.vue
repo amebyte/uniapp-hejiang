@@ -588,6 +588,13 @@ export default defineComponent({
       })
     }
 
+    // 取消 | 申请退款
+    const cancel = (e) => {
+      uni.navigateTo({
+        url: '/pages/order/refund/order-refund?id=' + e.id,
+      })
+    }
+
     const getOrderDetail = () => {
       fetchOrderDetail({
         id: state.order_id,
@@ -629,6 +636,7 @@ export default defineComponent({
       ...toRefs(state),
       formList,
       copyText,
+      cancel,
     }
   },
 })
