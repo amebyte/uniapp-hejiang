@@ -55,31 +55,31 @@
         </view>
       </view>
       <view class="box-content row">
-        <navigator url="/pages/order/list?status=1" class="box-item col-4">
+        <view class="box-item col-4" @click="toPage('/pages/order/list?status=1')">
           <text class="iconfont icon-pending-payment icon"></text>
           <text>待付款</text>
-        </navigator>
-        <navigator url="/pages/order/list?status=2" class="box-item col-4">
+        </view>
+        <view class="box-item col-4" @click="toPage('/pages/order/list?status=2')">
           <text class="iconfont icon-wait-send icon"></text>
           <text>待发货</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">
             {{ orderCounts.unauditedOrderCounts > 99 ? '99+' : orderCounts.unauditedOrderCounts }}
           </view>
-        </navigator>
-        <navigator url="/pages/order/list?status=3" class="box-item col-4">
+        </view>
+        <view class="box-item col-4" @click="toPage('/pages/order/list?status=3')">
           <text class="iconfont icon-dispatched icon"></text>
           <text>待收货</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">
             {{ orderCounts.unauditedOrderCounts > 99 ? '99+' : orderCounts.unauditedOrderCounts }}
           </view>
-        </navigator>
-        <navigator url="/pages/order/list?status=4" class="box-item col-4">
+        </view>
+        <view class="box-item col-4" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-completed icon"></text>
           <text>已完成</text>
           <view v-if="orderCounts.unauditedOrderCounts > 0" class="desc">
             {{ orderCounts.unauditedOrderCounts > 99 ? '99+' : orderCounts.unauditedOrderCounts }}
           </view>
-        </navigator>
+        </view>
       </view>
     </view>
     <!-- 我的订单 end-->
@@ -87,18 +87,18 @@
     <view class="user-order">
       <view class="box-header two_sides"> 我的内容 </view>
       <view class="box-content row">
-        <navigator url="/pages/users/address/addr-manage" class="box-item col-3">
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-picture icon"></text>
           <text>我的作品</text>
-        </navigator>
-        <navigator url="/pages/users/user-goods-collection/index" class="box-item col-3">
+        </view>
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-comment icon"></text>
           <text>我的评论</text>
-        </navigator>
-        <navigator url="/pages/users/foot-print/index" class="box-item col-3">
+        </view>
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-love icon"></text>
           <text>我的收藏</text>
-        </navigator>
+        </view>
       </view>
     </view>
     <!-- 我的内容 end-->
@@ -106,18 +106,18 @@
     <view class="user-order">
       <view class="box-header two_sides"> 我的服务 </view>
       <view class="box-content row">
-        <navigator url="/pages/users/address/addr-manage" class="box-item col-3">
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-subject-talk icon"></text>
           <text>我的课程</text>
-        </navigator>
-        <navigator url="/pages/users/user-goods-collection/index" class="box-item col-3">
+        </view>
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-calendar icon"></text>
           <text>我的预约</text>
-        </navigator>
-        <navigator url="/pages/users/foot-print/index" class="box-item col-3">
+        </view>
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-question icon"></text>
           <text>我的答疑</text>
-        </navigator>
+        </view>
       </view>
     </view>
     <!-- 我的服务 end-->
@@ -125,18 +125,18 @@
     <view class="user-order">
       <view class="box-header two_sides"> 我的设置 </view>
       <view class="box-content row">
-        <navigator url="/pages/users/address/addr-manage" class="box-item col-3">
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-data icon"></text>
           <text>修改资料</text>
-        </navigator>
-        <navigator url="/pages/users/user-goods-collection/index" class="box-item col-3">
+        </view>
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-address icon"></text>
           <text>收货地址</text>
-        </navigator>
-        <navigator url="/pages/users/foot-print/index" class="box-item col-3">
+        </view>
+        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
           <text class="iconfont icon-sign-out icon"></text>
           <text>退出账号</text>
-        </navigator>
+        </view>
       </view>
     </view>
     <!-- 我的设置 end-->
@@ -200,7 +200,6 @@ page {
         position: absolute;
         left: -20%;
         top: 0;
-        z-index: -1;
         content: '';
         border-radius: 0 0 50% 50%;
         background-color: $top-background-color;

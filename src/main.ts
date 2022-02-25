@@ -1,4 +1,4 @@
-// import '../.env'
+import '../.env'
 import { createSSRApp } from 'vue'
 import App from './App.vue'
 import { store } from './store'

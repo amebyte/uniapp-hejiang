@@ -1,5 +1,7 @@
 import request from '@/utils/request'
+// #ifdef H5
 import wechat from '@/libs/wechat'
+// #endif
 
 /**
  * 用户登录 - 微信/H5/
@@ -12,6 +14,7 @@ export function fetchLogin(data) {
   return request.post!('&r=api/passport/login', data, { noAuth: true }, true)
 }
 
+// #ifdef H5
 /**
  * 获取微信公众号js配置
  * @returns {*}
@@ -28,3 +31,4 @@ export function getWechatConfig() {
     }
   )
 }
+// #endif

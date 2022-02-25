@@ -2,15 +2,15 @@
   <view class="nav-model">
     <view class="item nav-home" :class="navMask ? 'out' : ''">
       <text class="desc">商城首页</text>
-      <navigator class="navigator iconfont icon-home" open-type="switchTab" url="/pages/index/index"> </navigator>
+      <view class="navigator iconfont icon-home" @click="toPage('/pages/index/index')"> </view>
     </view>
     <view class="item nav-member" :class="navMask ? 'out' : ''">
       <text class="desc">会员中心</text>
-      <navigator class="navigator iconfont icon-member-empty" url="/pages/my/memberCenter"></navigator>
+      <view class="navigator iconfont icon-member-empty" @click="toPage('/pages/my/memberCenter')"></view>
     </view>
     <view class="item nav-shopping-cart" :class="navMask ? 'out' : ''">
       <text class="desc">购物车</text>
-      <navigator class="navigator iconfont icon-shopping-cart-mini" url="/pages/shopping-cart/index"></navigator>
+      <view class="navigator iconfont icon-shopping-cart-mini" @click="toPage('/pages/shopping-cart/index')"></view>
     </view>
     <view class="item nav-btn" :class="navMask ? 'nav-btn-on' : ''" @click="navToggle">
       <text v-if="!navMask">快捷</text>
@@ -24,6 +24,11 @@ import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, to
 const navMask = ref(false)
 const navToggle = () => {
   navMask.value = !navMask.value
+}
+const toPage = (path) => {
+  uni.navigateTo({
+    url: path,
+  })
 }
 </script>
 <style lang="scss">
