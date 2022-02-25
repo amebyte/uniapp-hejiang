@@ -21,6 +21,7 @@ export function getWechatConfig() {
     '&r=plugin/wechat/api/passport/check',
     {
       url: encodeURIComponent(wechat.signLink()),
+      //   url: encodeURIComponent('https://mall.fsbaide.cn'),
     },
     {
       noAuth: true,

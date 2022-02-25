@@ -6,7 +6,8 @@ export interface AppState {
 }
 
 export const state: AppState = {
-  token: Cache.get(LOGIN_STATUS) || 's1mJ74NXSk1bJNoABfVPUkBukaBtgtdD',
+  //   token: Cache.get(LOGIN_STATUS) || 's1mJ74NXSk1bJNoABfVPUkBukaBtgtdD',
+  token: Cache.get(LOGIN_STATUS) || '',
   userInfo: Cache.get(USER_INFO)
     ? JSON.parse(Cache.get(USER_INFO))
     : JSON.parse(

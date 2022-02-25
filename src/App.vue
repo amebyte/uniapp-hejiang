@@ -8,7 +8,7 @@ import Cache from '@/utils/cache'
 onLaunch((option) => {
   const isLogin = store.state.app.token
   store.dispatch(MallConfigActionTypes.ACTION_MALL_GET_CONFIG)
-  console.log('App Launch')
+  console.log('App Launch isLogin', isLogin)
   // #ifdef H5
   let snsapiBase = 'snsapi_base'
   let urlData = location.pathname + location.search
