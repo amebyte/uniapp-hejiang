@@ -43,6 +43,12 @@
       "style": {
         "navigationBarTitleText": "发现首页"
       }
+    },
+    {
+      "path": "pages/auth/index",
+      "style": {
+        "navigationBarTitleText": "自动登录"
+      }
     }
   ],
   "subPackages": [

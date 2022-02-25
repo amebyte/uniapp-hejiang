@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import wechat from '@/libs/wechat'
 
 /**
  * 用户登录 - 微信/H5/
@@ -9,4 +10,20 @@ import request from '@/utils/request'
  */
 export function fetchLogin(data) {
   return request.post!('&r=api/passport/login', data, { noAuth: true }, true)
+}
+
+/**
+ * 获取微信公众号js配置
+ * @returns {*}
+ */
+export function getWechatConfig() {
+  return request.get!(
+    '&r=plugin/wechat/api/passport/check',
+    {
+      url: encodeURIComponent(wechat.signLink()),
+    },
+    {
+      noAuth: true,
+    }
+  )
 }

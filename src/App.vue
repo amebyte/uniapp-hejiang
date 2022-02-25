@@ -2,9 +2,38 @@
 import { onLaunch, onShow, onHide } from '@dcloudio/uni-app'
 import { store } from '@/store'
 import { MallConfigActionTypes } from '@/store/modules/mallConfig/action-types'
-onLaunch(() => {
+import { checkLogin } from '@/libs/login'
+import Auth from '@/libs/wechat'
+import Cache from '@/utils/cache'
+onLaunch((option) => {
+  const isLogin = store.state.app.token
   store.dispatch(MallConfigActionTypes.ACTION_MALL_GET_CONFIG)
   console.log('App Launch')
+  // #ifdef H5
+  let snsapiBase = 'snsapi_base'
+  let urlData = location.pathname + location.search
+  if (!isLogin && Auth.isWeixin()) {
+    const { code, state, back_url } = option.query as any
+    if (code && location.pathname.indexOf('/pages/my/login') === -1) {
+      // 存储静默授权code
+      uni.setStorageSync('snsapiCode', code)
+      Auth.auth(code)
+        .then((res) => {
+          Cache.set('isFetchLogined', 'isFetchLogined')
+          location.replace(decodeURIComponent(decodeURIComponent(back_url)))
+        })
+        .catch((error) => {
+          console.error('静默登录出错：', error)
+        })
+    } else {
+      if (!Cache.has('isFetchLogined')) {
+        if (location.pathname.indexOf('/pages/my/login') === -1) {
+          Auth.oAuth(snsapiBase, urlData)
+        }
+      }
+    }
+  }
+  // #endif
 })
 onShow(() => {
   console.log('App Show')
