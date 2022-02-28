@@ -1,6 +1,5 @@
 import h5Dev from './env.h5.dev'
 let ENV_VAR = null as any
-console.log('process', process)
 if (process.env.NODE_ENV == "development") {
 	ENV_VAR = h5Dev
 } else if (process.env.NODE_ENV == "H5-PROD") {
