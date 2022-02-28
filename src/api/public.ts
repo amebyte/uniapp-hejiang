@@ -7,7 +7,6 @@ import wechat from '@/libs/wechat'
  * 用户登录 - 小程序
  * @param data object
  *
- *	loginType: xcx 小程序 h5 phone
  *	smsCode
  */
 export function fetchLogin(data) {
@@ -15,14 +14,23 @@ export function fetchLogin(data) {
 }
 
 /**
- * 用户登录 - 小程序
+ * 用户登录 - H5
  * @param data object
  *
- *	loginType: xcx 小程序 h5 phone
  *	smsCode
  */
 export function fetchWechatH5Login(data) {
   return request.post!('&r=api/passport/login', data, { noAuth: true }, true)
+}
+
+/**
+ * 用户登录 - H5
+ * @param data object
+ *
+ *	smsCode
+ */
+export function fetchWechatH5Register(data) {
+  return request.get!('&r=plugin/wechat/api/passport/login-url', data, { noAuth: true }, true)
 }
 
 // #ifdef H5

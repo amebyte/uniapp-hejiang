@@ -21,8 +21,9 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import Auth from '@/libs/wechat'
 import { fetchUserInfo } from '@/api/user'
-import { fetchLogin } from '@/api/public'
+import { fetchLogin, fetchWechatH5Register } from '@/api/public'
 import { RoutineInstance } from '@/libs/routine'
 import { Tips } from '@/utils/util'
 import Cache from '@/utils/cache'
@@ -36,15 +37,30 @@ export default defineComponent({
       getUserProfile()
       // #endif
       // #ifdef H5
-      wechatLogin()
+      wechatH5Login()
       // #endif
     }
     // #ifdef H5
     /**
      * 公众号登录
      */
-    const wechatLogin = () => {
-      // this.$wechat.oAuth('snsapi_userinfo', '/pages/auth/index')
+    const wechatH5Login = () => {
+      let urlData = location.pathname + location.search
+      Auth.oAuth('snsapi_userinfo', urlData)
+      //   fetchWechatH5Register({
+      //     scope: 'snsapi_userinfo',
+      //     response_type: 'code',
+      //     url: `${window.location.href}`,
+      //   }).then((res) => {
+      //     console.log('res', res)
+      //     if (res.code === 0) {
+      //       window.location.replace(res.data.url)
+      //     } else {
+      //       uni.navigateTo({
+      //         url: '/pages/registered/sign',
+      //       })
+      //     }
+      //   })
     }
     // #endif
 

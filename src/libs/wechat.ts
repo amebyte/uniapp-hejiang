@@ -219,7 +219,7 @@ class AuthWechat {
    */
   oAuth(snsapiBase, url) {
     if (uni.getStorageSync(WX_AUTH) && store.state.app.token && snsapiBase == 'snsapi_base') return
-    const { code } = parseQuery()
+    const { code } = parseQuery() as any
     if (!code || code == uni.getStorageSync('snsapiCode')) {
       return this.toAuth(snsapiBase, url)
     } else {
@@ -250,7 +250,7 @@ class AuthWechat {
           console.log('fetchLogindata', data)
           if (code === 0) {
             store.commit(AppMutationTypes.SET_TOKEN, data.access_token)
-            // 更新用户信息
+            // 更新用户资料
             fetchUserInfo().then((res) => {
               store.commit(AppMutationTypes.SET_USER_INFO, res.data)
             })
