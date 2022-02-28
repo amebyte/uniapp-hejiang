@@ -26,8 +26,8 @@
         <view class="setup"><text class="iconfont icon-setting"></text></view>
       </block>
       <block v-else>
-        <view class="user-avatar" @click="goLogin">
-          <text class="iconfont icon-setting"></text>
+        <view class="user-no-head" @click="goLogin">
+          <text class="iconfont icon-no-head"></text>
         </view>
         <view class="user-right">
           <view class="user-right-top" @click="goLogin">
@@ -288,6 +288,15 @@ page {
         opacity: 0.7;
       }
     }
+
+    .user-no-head {
+      padding-top: 20rpx;
+      .icon-no-head {
+        color: #fff;
+        font-size: 84rpx;
+      }
+    }
+
     .setup {
       position: absolute;
       top: 70rpx;
