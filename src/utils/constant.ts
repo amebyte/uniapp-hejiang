@@ -17,3 +17,11 @@ export const orderStatusEnum = new Enum({
   PICK_UP_PENDING: [11, '待自提'],
   REFUSE_REFUND: [12, '拒绝退款'],
 })
+
+/**
+ * 登录方式
+ */
+export const loginType = {
+  WECHAT_H5: 'wechat', // 微信公众号
+  MINI: 'xcx', // 小程序
+}

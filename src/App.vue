@@ -5,6 +5,7 @@ import { MallConfigActionTypes } from '@/store/modules/mallConfig/action-types'
 import { checkLogin } from '@/libs/login'
 import Auth from '@/libs/wechat'
 import Cache from '@/utils/cache'
+import { parseQuery } from '@/utils'
 onLaunch((option) => {
   const isLogin = store.state.app.token
   store.dispatch(MallConfigActionTypes.ACTION_MALL_GET_CONFIG)
@@ -13,8 +14,10 @@ onLaunch((option) => {
   let snsapiBase = 'snsapi_base'
   let urlData = location.pathname + location.search
   if (!isLogin && Auth.isWeixin()) {
-    const { code, state, back_url } = option.query as any
+    console.log('onLaunch-option', parseQuery())
+    const { code, state, back_url } = parseQuery() as any
     if (code && location.pathname.indexOf('/pages/my/login') === -1) {
+      console.log('存储静默授权code', code)
       // 存储静默授权code
       uni.setStorageSync('snsapiCode', code)
       Auth.auth(code)

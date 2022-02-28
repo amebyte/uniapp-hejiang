@@ -5,6 +5,7 @@ import { WX_AUTH, STATE_KEY, BACK_URL } from '@/config/cache'
 import { parseQuery } from '@/utils'
 import { store } from '@/store'
 import Cache from '@/utils/cache'
+import { loginType } from '@/utils/constant'
 
 class AuthWechat {
   constructor() {
@@ -37,9 +38,9 @@ class AuthWechat {
         .then((res) => {
           const config = {
             debug: false,
-            appId: res.data.appId,
+            appId: res.data.appid,
             timestamp: res.data.timestamp,
-            nonceStr: res.data.nonceStr,
+            nonceStr: res.data.noncest,
             signature: res.data.signature,
             jsApiList: [
               'chooseWXPay',
@@ -236,22 +237,22 @@ class AuthWechat {
    * 授权登录获取token
    * @param {Object} code
    */
-  auth(code, loginType = loginType.WECHAT_H5) {
+  auth(code, type = loginType.WECHAT_H5) {
     return new Promise((resolve, reject) => {
       const params = {
         code: code,
-        loginType,
+        type,
       }
       fetchLogin(params)
         .then(async ({ data }) => {
-          console.log('data', data)
+          console.log('fetchLogindata', data)
           // 更新用户信息
           data && (await store.dispatch('USERINFO'))
           resolve(data)
         })
         .catch((err) => {
           console.log('err', err)
-          if (loginType === loginType.WECHAT_H5) {
+          if (type === loginType.WECHAT_H5) {
             uni.showToast({
               icon: 'none',
               title: err,
