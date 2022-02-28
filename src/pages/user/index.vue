@@ -164,7 +164,9 @@ const toPage = (path) => {
   })
 }
 const goLogin = () => {
-  console.log('goLogin')
+  uni.navigateTo({
+    url: `/pages/my/login`,
+  })
 }
 const gotoMemberCenter = () => {
   uni.navigateTo({
