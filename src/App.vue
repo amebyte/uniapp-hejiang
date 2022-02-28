@@ -23,7 +23,7 @@ onLaunch((option) => {
       Auth.auth(code)
         .then((res) => {
           Cache.set('isFetchLogined', 'isFetchLogined')
-          location.replace(decodeURIComponent(decodeURIComponent(back_url)))
+          //   location.replace(decodeURIComponent(decodeURIComponent(back_url)))
         })
         .catch((error) => {
           console.error('静默登录出错：', error)

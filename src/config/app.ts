@@ -19,6 +19,11 @@ export const TOKENNAME = 'X-Access-Token'
 // 缓存时间 0 永久
 export const EXPIRE = 0
 
+// #ifdef MP-WEIXIN
 export const X_APP_PLATFORM = 'wxapp'
+// #endif
+// #ifdef H5
+export const X_APP_PLATFORM = 'wechat'
+// #endif
 
 export const X_APP_VERSION = '4.4.45'

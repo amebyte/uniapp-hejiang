@@ -4,13 +4,24 @@ import wechat from '@/libs/wechat'
 // #endif
 
 /**
- * 用户登录 - 微信/H5/
+ * 用户登录 - 小程序
  * @param data object
  *
  *	loginType: xcx 小程序 h5 phone
  *	smsCode
  */
 export function fetchLogin(data) {
+  return request.post!('&r=api/passport/login', data, { noAuth: true }, true)
+}
+
+/**
+ * 用户登录 - 小程序
+ * @param data object
+ *
+ *	loginType: xcx 小程序 h5 phone
+ *	smsCode
+ */
+export function fetchWechatH5Login(data) {
   return request.post!('&r=api/passport/login', data, { noAuth: true }, true)
 }
 

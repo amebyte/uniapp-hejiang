@@ -1,11 +1,13 @@
 // #ifdef H5
 import WechatJSSDK from 'weixin-js-sdk'
-import { getWechatConfig, fetchLogin } from '@/api/public'
+import { getWechatConfig, fetchWechatH5Login } from '@/api/public'
+import { fetchUserInfo } from '@/api/user'
 import { WX_AUTH, STATE_KEY, BACK_URL } from '@/config/cache'
 import { parseQuery } from '@/utils'
 import { store } from '@/store'
 import Cache from '@/utils/cache'
 import { loginType } from '@/utils/constant'
+import { AppMutationTypes } from '@/store/modules/app/mutation-types'
 
 class AuthWechat {
   constructor() {
@@ -243,11 +245,16 @@ class AuthWechat {
         code: code,
         type,
       }
-      fetchLogin(params)
-        .then(async ({ data }) => {
+      fetchWechatH5Login(params)
+        .then(async ({ code, data }) => {
           console.log('fetchLogindata', data)
-          // 更新用户信息
-          data && (await store.dispatch('USERINFO'))
+          if (code === 0) {
+            store.commit(AppMutationTypes.SET_TOKEN, data.access_token)
+            // 更新用户信息
+            fetchUserInfo().then((res) => {
+              store.commit(AppMutationTypes.SET_USER_INFO, res.data)
+            })
+          }
           resolve(data)
         })
         .catch((err) => {
