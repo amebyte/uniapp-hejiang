@@ -31,3 +31,7 @@ export function fetchOrderPayData(data) {
 export function fetchOrderPayResult(data) {
   return request.get!('&r=api/order/pay-result', data, { noAuth: false }, false)
 }
+
+export function fetchOrderIsPay(data) {
+  return request.get!('&r=api/order/is-pay', data, { noAuth: false }, false)
+}

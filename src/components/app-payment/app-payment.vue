@@ -121,7 +121,7 @@ import Wechat from '@/libs/wechat'
 import Cache from '@/utils/cache'
 import { PaymentMutationTypes } from '@/store/modules/payment/mutation-types'
 import AppRadio from '@/components/app-radio/app-radio.vue'
-import { fetchOrderPayments, fetchOrderPayData } from '@/api/order'
+import { fetchOrderPayments, fetchOrderPayData, fetchOrderIsPay } from '@/api/order'
 
 export default defineComponent({
   name: 'AppPayment',
@@ -619,12 +619,8 @@ export default defineComponent({
     // #ifdef H5
     const alipayH5Pay = () => {}
     const weChartPay = (id) => {
-      this.$request({
-        url: this.$api.registered.pay,
-        method: 'get',
-        data: {
-          payment_order_union_id: id,
-        },
+      fetchOrderIsPay({
+        payment_order_union_id: id,
       }).then((res) => {
         if (res.code === 0) {
           if (res.data.status === 1) {
@@ -632,11 +628,11 @@ export default defineComponent({
               errMsg: '支付成功',
             })
             uni.redirectTo({
-              url: `/pages/order-submit/pay-result?payment_order_union_id=${id}`,
+              url: `/pages/order/payResult?payment_order_union_id=${id}`,
             })
           } else {
             uni.redirectTo({
-              url: '/pages/order/index/index',
+              url: '/pages/order/list',
             })
           }
         }
