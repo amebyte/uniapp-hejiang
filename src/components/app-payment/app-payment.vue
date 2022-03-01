@@ -378,7 +378,7 @@ export default defineComponent({
                 Wechat.pay({
                   timestamp: response.data.timeStamp,
                   nonceStr: response.data.nonceStr,
-                  packAge: response.data.package,
+                  package: response.data.package,
                   signType: response.data.signType,
                   paySign: response.data.paySign,
                   webUrl: response.data.mweb_url,

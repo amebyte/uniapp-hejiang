@@ -9,11 +9,11 @@
       <text v-else class="iconfont icon-favorite-filling"></text>
       <text class="txt">收藏</text>
     </view>
-    <navigator class="item shopping-cart" url="/pages/shopping-cart/index" hover-class="none">
+    <view class="item shopping-cart" @click="gotoHandler(`/pages/shopping-cart/index`)">
       <text class="iconfont icon-shopping-cart"></text>
       <text v-if="cartCount > 0" class="good-number">{{ cartCount > 99 ? '99+' : cartCount }}</text>
       <text class="txt">购物车</text>
-    </navigator>
+    </view>
     <view class="item btn">
       <text class="txt add-cart" @click="joinCart">加入购物车</text>
       <text class="txt buy-now" @click="buyNowAction">立即抢购</text>
@@ -66,10 +66,10 @@ export default defineComponent({
       }
     }
     /**
-     * 跳转首页
+     * 跳转
      */
-    const gotoHandler = () => {
-      console.log('gotoHandler')
+    const gotoHandler = (url) => {
+      Tips(url)
     }
     /**
      * toggle收藏
