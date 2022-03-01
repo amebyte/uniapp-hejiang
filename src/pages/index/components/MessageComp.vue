@@ -25,7 +25,9 @@ const closeMessage = () => {
   line-height: 50rpx;
   border-radius: 10rpx;
   display: flex;
+  justify-content: space-between;
   .content {
+    flex: 1;
     font-size: 24rpx;
     color: $theme-font-color;
     font-weight: bold;
