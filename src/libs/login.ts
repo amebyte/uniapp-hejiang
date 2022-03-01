@@ -20,7 +20,7 @@ export function _toLogin() {
   store.commit('LOGOUT')
   let path = prePage()
   // #ifdef H5
-  path = location.pathname + location.search
+  path = location.pathname + location.hash
   // #endif
   Cache.set(BACK_URL, path)
   uni.navigateTo({

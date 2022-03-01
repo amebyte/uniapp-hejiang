@@ -253,9 +253,11 @@ class AuthWechat {
             // 更新用户资料
             fetchUserInfo().then((res) => {
               store.commit(AppMutationTypes.SET_USER_INFO, res.data)
+              resolve(data)
             })
+          } else {
+            resolve(data)
           }
-          resolve(data)
         })
         .catch((err) => {
           console.log('err', err)
