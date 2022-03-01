@@ -116,8 +116,8 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onUnload, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, nextTick } from 'vue'
-import { mapGetters, mapState } from 'vuex'
 import { store } from '@/store'
+import Wechat from '@/libs/wechat'
 import Cache from '@/utils/cache'
 import { PaymentMutationTypes } from '@/store/modules/payment/mutation-types'
 import AppRadio from '@/components/app-radio/app-radio.vue'
@@ -359,7 +359,7 @@ export default defineComponent({
         }
       }
       data.url += `&isWechat=true&payType=${store.state.payment.payType}`
-      if (!this.$jwx.isWechat()) {
+      if (!Wechat.isWeixin()) {
         data.url += '&pay_id_weChart=' + data.id
       }
       // #endif
@@ -375,7 +375,7 @@ export default defineComponent({
               // #ifdef H5
               case 'wechat_h5':
                 console.log('debug payment, wechat_h5')
-                this.$jwx.chooseWXPay({
+                Wechat.pay({
                   timestamp: response.data.timeStamp,
                   nonceStr: response.data.nonceStr,
                   packAge: response.data.package,
