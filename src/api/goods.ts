@@ -18,6 +18,7 @@ export function fetchRecommendGoodsList2(data) {
               thumb: o.cover_pic,
               productName: o.name,
               marketPrice: o.price,
+              originalPrice: o.original_price,
             })
           })
           resolve(data)
@@ -49,11 +50,14 @@ export function fetchGoodsList(data) {
           const data: goodsType[] = []
           const list = r.data.list as any
           list.map((o) => {
+            const salesNum = o.sales.replace('已售', '').replace(o.unit, '')
             data.push({
               id: o.id,
               thumb: o.cover_pic,
               productName: o.name,
               marketPrice: o.price,
+              originalPrice: o.original_price,
+              salesNum,
             })
           })
           resolve(data)

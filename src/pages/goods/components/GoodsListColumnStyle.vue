@@ -24,11 +24,14 @@
           </view>
         </view>
         <view class="action">
-          <view class="l">已报名<text>3</text>人</view>
+          <view class="l"
+            >已报名<text>{{ item.salesNum }}</text
+            >人</view
+          >
           <view class="r">
             <view class="btn">
               <view class="l">
-                <text>¥{{ item.original_price }}</text>
+                <text>¥{{ item.originalPrice }}</text>
                 <text>¥{{ item.marketPrice }}</text>
               </view>
               <view class="r" @click="goDetail(item)"> 马上抢购 </view>
