@@ -7,7 +7,7 @@ import { goodsType } from '@/types'
  */
 export function fetchRecommendGoodsList2(data) {
   return new Promise((resolve, reject) => {
-    request.get!('&r=api/default/goods-list&page=1&cat_id=5', data, { noAuth: true })
+    request.get!('&r=api/default/goods-list', data, { noAuth: true })
       .then((r) => {
         if (r.code === 0) {
           const data: goodsType[] = []
@@ -42,7 +42,27 @@ export function fetchRecommendGoodsList(data) {
  *
  */
 export function fetchGoodsList(data) {
-  return request.get!('&r=api/default/goods-list&page=1&cat_id=', data, { noAuth: true })
+  return new Promise((resolve, reject) => {
+    request.get!(`&r=api/default/goods-list`, data, { noAuth: true })
+      .then((r) => {
+        if (r.code === 0) {
+          const data: goodsType[] = []
+          const list = r.data.list as any
+          list.map((o) => {
+            data.push({
+              id: o.id,
+              thumb: o.cover_pic,
+              productName: o.name,
+              marketPrice: o.price,
+            })
+          })
+          resolve(data)
+        } else {
+          reject(r)
+        }
+      })
+      .catch((err) => console.log(err))
+  })
 }
 
 /**

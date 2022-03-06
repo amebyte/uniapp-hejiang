@@ -31,7 +31,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
-import { fetchRecommendGoodsList2 } from '@/api/goods'
+import { fetchGoodsList } from '@/api/goods'
 import { Tips } from '@/utils/util'
 import { goodsType } from '@/types'
 export default defineComponent({
@@ -54,8 +54,9 @@ export default defineComponent({
       const params = {
         pageNum: 0,
         pageSize: 10,
+        cat_id: 5,
       }
-      fetchRecommendGoodsList2(params)
+      fetchGoodsList(params)
         .then((r) => {
           console.log('r', r)
           newGoodsList.value = r as Array<goodsType>

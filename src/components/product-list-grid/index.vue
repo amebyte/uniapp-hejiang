@@ -29,15 +29,19 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
-import { fetchRecommendGoodsList } from '@/api/goods'
+import { fetchGoodsList } from '@/api/goods'
 import { goodsType } from '@/types'
+const props = defineProps({
+  catId: { type: String, required: true },
+})
 let goodsList = ref<Array<goodsType>>([])
 const getNewGoodsList = () => {
   const params = {
     pageNum: 0,
     pageSize: 10,
+    cat_id: props.catId,
   }
-  fetchRecommendGoodsList(params)
+  fetchGoodsList(params)
     .then((r: any) => {
       console.log('r', r)
       goodsList.value = r

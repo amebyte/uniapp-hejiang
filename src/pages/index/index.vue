@@ -13,7 +13,7 @@
     </view>
     <view class="content">
       <!--轮播图 start-->
-      <ad-swiper :img-urls="indexBanner"></ad-swiper>
+      <ad-swiper :img-urls="banner" img-key="pic_url"></ad-swiper>
       <!--轮播图 end-->
       <!--搜索 start-->
       <view class="header-search" :style="{ display: state.display }">
@@ -60,6 +60,7 @@ import RecommendGoods from './components/RecommendGoods.vue'
 import EventReservation from './components/EventReservation.vue'
 import QuestionsAndAnswers from './components/QuestionsAndAnswers.vue'
 import { IMAGE_URL, APP_NAME } from '@/config/app'
+import { fetchTpl } from '@/api/tpl'
 export default defineComponent({
   name: 'IndexPage',
   components: {
@@ -135,6 +136,20 @@ export default defineComponent({
     }
     const { proxy } = getCurrentInstance() as any
     // console.log('ctx', proxy, proxy.$StatusBar, proxy.$test)
+    let banner = ref({})
+    fetchTpl({})
+      .then((r) => {
+        console.log('fetchTpl', r)
+        if (r.code === 0) {
+          r.data.home_pages.forEach((o) => {
+            if (o.key === 'banner') {
+              banner.value = o.banners
+            }
+          })
+        }
+      })
+      .catch((err) => console.log(err))
+
     const scroll = function (e) {
       const scrollY = e.scrollTop
       state.showBg = scrollY > 40 ? true : false
@@ -162,6 +177,7 @@ export default defineComponent({
       indexBanner,
       isShowMessage,
       closeMessage,
+      banner,
     }
   },
 })

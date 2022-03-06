@@ -17,7 +17,7 @@ export const state: BannerState<imgUrlsType> = {
   indexBanner: [
     {
       type: 'image',
-      src: 'https://mall.fsbaide.cn/web/uploads/thumbs/mall1/20211211/00fc5f803fac014cbbb0eaabfeba3b8e.png',
+      src: 'https://kaizhuo.eadts.cn/web/uploads/mall1/20220306/146aae386c1f376bdbf13a2f15027f13.png',
     },
   ], // 首页的banner列表
   seckillBanner: [], // 秒杀的banner列表

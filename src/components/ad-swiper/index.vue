@@ -13,26 +13,7 @@
       @change="change"
     >
       <block v-for="(item, index) in imgUrls" :key="index">
-        <swiper-item v-if="item.type == 'video'" :style="'height:' + imageH + 'rpx;'">
-          <view class="item">
-            <video
-              id="myVideo"
-              :src="item.src"
-              objectFit="cover"
-              controls
-              style="width: 100%; height: 100%"
-              show-center-play-btn
-              show-mute-btn="true"
-              auto-pause-if-navigate
-              :custom-cache="false"
-              :enable-progress-gesture="false"
-              @play="bindPlay"
-              @ended="bindEnd"
-              @pause="bindPause"
-            ></video>
-          </view>
-        </swiper-item>
-        <swiper-item v-else @click="openLink(index)">
+        <swiper-item @click="openLink(index)">
           <image
             :src="item[imgKey]"
             class="slide-image"
@@ -50,11 +31,20 @@
 import { PropType, toRefs, defineComponent, reactive } from 'vue'
 import { imgUrlsType } from '@/store/modules/banner'
 
+interface bannerType {
+  id: number
+  title: string
+  pic_url: string
+  open_type: string
+  page_url: string
+  params: any[]
+}
+
 export default defineComponent({
   name: 'AdSwiper',
   props: {
     imgUrls: {
-      type: Array as PropType<Array<imgUrlsType>>,
+      type: Array as PropType<Array<bannerType>>,
       default: () => {
         return []
       },

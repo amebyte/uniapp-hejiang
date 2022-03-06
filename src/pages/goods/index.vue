@@ -16,10 +16,10 @@
       <GoodsListColumnStyle />
     </view>
     <view v-show="currNavId === 2">
-      <ProductListGrid />
+      <ProductListGrid cat-id="6" />
     </view>
     <view v-show="currNavId === 3">
-      <ProductListGrid />
+      <ProductListGrid cat-id="7" />
     </view>
   </view>
 </template>
