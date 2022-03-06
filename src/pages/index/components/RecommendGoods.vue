@@ -18,7 +18,7 @@
                   <image :src="item.thumb"></image>
                 </view>
                 <view class="pro-info line1">{{ item.productName }}</view>
-                <view class="money font-color">新人价：￥{{ item.marketPrice }}</view>
+                <view class="money font-color">售价：￥{{ item.marketPrice }}</view>
               </view>
             </block>
           </scroll-view>
