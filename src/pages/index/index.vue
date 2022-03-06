@@ -136,7 +136,7 @@ export default defineComponent({
     }
     const { proxy } = getCurrentInstance() as any
     // console.log('ctx', proxy, proxy.$StatusBar, proxy.$test)
-    let banner = ref({})
+    let banner = ref([])
     fetchTpl({})
       .then((r) => {
         console.log('fetchTpl', r)

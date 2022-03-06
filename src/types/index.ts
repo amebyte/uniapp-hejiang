@@ -10,4 +10,5 @@ export type goodsType = {
   skus?: any[]
   attrGroups?: any[]
   attr?: any[]
+  original_price?: string
 }

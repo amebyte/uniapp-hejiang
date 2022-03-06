@@ -5,10 +5,7 @@
         <view class="tag">限时特惠</view>
         <view class="content">
           <view class="image">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
+            <image :src="item.thumb" mode="scaleToFill"></image>
           </view>
           <view class="wrap">
             <view class="label-wrap">
@@ -31,10 +28,10 @@
           <view class="r">
             <view class="btn">
               <view class="l">
-                <text>¥199</text>
-                <text>¥199</text>
+                <text>¥{{ item.original_price }}</text>
+                <text>¥{{ item.marketPrice }}</text>
               </view>
-              <view class="r"> 马上抢购 </view>
+              <view class="r" @click="goDetail(item)"> 马上抢购 </view>
             </view>
           </view>
         </view>
@@ -62,6 +59,13 @@ const getNewGoodsList = () => {
     })
     .catch((err) => console.log(err))
 }
+
+const goDetail = (item) => {
+  uni.navigateTo({
+    url: `/pages/goods/goodsDetail?productId=${item.id}&shopId=${item.shopId}`,
+  })
+}
+
 onMounted(() => {
   getNewGoodsList()
 })
