@@ -103,6 +103,7 @@ export function fetchGoodsDetail(data) {
               attrGroups: normalizeAttrGroups(d.attr_groups),
               skus: normalizeGoodsSkus(d.attr),
               attr: d.attr,
+              cats: d.cats,
             }
             return data
           }

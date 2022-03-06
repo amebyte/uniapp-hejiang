@@ -10,10 +10,11 @@
       <!--课程信息 start-->
       <GoodsCurriculum />
       <!--课程信息 end-->
+
+      <!--老师信息 start-->
+      <GoodsTeacher />
+      <!--老师信息 end-->
     </template>
-    <!--老师信息 start-->
-    <GoodsTeacher />
-    <!--老师信息 end-->
     <!--商品详情 start-->
     <GoodsContent :goods-info="goodsInfo" />
     <!--商品详情 end-->
