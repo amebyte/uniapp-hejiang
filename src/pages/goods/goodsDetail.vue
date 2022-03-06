@@ -15,6 +15,9 @@
       <GoodsTeacher />
       <!--老师信息 end-->
     </template>
+    <template v-else>
+      <GoodsSpecs />
+    </template>
     <!--商品详情 start-->
     <GoodsContent :goods-info="goodsInfo" />
     <!--商品详情 end-->
@@ -53,6 +56,7 @@ import GoodsInfo from './components/GoodsInfo.vue'
 import GoodsContent from './components/GoodsContent.vue'
 import DetailFooterBar from './components/DetailFooterBar.vue'
 import GoodsCurriculum from './components/GoodsCurriculum.vue'
+import GoodsSpecs from './components/GoodsSpecs.vue'
 import GoodsTeacher from './components/GoodsTeacher.vue'
 import { fetchGoodsDetail } from '@/api/goods'
 import { fetchUserInfo } from '@/api/user'
@@ -67,6 +71,7 @@ export default defineComponent({
     DetailFooterBar,
     GoodsCurriculum,
     GoodsTeacher,
+    GoodsSpecs,
   },
   setup() {
     const store = useStore()
