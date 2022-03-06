@@ -1,6 +1,6 @@
 <template>
   <view class="goods-info-wrap">
-    <view class="status-desc">
+    <view v-if="isCurriculum" class="status-desc">
       <view class="content">
         <view class="l">已报名 <text>3</text> 人 剩余 <text>12</text> 个名额</view>
         <view class="r">线下课程</view>
@@ -46,6 +46,10 @@ const props = defineProps({
     default: () => {
       return {}
     },
+  },
+  isCurriculum: {
+    type: Boolean,
+    default: false,
   },
 })
 const emits = defineEmits(['openShare'])

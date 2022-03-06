@@ -12,4 +12,5 @@ export type goodsType = {
   attr?: any[]
   originalPrice?: string
   salesNum?: string
+  cats?: string[]
 }

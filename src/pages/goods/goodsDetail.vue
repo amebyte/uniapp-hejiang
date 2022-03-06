@@ -4,11 +4,13 @@
     <ProductDetailSwiper :img-urls="sliderImage" :videoline="goodsInfo.videoLink" />
     <!--轮播图 end-->
     <!--商品信息 start-->
-    <goodsInfo :goods-info="goodsInfo" @openShare="openShare" />
+    <goodsInfo :goods-info="goodsInfo" :is-curriculum="isCurriculum" @openShare="openShare" />
     <!--商品信息 end-->
-    <!--课程信息 start-->
-    <GoodsCurriculum />
-    <!--课程信息 end-->
+    <template v-if="isCurriculum">
+      <!--课程信息 start-->
+      <GoodsCurriculum />
+      <!--课程信息 end-->
+    </template>
     <!--老师信息 start-->
     <GoodsTeacher />
     <!--老师信息 end-->
@@ -82,6 +84,7 @@ export default defineComponent({
       cart_num: 0,
       attrValue: '',
       attrTxt: '请选择',
+      isCurriculum: false,
     })
     const detailFooterBarRef = ref(null)
     const getGoodsDetail = () => {
@@ -89,10 +92,11 @@ export default defineComponent({
         .then((r) => {
           console.log('r', r)
           state.goodsInfo = r
+          state.isCurriculum = state.goodsInfo.cats.includes('5')
           state.sliderImage = state.goodsInfo.sliderImage
           state.attr.productAttr = state.goodsInfo.attrGroups
           const minPrice = minHeap(state.goodsInfo.skus, 'marketPrice')
-          console.log('minPrice', minPrice)
+
           setDefaultAttrSelect(minPrice)
         })
         .catch((err) => console.log('err', err))
