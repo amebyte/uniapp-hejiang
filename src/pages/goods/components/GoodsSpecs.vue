@@ -29,7 +29,6 @@
       padding: 20rpx;
       border-bottom: 2rpx solid #f5f3f3;
       .label {
-        flex: 1;
         color: #5aefc9;
       }
       .info {
