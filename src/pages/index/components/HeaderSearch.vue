@@ -4,7 +4,7 @@
     <view class="search-wrapper acea-row row-middle">
       <view class="input acea-row row-middle fillet" hover-class="none" @click="goPage">
         <text class="iconfont icon-search"></text>
-        搜索开卓好物，提高生活品质</view
+        搜索课程</view
       >
     </view>
   </view>
@@ -15,7 +15,7 @@
       <view class="search-wrapper acea-row row-middle">
         <navigator url="/pages/goods/goods-search/index" class="input acea-row row-middle fillet" hover-class="none">
           <text class="iconfont icon-search"></text>
-          搜索开卓好物，提高生活品质</navigator
+          搜索课程</navigator
         >
       </view>
     </view>
@@ -51,7 +51,8 @@ export default defineComponent({
   height: 100rpx;
 
   .search-wrapper {
-    padding: 20rpx 50rpx 0 53rpx;
+    width: 90%;
+    padding: 10rpx 50rpx 0 53rpx;
 
     .input {
       height: 58rpx;

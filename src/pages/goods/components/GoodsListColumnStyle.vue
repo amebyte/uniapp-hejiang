@@ -181,7 +181,7 @@ onMounted(() => {
         }
       }
       > .r {
-        flex: 2;
+        flex: 3.5;
         .btn {
           display: flex;
           justify-content: space-between;
@@ -194,7 +194,7 @@ onMounted(() => {
           font-weight: 600;
           color: #ffffff;
           > .l {
-            flex: 1.3;
+            flex: 1.8;
             display: flex;
             justify-content: space-between;
             padding-right: 40rpx;
