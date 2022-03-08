@@ -79,3 +79,85 @@ $uni-font-size-paragraph:30rpx;
 
 /* 屏幕宽度*/
 $screen-width: 750rpx;
+
+
+
+.text-center {
+    text-align: center;
+}
+.font-weight {
+    font-weight: bold;
+}
+// 屏幕宽度
+.page-width {
+    width: 100%;
+}
+.goods-hover-class {
+    opacity: .9;
+    background-color: #f7f7f7;
+}
+// 背景图片
+.background-image {
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    background-position: center;
+}
+// 重要
+$uni-important-color-red: #ff4544; // 小面积使用，用于特别强调和突出的文字，按钮和icon
+$uni-important-color-black: #353535;// 用于重要级文字信息、标题信息等
+
+// 一般
+$uni-general-color-one: #666666;// 用于普通段落信息
+$uni-general-color-two: #999999;// 用于辅助、次要文字信息
+$uni-general-color-three: #cdcdcd;// 用于灰按钮、占位文字
+
+// 较弱
+$uni-weak-color-one: #e2e2e2;// 用于分割线
+$uni-weak-color-two: #f7f7f7;// 用于内容区域底色
+
+// 重要
+$uni-font-size-import-one: 36rpx; // 用在少量标题
+$uni-line-height-import-one: 44rpx;
+
+$uni-font-size-import-two: 32rpx; // 用于一些较为重要的文字或操作按钮
+$uni-line-height-import-two: 40rpx;
+
+// 一般
+$uni-font-size-general-one: 28rpx;// 用于大多数文字
+$uni-line-height-general-one: 36rpx;
+
+$uni-font-size-general-two: 26rpx;// 用于大多数文字
+$uni-line-height-general-two: 32rpx;
+
+// 弱
+$uni-font-size-weak-one: 24rpx; // 用于辅助性文字
+$uni-line-height-weak-one: 30rpx;
+
+$uni-font-size-weak-two: 22rpx; // 用于辅助性文字
+$uni-line-height-weak-two: 28rpx;
+
+/*全局文字大小*/
+$uni-font-size: 32rpx;
+
+/* 屏幕宽度*/
+$screen-width: 750rpx;
+
+page {
+font-size: $uni-font-size;
+background: $uni-weak-color-two;
+}
+.page-width {
+width: 100%;
+}
+
+// 交互优化
+.u-hover-class  {
+opacity: .9;
+background-color: #f7f7f7;
+}
+
+.safe-area-inset-bottom {
+padding-bottom: 0;
+padding-bottom: constant(safe-area-inset-bottom);
+padding-bottom: env(safe-area-inset-bottom);
+}

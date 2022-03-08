@@ -39,7 +39,6 @@
       <QuestionsAndAnswers />
       <!--专家答疑 end-->
     </view>
-    <NavModel />
   </view>
 </template>
 
@@ -51,7 +50,6 @@ import { useStore, mapActions } from 'vuex'
 import { BannerActionTypes } from '@/store/modules/banner/action-types'
 import { useMapState } from '@/hooks/useMapState'
 import AdSwiper from '@/components/ad-swiper/index.vue'
-import NavModel from '@/components/nav-model/nav-model.vue'
 import HeaderSearch from './components/HeaderSearch.vue'
 import MessageComp from './components/MessageComp.vue'
 import MenusComp from './components/MenusComp.vue'
@@ -65,7 +63,6 @@ export default defineComponent({
   name: 'IndexPage',
   components: {
     AdSwiper,
-    NavModel,
     HeaderSearch,
     MessageComp,
     MenusComp,
@@ -116,7 +113,7 @@ export default defineComponent({
 
     const title = ref(APP_NAME)
 
-    let isShowMessage = ref(true)
+    let isShowMessage = ref(false)
     const closeMessage = () => {
       isShowMessage.value = false
     }

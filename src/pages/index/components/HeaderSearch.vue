@@ -13,7 +13,7 @@
   <view class="mp-header" :style="{ 'padding-top': sysHeight + 'px' }">
     <view class="search-box">
       <view class="search-wrapper acea-row row-middle">
-        <navigator url="/pages/goods/goods-search/index" class="input acea-row row-middle fillet" hover-class="none">
+        <navigator url="/pages/search/search" class="input acea-row row-middle fillet" hover-class="none">
           <text class="iconfont icon-search"></text>
           搜索课程</navigator
         >
@@ -33,7 +33,7 @@ export default defineComponent({
     const sysHeight = ref(proxy.$CustomBar)
     const goPage = () => {
       uni.navigateTo({
-        url: '/pages/goods/goods-search/index',
+        url: '/pages/search/search',
       })
     }
     return {
@@ -51,6 +51,7 @@ export default defineComponent({
   height: 100rpx;
 
   .search-wrapper {
+    margin-left: 100rpx;
     width: 90%;
     padding: 10rpx 50rpx 0 53rpx;
 
