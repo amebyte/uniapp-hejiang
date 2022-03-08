@@ -2,7 +2,7 @@
   <view>
     <view v-if="menus.length" class="nav acea-row acea-row">
       <block v-for="(item, index) in menus" :key="index">
-        <view class="item" @click="menusTap(item.path)">
+        <view class="item" @click="menusTap(item)">
           <view class="pictrue">
             <image :src="item.url"></image>
           </view>
@@ -50,14 +50,14 @@ export default defineComponent({
       return m
     })
 
-    const menusTap = (url) => {
-      if (url.indexOf('http') != -1) {
-        // #ifdef H5
-        location.href = url
-        // #endif
+    const menusTap = (item) => {
+      if (item.switchTab) {
+        uni.switchTab({
+          url: item.path,
+        })
       } else {
         uni.navigateTo({
-          url: url,
+          url: item.path,
         })
       }
     }

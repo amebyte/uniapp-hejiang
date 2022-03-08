@@ -82,7 +82,6 @@ page {
         position: absolute;
         left: -20%;
         top: 0;
-        z-index: -1;
         content: '';
         border-radius: 0 0 50% 50%;
         background-color: #102c24;

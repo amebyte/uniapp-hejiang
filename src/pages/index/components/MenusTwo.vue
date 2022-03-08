@@ -1,6 +1,6 @@
 <template>
   <view class="wrapper">
-    <view class="box">
+    <view class="box" @click="gotoMemberCenter">
       <view class="l">
         <view class="title">会员中心</view>
         <view class="desc">加入会员超多福利</view>
@@ -9,7 +9,7 @@
         <image src="/static/images/skip/home-member.png" mode="scaleToFill"></image>
       </view>
     </view>
-    <view class="box">
+    <view class="box" @click="gotoShop">
       <view class="l">
         <view class="title">开卓商城</view>
         <view class="desc">不错过每一件精品</view>
@@ -20,7 +20,18 @@
     </view>
   </view>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const gotoMemberCenter = () => {
+  uni.navigateTo({
+    url: `/pages/my/memberCenter`,
+  })
+}
+const gotoShop = () => {
+  uni.switchTab({
+    url: `/pages/goods/index`,
+  })
+}
+</script>
 <style lang="scss" scoped>
 .wrapper {
   display: flex;

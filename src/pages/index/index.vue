@@ -92,11 +92,13 @@ export default defineComponent({
           url: '../../static/images/skip/curriculum.png',
           title: '课程',
           path: '/pages/goods/index',
+          switchTab: true,
         },
         {
           url: '../../static/images/skip/AAndQ.png',
           title: '答疑',
           path: '/pages/discover-home/index',
+          switchTab: true,
         },
         {
           url: '../../static/images/skip/brand.png',
