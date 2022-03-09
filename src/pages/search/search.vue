@@ -102,8 +102,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { mapGetters, mapState } from 'vuex'
-
+import { store } from '@/store'
 let page = 1
 let is_loading = false
 let is_no_more = false
@@ -113,15 +112,15 @@ export default defineComponent({
   setup() {
     const state = reactive({
       hotGoodsList: [],
-      list: [],
+      list: [] as any[],
       isSearch: false,
       historyList: [],
       keyword: '',
       recommend_list: [],
-      mch_id: 0,
+      mch_id: 0 as any,
       beginAfter: true,
       tempList: [],
-      realHistoryList: [],
+      realHistoryList: [] as any[],
       loading: false,
       goodsReset: false,
       attrGoods: {
@@ -133,24 +132,18 @@ export default defineComponent({
       sign: '',
       url: '',
     })
+    const getSetting = computed(() => store.state.mallConfig.mall.setting)
+    const getTheme = store.state.mallConfig.theme_color
 
-    return {
-      ...toRefs(state),
-    }
-  },
-  computed: {
-    ...mapGetters('mallConfig', {
-      getSetting: 'getSetting',
-      getTheme: 'getTheme',
-    }),
-    newList() {
-      if (this.list.length > 0) {
-        return this.list
+    const newList = computed(() => {
+      if (state.list.length > 0) {
+        return state.list
       } else {
-        return this.recommend_list
+        return state.recommend_list
       }
-    },
-    sizeTransform() {
+    })
+
+    const sizeTransform = computed(() => {
       const windowWidth = uni.getSystemInfoSync().windowWidth
       const p = 750 / windowWidth
       const boxLeft = 24 / p
@@ -164,53 +157,12 @@ export default defineComponent({
         btnWidth,
         listWidth,
       }
-    },
-    ...mapState({
-      isListUnderlinePrice: (state) => state.mallConfig.mall.setting.is_list_underline_price,
-    }),
-  },
-  onLoad(options) {
-    this.$commonLoad.onload(options)
-    this.mch_id = options.mch_id ? options.mch_id : 0
-    this.sign = options.sign ? options.sign : 'goods'
-    if (this.sign === 'goods') {
-      this.url = this.$api.default.goods_list
-    } else if (this.sign === 'pt') {
-      this.url = this.$api.pt.goods
-    } else if (this.sign === 'wholesale') {
-      this.url = this.$api.wholesale.index
-    }
-    page = 1
-    is_loading = false
-    is_no_more = false
-    this.historyList = this.getHistory()
-    this.getSelect()
-    this.getRecommend()
-    this.getHotSearch()
-  },
-  onReachBottom() {
-    if (is_no_more) {
-    } else {
-      this.goodsReset = false
-      if (this.keyword) {
-        this.loading = true
-        this.getGoodsList()
-      }
-    }
-  },
-  watch: {
-    keyword: {
-      handler(v) {
-        if (v == '') {
-          this.cancel()
-        }
-      },
-      immediate: true,
-    },
-  },
-  methods: {
-    async getSelect() {
-      const historyList = this.historyList
+    })
+
+    const isListUnderlinePrice = computed(() => store.state.mallConfig.mall.setting.is_list_underline_price)
+
+    const getSelect = async () => {
+      const historyList = state.historyList
       if (historyList && historyList.length) {
         const self = this
         // #ifdef MP-WEIXIN || H5
@@ -244,14 +196,15 @@ export default defineComponent({
             .exec()
         }, time)
       }
-    },
-    formatData(res) {
+    }
+
+    const formatData = (res) => {
       const self = this
-      const historyList = self.historyList
-      const { marginRight, listWidth } = self.sizeTransform
+      const historyList = state.historyList
+      const { marginRight, listWidth } = sizeTransform.value
 
       //列表格式化
-      let tempList = []
+      let tempList = [] as any[]
       let item = []
       let line_width = 0
       for (let i = 0; i < res.length; i++) {
@@ -274,14 +227,14 @@ export default defineComponent({
       if (item.length) {
         tempList.push(item)
       }
-      this.tempList = tempList
-    },
+      state.tempList = tempList
+    }
 
-    selectLimitList(res) {
+    const selectLimitList = (res) => {
       const self = this
-      const { btnWidth, listWidth, marginRight } = self.sizeTransform
-      let newArr = JSON.parse(JSON.stringify(self.tempList))
-      let realHistoryList = []
+      const { btnWidth, listWidth, marginRight } = sizeTransform.value
+      let newArr = JSON.parse(JSON.stringify(state.tempList))
+      let realHistoryList = [] as any[]
       if (newArr.length > 2) {
         let indexMore = 0
         const secondWidth = listWidth - btnWidth - marginRight
@@ -296,89 +249,96 @@ export default defineComponent({
           mark: true,
         })
         realHistoryList = [newArr[0], newArr[1]]
-        self.beginAfter = true
+        state.beginAfter = true
       } else {
         //newArr.forEach(item => realHistoryList = [...realHistoryList, ...item]);
         newArr.forEach((item) => realHistoryList.push(item))
-        self.beginAfter = false
+        state.beginAfter = false
       }
-      self.realHistoryList = realHistoryList
-    },
+      state.realHistoryList = realHistoryList
+    }
 
-    selectAllList() {
-      const tempList = this.tempList
+    const selectAllList = () => {
+      const tempList = state.tempList
       let arr = []
       if (tempList && tempList.length) {
         for (let i = 0; i < 5 && i < tempList.length; i++) {
           arr.push(tempList[i])
         }
       }
-      this.beginAfter = false
-      this.realHistoryList = arr
-    },
-    goodsNav(url) {
+      state.beginAfter = false
+      state.realHistoryList = arr
+    }
+
+    const goodsNav = (url) => {
       uni.navigateTo({ url: url })
-    },
-    clear() {
+    }
+
+    const clear = () => {
       uni.hideKeyboard()
-      this.keyword = ''
-      this.loading = false
-    },
-    getHotSearch() {
-      if (this.getSetting.is_show_hot_goods != 1) {
+      state.keyword = ''
+      state.loading = false
+    }
+
+    const getHotSearch = () => {
+      if (getSetting.value.is_show_hot_goods != 1) {
         return
       }
       this.$request({
         url: this.$api.goods.hot_search,
       }).then((response) => {
-        this.hotGoodsList = response.data.list
+        state.hotGoodsList = response.data.list
       })
-    },
-    cancel() {
-      this.isSearch = false
-      this.loading = false
-      this.keyword = ''
-      this.list = []
-    },
-    reset() {
+    }
+
+    const cancel = () => {
+      state.isSearch = false
+      state.loading = false
+      state.keyword = ''
+      state.list = []
+    }
+
+    const reset = () => {
       page = 1
       is_no_more = false
-      this.goodsReset = true
-      this.getGoodsList()
-    },
-    search() {
-      let keyword = this.keyword
+      state.goodsReset = true
+      getGoodsList()
+    }
+
+    const search = () => {
+      let keyword = state.keyword
       if (keyword === '') return
-      this.keyword = keyword.trim()
-      this.setHistory()
-      this.getSelect()
-      this.reset()
-    },
-    getGoodsList() {
-      if (!this.keyword) return
+      state.keyword = keyword.trim()
+      setHistory()
+      getSelect()
+      reset()
+    }
+
+    const getGoodsList = () => {
+      if (!state.keyword) return
       if (is_loading) return
       is_loading = true
       this.$request({
-        url: this.url,
+        url: state.url,
         data: {
-          keyword: this.keyword,
-          mch_id: this.mch_id,
+          keyword: state.keyword,
+          mch_id: state.mch_id,
           page: page,
         },
       })
         .then((response) => {
           is_loading = false
-          this.isSearch = true
-          this.loading = false
+          state.isSearch = true
+          state.loading = false
           let { code, data, msg } = response
           if (code === 0) {
-            if (page === 1) this.list = []
+            if (page === 1) state.list = []
             if (data.list.length > 0) {
-              this.list.push(...data.list)
+              state.list.push(...data.list)
               page++
             } else {
               is_no_more = true
-              if (page === 1) this.getRecommend()
+              if (page === 1) getRecommend()
             }
           } else {
             uni.showModal({
@@ -389,10 +349,11 @@ export default defineComponent({
         .catch(() => {
           is_loading = false
         })
-    },
-    setHistory() {
-      let historyList = this.getHistory()
-      let keyword = this.keyword.trim()
+    }
+
+    const setHistory = () => {
+      let historyList = getHistory()
+      let keyword = state.keyword.trim()
 
       historyList.forEach((item, index) => {
         if (item.keyword === keyword) historyList.splice(index, 1)
@@ -401,33 +362,37 @@ export default defineComponent({
         keyword: keyword,
       })
       if (historyList.length > 20) historyList.pop()
-      this.historyList = historyList
+      state.historyList = historyList
       uni.setStorageSync('SEARCH_HISTORY_LIST', historyList)
-    },
-    getHistory() {
+    }
+
+    const getHistory = () => {
       let historyList = uni.getStorageSync('SEARCH_HISTORY_LIST')
       if (!historyList) historyList = []
       return historyList
-    },
-    deleteHistory() {
+    }
+
+    const deleteHistory = () => {
       let self = this
       uni.showModal({
         content: '确认删除全部历史记录？',
         success: function (res) {
           if (res.confirm) {
             uni.removeStorageSync('SEARCH_HISTORY_LIST')
-            self.historyList = []
+            state.historyList = []
           }
         },
       })
-    },
-    historyClick(keyword) {
-      this.keyword = keyword.trim()
-      this.reset()
-    },
-    getRecommend() {
-      if (this.mch_id) return
-      if (this.recommend_list.length > 0) return
+    }
+
+    const historyClick = (keyword) => {
+      state.keyword = keyword.trim()
+      reset()
+    }
+
+    const getRecommend = () => {
+      if (state.mch_id) return
+      if (state.recommend_list.length > 0) return
       this.$request({
         url: this.$api.goods.new_recommend,
         data: {
@@ -435,14 +400,65 @@ export default defineComponent({
           type: 'goods',
         },
       }).then((response) => {
-        if (response.code === 0) this.recommend_list = response.data.list
+        if (response.code === 0) state.recommend_list = response.data.list
       })
-    },
-    buyProduct({ goods, attrShow }) {
-      this.attrGoods.goods = goods
+    }
+
+    const buyProduct = ({ goods, attrShow }) => {
+      state.attrGoods.goods = goods
       setTimeout(() => {
-        this.attrGoods.attrShow = attrShow
+        state.attrGoods.attrShow = attrShow
       })
+    }
+
+    onLoad((options) => {
+      state.mch_id = options.mch_id ? options.mch_id : 0
+      state.sign = options.sign ? options.sign : 'goods'
+      if (state.sign === 'goods') {
+        state.url = this.$api.default.goods_list
+      } else if (state.sign === 'pt') {
+        state.url = this.$api.pt.goods
+      } else if (state.sign === 'wholesale') {
+        state.url = this.$api.wholesale.index
+      }
+      page = 1
+      is_loading = false
+      is_no_more = false
+      state.historyList = getHistory()
+      getSelect()
+      getRecommend()
+      getHotSearch()
+    })
+
+    onReachBottom(() => {
+      if (is_no_more) {
+        console.log('xxx')
+      } else {
+        state.goodsReset = false
+        if (state.keyword) {
+          state.loading = true
+          getGoodsList()
+        }
+      }
+    })
+
+    return {
+      ...toRefs(state),
+      getTheme,
+      getSetting,
+      newList,
+      sizeTransform,
+      isListUnderlinePrice,
+    }
+  },
+  watch: {
+    keyword: {
+      handler(v) {
+        if (v == '') {
+          this.cancel()
+        }
+      },
+      immediate: true,
     },
   },
 })
