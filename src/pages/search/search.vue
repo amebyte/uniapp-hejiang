@@ -103,7 +103,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, watch } from 'vue'
 import { store } from '@/store'
-import { fetchHotGoodsSearch, fetchRecommendSearch } from '@/api/goods'
+import { fetchHotGoodsSearch, fetchRecommendSearch, fetchSearchGoods } from '@/api/goods'
 let page = 1
 let is_loading = false
 let is_no_more = false
@@ -120,7 +120,7 @@ export default defineComponent({
       recommend_list: [],
       mch_id: 0 as any,
       beginAfter: true,
-      tempList: [],
+      tempList: [] as any[],
       realHistoryList: [] as any[],
       loading: false,
       goodsReset: false,
@@ -317,13 +317,11 @@ export default defineComponent({
       if (!state.keyword) return
       if (is_loading) return
       is_loading = true
-      this.$request({
-        url: state.url,
-        data: {
-          keyword: state.keyword,
-          mch_id: state.mch_id,
-          page: page,
-        },
+
+      fetchSearchGoods({
+        keyword: state.keyword,
+        mch_id: state.mch_id,
+        page: page,
       })
         .then((response) => {
           is_loading = false

@@ -55,6 +55,14 @@ export function fetchRecommendGoodsList(data) {
 }
 
 /**
+ * 搜索商品
+ *
+ */
+export function fetchSearchGoods(data) {
+  return request.get!('&r=api/default/goods-list', data, { noAuth: true })
+}
+
+/**
  * 商品列表
  *
  */
