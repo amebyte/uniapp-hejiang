@@ -31,6 +31,22 @@ export function fetchRecommendGoodsList2(data) {
 }
 
 /**
+ * 热搜商品
+ *
+ */
+export function fetchHotGoodsSearch(data) {
+  return request.get!('&r=api/goods/hot-search', data, { noAuth: true })
+}
+
+/**
+ * 搜索推荐商品
+ *
+ */
+export function fetchRecommendSearch(data) {
+  return request.get!('&r=api/goods/new-recommend', data, { noAuth: true })
+}
+
+/**
  * 推荐商品
  *
  */

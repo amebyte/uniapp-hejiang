@@ -43,7 +43,7 @@
                     class="box-grow-0 close-pic cross-center"
                     @click="selectAllList"
                   >
-                    <image src="./image/icon_open.png"></image>
+                    <image src="/static/icon/image/icon_open.png"></image>
                   </view>
                 </view>
               </view>
@@ -51,8 +51,8 @@
           </view>
         </view>
         <!-- 热搜 -->
-        <view v-if="getSetting.is_show_hot_goods == 1 && sign === 'goods'" class="hot-center">
-          <image class="top-image" src="./image/icon_top.png"></image>
+        <view v-if="Number(getSetting.is_show_hot_goods) == 1 && sign === 'goods'" class="hot-center">
+          <image class="top-image" src="/static/icon/image/icon_top.png"></image>
           <view v-if="hotGoodsList && hotGoodsList.length" class="top-list">
             <view
               v-for="(goods, index) in hotGoodsList"
@@ -65,10 +65,10 @@
                   v-if="goods.sort < 4"
                   :src="
                     goods.sort === 1
-                      ? './image/list_icon_first.png'
+                      ? '/static/icon/image/list_icon_first.png'
                       : goods.sort === 2
-                      ? './image/list_icon_second.png'
-                      : './image/list_cion_third.png'
+                      ? '/static/icon/image/list_icon_second.png'
+                      : '/static/icon/image/list_cion_third.png'
                   "
                 ></image>
                 <view v-if="goods.sort > 3">{{ goods.sort }}</view>
@@ -101,8 +101,9 @@
 
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
-import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
+import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, watch } from 'vue'
 import { store } from '@/store'
+import { fetchHotGoodsSearch, fetchRecommendSearch } from '@/api/goods'
 let page = 1
 let is_loading = false
 let is_no_more = false
@@ -111,10 +112,10 @@ export default defineComponent({
   name: 'SearchPage',
   setup() {
     const state = reactive({
-      hotGoodsList: [],
+      hotGoodsList: [] as any[],
       list: [] as any[],
       isSearch: false,
-      historyList: [],
+      historyList: [] as any[],
       keyword: '',
       recommend_list: [],
       mch_id: 0 as any,
@@ -185,11 +186,11 @@ export default defineComponent({
                 size: true,
               },
               function (res) {
-                self.formatData(res)
-                if (self.beginAfter) {
-                  self.selectLimitList(res)
+                formatData(res)
+                if (state.beginAfter) {
+                  selectLimitList(res)
                 } else {
-                  self.selectAllList()
+                  selectAllList()
                 }
               }
             )
@@ -205,7 +206,7 @@ export default defineComponent({
 
       //列表格式化
       let tempList = [] as any[]
-      let item = []
+      let item = [] as any[]
       let line_width = 0
       for (let i = 0; i < res.length; i++) {
         const alone_width = res[i].width + marginRight
@@ -281,12 +282,10 @@ export default defineComponent({
     }
 
     const getHotSearch = () => {
-      if (getSetting.value.is_show_hot_goods != 1) {
+      if (Number(getSetting.value.is_show_hot_goods) !== 1) {
         return
       }
-      this.$request({
-        url: this.$api.goods.hot_search,
-      }).then((response) => {
+      fetchHotGoodsSearch({}).then((response) => {
         state.hotGoodsList = response.data.list
       })
     }
@@ -393,34 +392,31 @@ export default defineComponent({
     const getRecommend = () => {
       if (state.mch_id) return
       if (state.recommend_list.length > 0) return
-      this.$request({
-        url: this.$api.goods.new_recommend,
-        data: {
-          goods_id: 0,
-          type: 'goods',
-        },
+      fetchRecommendSearch({
+        goods_id: 0,
+        type: 'goods',
       }).then((response) => {
         if (response.code === 0) state.recommend_list = response.data.list
       })
     }
 
-    const buyProduct = ({ goods, attrShow }) => {
-      state.attrGoods.goods = goods
-      setTimeout(() => {
-        state.attrGoods.attrShow = attrShow
-      })
-    }
+    watch(
+      () => state.keyword,
+      (newVal, prevState) => {
+        if (newVal === '') {
+          cancel()
+        }
+      },
+      {
+        immediate: true,
+        deep: true,
+      }
+    )
 
     onLoad((options) => {
       state.mch_id = options.mch_id ? options.mch_id : 0
       state.sign = options.sign ? options.sign : 'goods'
-      if (state.sign === 'goods') {
-        state.url = this.$api.default.goods_list
-      } else if (state.sign === 'pt') {
-        state.url = this.$api.pt.goods
-      } else if (state.sign === 'wholesale') {
-        state.url = this.$api.wholesale.index
-      }
+
       page = 1
       is_loading = false
       is_no_more = false
@@ -456,16 +452,6 @@ export default defineComponent({
       selectAllList,
       goodsNav,
     }
-  },
-  watch: {
-    keyword: {
-      handler(v) {
-        if (v == '') {
-          this.cancel()
-        }
-      },
-      immediate: true,
-    },
   },
 })
 </script>
