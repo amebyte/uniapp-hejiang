@@ -93,6 +93,19 @@
             </view>
           </view>
         </template>
+        <view style="background-color: #f7f7f7">
+          <u-ordinary-list
+            :is-under-line-price="isListUnderlinePrice == 1 ? true : false"
+            :reset="goodsReset"
+            :pagination="true"
+            :list="newList"
+            :theme="getTheme"
+            :show-buy-btn="sign === 'goods' ? true : false"
+            :is-show-attr="false"
+            :list-style="2"
+            @buyProduct="buyProduct"
+          ></u-ordinary-list>
+        </view>
       </view>
       <view v-if="loading" class="u-loading-list">加载中...</view>
     </view>
@@ -104,12 +117,16 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, watch } from 'vue'
 import { store } from '@/store'
 import { fetchHotGoodsSearch, fetchRecommendSearch, fetchSearchGoods } from '@/api/goods'
+import uOrdinaryList from '@/components/u-goods-list/u-ordinary-list.vue'
 let page = 1
 let is_loading = false
 let is_no_more = false
 
 export default defineComponent({
   name: 'SearchPage',
+  components: {
+    uOrdinaryList,
+  },
   setup() {
     const state = reactive({
       hotGoodsList: [] as any[],
@@ -398,6 +415,10 @@ export default defineComponent({
       })
     }
 
+    const buyProduct = () => {
+      console.log('buyProduct')
+    }
+
     watch(
       () => state.keyword,
       (newVal, prevState) => {
@@ -449,6 +470,7 @@ export default defineComponent({
       historyClick,
       selectAllList,
       goodsNav,
+      buyProduct,
     }
   },
 })

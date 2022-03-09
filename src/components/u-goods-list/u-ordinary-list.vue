@@ -120,7 +120,6 @@
                   >
                   <view
                     v-else
-                    :style="{ 'background-color': goods.buy_goods_auth ? theme.background : '#999999' }"
                     :class="['u-cart-btn-icon', 'box-grow-0', 'u-cart-btn-icon-' + buyBtn]"
                     @click.stop="buyProduct(goods)"
                   >
@@ -245,7 +244,6 @@
                 >
                 <view
                   v-else
-                  :style="{ 'background-color': goods.buy_goods_auth ? theme.background : '#999999' }"
                   :class="['u-cart-btn-icon', 'box-grow-0', 'u-cart-btn-icon-' + buyBtn]"
                   @click.stop="buyProduct(goods)"
                 >
@@ -367,7 +365,6 @@
                   >
                   <view
                     v-else
-                    :style="{ 'background-color': goods.buy_goods_auth ? theme.background : '#999999' }"
                     :class="['u-cart-btn-icon', 'box-grow-0', 'u-cart-btn-icon-' + buyBtn]"
                     @click.stop="buyProduct(goods)"
                   ></view>
@@ -446,7 +443,6 @@
                       (isShowCart && goods.goods_stock !== 0 && goods.is_negotiable !== 1) ||
                       (isDIY && isShowBuyBtn(goods) && textStyle !== 2)
                     "
-                    :style="{ 'background-color': goods.buy_goods_auth ? theme.background : '#999999' }"
                     :class="['u-cart-btn-icon', 'box-grow-0', 'u-cart-btn-icon-' + buyBtn]"
                     @click.stop="buyProduct(goods)"
                   >
@@ -468,13 +464,13 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, watch } from 'vue'
-import { mapGetters, mapState } from 'vuex'
 import { store } from '@/store'
 import { isEmpty } from '@/utils/util'
+import AppImage from '@/components/app-image/app-image.vue'
 
 export default defineComponent({
   name: 'UGoodsList',
-  components: {},
+  components: { AppImage },
   props: {
     // 活动信息
     activity: {
@@ -598,7 +594,7 @@ export default defineComponent({
     },
     isBuy: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     // 预览接口
     previewUrl: {
@@ -1046,7 +1042,7 @@ export default defineComponent({
 }
 
 .u-goods-list {
-  // padding: 24upx 24upx 0 24upx;
+  padding: 24upx 24upx 0 24upx;
   &.u-bottom-border {
     padding: 0;
     padding-top: 24upx;
@@ -1154,7 +1150,19 @@ export default defineComponent({
 }
 
 .u-cart-btn-icon-cart {
-  background-image: url('../../../static/image/icon/cats.png');
+  font-family: iconfont !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font-size: 1.5625rem;
+  font-weight: 700;
+  color: #1aa86c;
+}
+
+.u-cart-btn-icon-cart::before {
+  content: '\e776';
 }
 
 .u-cart-btn-icon-add {
