@@ -449,6 +449,12 @@ export default defineComponent({
       newList,
       sizeTransform,
       isListUnderlinePrice,
+      clear,
+      search,
+      deleteHistory,
+      historyClick,
+      selectAllList,
+      goodsNav,
     }
   },
   watch: {
