@@ -103,12 +103,12 @@ export default defineComponent({
         {
           url: '../../static/images/skip/brand.png',
           title: '品牌',
-          path: '/pages/coupon/list',
+          path: '/pages/news/newsDetail',
         },
         {
           url: '../../static/images/skip/cooperate.png',
           title: '合作',
-          path: '/pages/shop/near-shop/index',
+          path: '/pages/news/newsDetail',
         },
       ],
     })

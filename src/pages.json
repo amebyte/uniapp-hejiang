@@ -55,6 +55,12 @@
       "style": {
         "navigationBarTitleText": "自动登录"
       }
+    },
+    {
+      "path": "pages/news/newsDetail",
+      "style": {
+        "navigationBarTitleText": "详情页面"
+      }
     }
   ],
   "subPackages": [
