@@ -470,6 +470,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, watch } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { store } from '@/store'
+import { isEmpty } from '@/utils/util'
 
 export default defineComponent({
   name: 'UGoodsList',
@@ -930,6 +931,39 @@ export default defineComponent({
       state.goodsList = []
     }
 
+    watch(
+      () => props.catList,
+      (newVal, prevState) => {
+        if (!props.showCat) return
+        !Array.isArray(newVal) || isEmpty(newVal) ? (state.is_show_off = false) : (state.is_show_off = true)
+      },
+      {
+        immediate: true,
+        deep: true,
+      }
+    )
+
+    watch(
+      () => copyList.value,
+      (nVal, oVal) => {
+        if (nVal) {
+          if (props.pagination && !props.reset) {
+            let startIndex = Array.isArray(oVal) && oVal.length > 0 ? oVal.length : 0
+            state.tempList = state.tempList.concat(cloneData(nVal.slice(startIndex)))
+          } else {
+            state.goodsList = []
+            state.tempList = cloneData(nVal)
+          }
+          splitData()
+        }
+        state.tempList && splitData()
+      },
+      {
+        immediate: true,
+        deep: true,
+      }
+    )
+
     return {
       ...toRefs(state),
       appSetting,
@@ -961,36 +995,6 @@ export default defineComponent({
       buyProduct,
     }
   },
-  watch: {
-    catList: {
-      handler(newValue) {
-        if (!this.showCat) return
-        !this.$validation.array(newValue) || this.$validation.isEmpty(newValue)
-          ? (this.is_show_off = false)
-          : (this.is_show_off = true)
-      },
-      deep: true,
-      immediate: true,
-    },
-    copyList: {
-      handler(nVal, oVal) {
-        if (nVal) {
-          if (this.pagination && !this.reset) {
-            let startIndex = Array.isArray(oVal) && oVal.length > 0 ? oVal.length : 0
-            this.tempList = this.tempList.concat(this.cloneData(nVal.slice(startIndex)))
-          } else {
-            this.goodsList = []
-            this.tempList = this.cloneData(nVal)
-          }
-          this.splitData()
-        }
-        this.tempList && this.splitData()
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
-  methods: {},
 })
 </script>
 
