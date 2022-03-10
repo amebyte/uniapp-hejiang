@@ -46,6 +46,16 @@ export function fetchGoodsList(data) {
           const list = r.data.list as any
           list.map((o) => {
             const salesNum = o.sales.replace('已售', '').replace(o.unit, '')
+            const curriculumContentParse = o.curriculum_content && JSON.parse(o.curriculum_content)
+            const curriculumDatetimeParse = o.curriculum_datetime && JSON.parse(o.curriculum_datetime)
+            const normalizeTeacherNames = (data) => {
+              let teacherNames = ''
+              data &&
+                data.forEach((o) => {
+                  teacherNames += o.name + ','
+                })
+              return teacherNames
+            }
             data.push({
               id: o.id,
               thumb: o.cover_pic,
@@ -53,9 +63,12 @@ export function fetchGoodsList(data) {
               marketPrice: o.price,
               originalPrice: o.original_price,
               salesNum,
-              curriculum_content: JSON.parse(o.curriculum_content),
-              curriculum_datetime: JSON.parse(o.curriculum_datetime),
+              curriculum_content: curriculumContentParse,
+              curriculum_datetime: curriculumDatetimeParse,
               curriculum_type: o.curriculum_type,
+              teacherNames: normalizeTeacherNames(curriculumContentParse),
+              curriculum_start_time: curriculumDatetimeParse && curriculumDatetimeParse[0],
+              curriculum_end_time: curriculumDatetimeParse && curriculumDatetimeParse[1],
             })
           })
           resolve(data)
@@ -102,8 +115,8 @@ export function fetchGoodsDetail(data) {
               skus: normalizeGoodsSkus(d.attr),
               attr: d.attr,
               cats: d.cats,
-              curriculum_content: JSON.parse(d.curriculum_content),
-              curriculum_datetime: JSON.parse(d.curriculum_datetime),
+              curriculum_content: d.curriculum_content && JSON.parse(d.curriculum_content),
+              curriculum_datetime: d.curriculum_datetime && JSON.parse(d.curriculum_datetime),
               curriculum_type: d.curriculum_type,
             }
             return data

@@ -15,11 +15,11 @@
             <view class="title">{{ item.productName }}</view>
             <view class="row">
               <view class="label">授课老师：</view>
-              <view class="content">黄XX老师</view>
+              <view class="content">{{ item.teacherNames }}</view>
             </view>
             <view class="row">
               <view class="label">开课时间：</view>
-              <view class="content">10月11日 上午10:00</view>
+              <view class="content">{{ item.curriculum_start_time }}</view>
             </view>
           </view>
         </view>
