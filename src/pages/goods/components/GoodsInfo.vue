@@ -2,8 +2,10 @@
   <view class="goods-info-wrap">
     <view v-if="isCurriculum" class="status-desc">
       <view class="content">
-        <view class="l">已报名 <text>3</text> 人 剩余 <text>12</text> 个名额</view>
-        <view class="r">线下课程</view>
+        <view class="l"
+          >已报名 <text>{{ goodsInfo.sales }}</text> 人 剩余 <text>{{ attr.productSelect.stock }}</text> 个名额</view
+        >
+        <view class="r">{{ goodsInfo.curriculum_type === 1 ? '线下课程' : '线上课程' }}</view>
       </view>
     </view>
     <view class="acea-row row-between row-bottom">
@@ -50,6 +52,12 @@ const props = defineProps({
   isCurriculum: {
     type: Boolean,
     default: false,
+  },
+  attr: {
+    type: Object,
+    default: () => {
+      return {}
+    },
   },
 })
 const emits = defineEmits(['openShare'])

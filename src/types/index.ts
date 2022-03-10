@@ -16,7 +16,9 @@ export type goodsType = {
   curriculum_content?: any[]
   curriculum_datetime?: any[]
   curriculum_type?: number
+  curriculum_address?: string
   teacherNames?: string
   curriculum_start_time?: string
   curriculum_end_time?: string
+  sales?: number
 }

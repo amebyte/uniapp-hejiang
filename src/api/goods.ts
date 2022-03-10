@@ -119,9 +119,11 @@ export function fetchGoodsDetail(data) {
               curriculum_content: d.curriculum_content,
               curriculum_datetime: d.curriculum_datetime,
               curriculum_type: d.curriculum_type,
+              curriculum_address: d.curriculum_address,
               curriculum_start_time: d.curriculum_datetime[0],
               curriculum_end_time: d.curriculum_datetime[1],
               teacherNames: normalizeTeacherNames(d.curriculum_content),
+              sales: d.sales,
             }
             return data
           }

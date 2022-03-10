@@ -8,7 +8,7 @@
       <view class="item">
         <view class="label"> 开课地点： </view>
         <view class="info">
-          <text class="txt">佛山市三水区知行天下青少年综合实践教育营</text>
+          <text class="txt">{{ goodsInfo.curriculum_address }}</text>
           <text class="nav-action" style="display: none">导航</text>
         </view>
       </view>

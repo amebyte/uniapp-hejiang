@@ -4,7 +4,7 @@
     <ProductDetailSwiper :img-urls="sliderImage" :videoline="goodsInfo.videoLink" />
     <!--轮播图 end-->
     <!--商品信息 start-->
-    <goodsInfo :goods-info="goodsInfo" :is-curriculum="isCurriculum" @openShare="openShare" />
+    <goodsInfo :goods-info="goodsInfo" :attr="attr" :is-curriculum="isCurriculum" @openShare="openShare" />
     <!--商品信息 end-->
     <template v-if="isCurriculum">
       <!--课程信息 start-->
