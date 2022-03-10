@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
-import { fetchRecommendGoodsList2 } from '@/api/goods'
+import { fetchGoodsList } from '@/api/goods'
 type goodsType = {
   id: string
   pic: string
@@ -36,7 +36,7 @@ const getEventReservationList = () => {
     pageNum: 0,
     pageSize: 5,
   }
-  fetchRecommendGoodsList2(params)
+  fetchGoodsList(params)
     .then((r: any) => {
       list.value = r.data
     })

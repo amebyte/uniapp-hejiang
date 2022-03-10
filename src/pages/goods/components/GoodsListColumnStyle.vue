@@ -10,7 +10,7 @@
           <view class="wrap">
             <view class="label-wrap">
               <view class="label">藤茶采制</view>
-              <view class="label r">线下课程</view>
+              <view class="label r">{{ item.curriculum_type === 1 ? '线下课程' : '线上课程' }}</view>
             </view>
             <view class="title">{{ item.productName }}</view>
             <view class="row">

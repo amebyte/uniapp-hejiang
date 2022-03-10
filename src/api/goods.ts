@@ -2,35 +2,6 @@ import request from '@/utils/request'
 import { goodsType } from '@/types'
 
 /**
- * 精选课程
- *
- */
-export function fetchRecommendGoodsList2(data) {
-  return new Promise((resolve, reject) => {
-    request.get!('&r=api/default/goods-list', data, { noAuth: true })
-      .then((r) => {
-        if (r.code === 0) {
-          const data: goodsType[] = []
-          const list = r.data.list as any
-          list.map((o) => {
-            data.push({
-              id: o.id,
-              thumb: o.cover_pic,
-              productName: o.name,
-              marketPrice: o.price,
-              originalPrice: o.original_price,
-            })
-          })
-          resolve(data)
-        } else {
-          reject(r)
-        }
-      })
-      .catch((err) => console.log(err))
-  })
-}
-
-/**
  * 热搜商品
  *
  */
@@ -82,6 +53,9 @@ export function fetchGoodsList(data) {
               marketPrice: o.price,
               originalPrice: o.original_price,
               salesNum,
+              curriculum_content: JSON.parse(o.curriculum_content),
+              curriculum_datetime: JSON.parse(o.curriculum_datetime),
+              curriculum_type: o.curriculum_type,
             })
           })
           resolve(data)
@@ -128,6 +102,9 @@ export function fetchGoodsDetail(data) {
               skus: normalizeGoodsSkus(d.attr),
               attr: d.attr,
               cats: d.cats,
+              curriculum_content: JSON.parse(d.curriculum_content),
+              curriculum_datetime: JSON.parse(d.curriculum_datetime),
+              curriculum_type: d.curriculum_type,
             }
             return data
           }

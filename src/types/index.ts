@@ -13,4 +13,7 @@ export type goodsType = {
   originalPrice?: string
   salesNum?: string
   cats?: string[]
+  curriculum_content: any[]
+  curriculum_datetime: any[]
+  curriculum_type: number
 }
