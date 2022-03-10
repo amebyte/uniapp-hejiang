@@ -45,7 +45,7 @@ const props = defineProps({
       padding-top: 30rpx;
     }
     .list {
-      min-height: 200rpx;
+      min-height: 100rpx;
       .item {
         display: flex;
         justify-content: flex-start;
