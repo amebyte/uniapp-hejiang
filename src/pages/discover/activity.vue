@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <!--top-bar start-->
-    <view class="top-bar">
+    <view class="top-bar" style="display: none">
       <view class="search-icon">
         <text class="iconfont icon-search"></text>
       </view>
