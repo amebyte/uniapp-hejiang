@@ -54,7 +54,7 @@ export function fetchGoodsList(data) {
                 data.forEach((o) => {
                   teacherNames += o.name + ','
                 })
-              return teacherNames
+              return teacherNames.slice(0, teacherNames.length - 1)
             }
             data.push({
               id: o.id,
