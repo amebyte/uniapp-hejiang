@@ -21,4 +21,5 @@ export type goodsType = {
   curriculum_start_time?: string
   curriculum_end_time?: string
   sales?: number
+  subtitle?: string
 }

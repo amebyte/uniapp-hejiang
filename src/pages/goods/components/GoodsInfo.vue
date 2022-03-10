@@ -37,7 +37,7 @@
       <text class="txt">{{ goodsInfo.productName }}</text>
     </view>
     <view class="good-tags" style="padding-bottom: 20rpx">
-      <text class="txt">{{ goodsInfo.brief }}</text>
+      <text class="txt">{{ goodsInfo.subtitle }}</text>
     </view>
   </view>
 </template>

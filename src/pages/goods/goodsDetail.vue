@@ -349,6 +349,6 @@ export default defineComponent({
 <style lang="scss">
 @import '@/static/css/variable.scss';
 page {
-  background-color: $background-color;
+  background-color: $background-color !important;
 }
 </style>

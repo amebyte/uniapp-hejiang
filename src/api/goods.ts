@@ -124,6 +124,7 @@ export function fetchGoodsDetail(data) {
               curriculum_end_time: d.curriculum_datetime[1],
               teacherNames: normalizeTeacherNames(d.curriculum_content),
               sales: d.sales,
+              subtitle: d.subtitle,
             }
             return data
           }
