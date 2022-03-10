@@ -3,35 +3,29 @@
     <view class="content">
       <view class="title">授课老师</view>
       <view class="list">
-        <view class="item">
+        <view v-for="(item, index) in goodsInfo.curriculum_content" :key="index" class="item">
           <view class="l">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
+            <image :src="item.thumb" mode="scaleToFill"></image>
           </view>
           <view class="r">
-            <view class="name">黄XX老师</view>
-            <view class="desc">黄XX老师黄XX老师黄XX老师黄XX老师黄XX老师</view>
-          </view>
-        </view>
-        <view class="item">
-          <view class="l">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
-          <view class="r">
-            <view class="name">黄XX老师</view>
-            <view class="desc">黄XX老师黄XX老师黄XX老师黄XX老师黄XX老师</view>
+            <view class="name">{{ item.name }}</view>
+            <view class="desc">{{ item.info }}</view>
           </view>
         </view>
       </view>
     </view>
   </view>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+  goodsInfo: {
+    type: Object,
+    default: () => {
+      return {}
+    },
+  },
+})
+</script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
 .teacher-wrap {

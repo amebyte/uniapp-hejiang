@@ -8,11 +8,11 @@
     <!--商品信息 end-->
     <template v-if="isCurriculum">
       <!--课程信息 start-->
-      <GoodsCurriculum />
+      <GoodsCurriculum :goods-info="goodsInfo" />
       <!--课程信息 end-->
 
       <!--老师信息 start-->
-      <GoodsTeacher />
+      <GoodsTeacher :goods-info="goodsInfo" />
       <!--老师信息 end-->
     </template>
     <template v-else>

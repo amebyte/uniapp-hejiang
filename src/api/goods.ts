@@ -1,6 +1,15 @@
 import request from '@/utils/request'
 import { goodsType } from '@/types'
 
+const normalizeTeacherNames = (data) => {
+  let teacherNames = ''
+  data &&
+    data.forEach((o) => {
+      teacherNames += o.name + ','
+    })
+  return teacherNames.slice(0, teacherNames.length - 1)
+}
+
 /**
  * 热搜商品
  *
@@ -48,14 +57,6 @@ export function fetchGoodsList(data) {
             const salesNum = o.sales.replace('已售', '').replace(o.unit, '')
             const curriculumContentParse = o.curriculum_content && JSON.parse(o.curriculum_content)
             const curriculumDatetimeParse = o.curriculum_datetime && JSON.parse(o.curriculum_datetime)
-            const normalizeTeacherNames = (data) => {
-              let teacherNames = ''
-              data &&
-                data.forEach((o) => {
-                  teacherNames += o.name + ','
-                })
-              return teacherNames.slice(0, teacherNames.length - 1)
-            }
             data.push({
               id: o.id,
               thumb: o.cover_pic,
@@ -115,9 +116,12 @@ export function fetchGoodsDetail(data) {
               skus: normalizeGoodsSkus(d.attr),
               attr: d.attr,
               cats: d.cats,
-              curriculum_content: d.curriculum_content && JSON.parse(d.curriculum_content),
-              curriculum_datetime: d.curriculum_datetime && JSON.parse(d.curriculum_datetime),
+              curriculum_content: d.curriculum_content,
+              curriculum_datetime: d.curriculum_datetime,
               curriculum_type: d.curriculum_type,
+              curriculum_start_time: d.curriculum_datetime[0],
+              curriculum_end_time: d.curriculum_datetime[1],
+              teacherNames: normalizeTeacherNames(d.curriculum_content),
             }
             return data
           }

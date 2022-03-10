@@ -3,7 +3,7 @@
     <view class="content">
       <view class="item">
         <view class="label"> 开课时间： </view>
-        <view class="info">10月11日上午10:00 - 10月12日下午16:00</view>
+        <view class="info">{{ goodsInfo.curriculum_start_time }} - {{ goodsInfo.curriculum_end_time }}</view>
       </view>
       <view class="item">
         <view class="label"> 开课地点： </view>
@@ -15,7 +15,16 @@
     </view>
   </view>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+  goodsInfo: {
+    type: Object,
+    default: () => {
+      return {}
+    },
+  },
+})
+</script>
 <style scoped lang="scss">
 .goods-curriculum-wrap {
   margin: 20rpx;
