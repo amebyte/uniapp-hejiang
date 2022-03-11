@@ -1,3 +1,16 @@
+const date = new Date() //得到当前日期原始模式
+const currDay = date.getDate() // 得到当前日期
+const currMonth = date.getMonth() + 1 //得到当前日期月份（注意： getMonth()方法一月为 0, 二月为 1, 以此类推。）
+const currYear = date.getFullYear()
+
+export const getDateObj = () => {
+  return {
+    currDay: currDay < 10 ? '0' + currDay : currDay,
+    currMonth: currMonth < 10 ? '0' + currMonth : currMonth,
+    currYear,
+  }
+}
+
 /**
  * opt  object | string
  * to_url object | string

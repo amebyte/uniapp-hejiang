@@ -14,8 +14,8 @@
     <!--预约次数 start-->
     <view class="info-bar">
       <view class="date">
-        <view class="day">07</view>
-        <view class="year-month">/2022.06 <text class="iconfont icon-arrow-down"></text></view>
+        <view class="day">{{ currDay }}</view>
+        <view class="year-month">/{{ currYear }}.{{ currMonth }} <text class="iconfont icon-arrow-down"></text></view>
       </view>
       <view class="subscribe-num">已预约<text>1</text>场活动</view>
     </view>
@@ -29,21 +29,23 @@
     <!--日历 end-->
     <!--预约列表 start-->
     <view class="list">
-      <view class="item">
-        <view class="time">
-          <text class="iconfont icon-time"></text>
-          9:00-10:00
-        </view>
-        <view class="title"> 活动主题-活动标题名字活动标题名字活动标题名字活动标题名字活动标题名字活动标题名字 </view>
-        <view class="action">
-          <view class="l">
-            <text class="iconfont icon-people"></text>
-            限定 20 人
+      <block v-for="(item, index) in list" :key="index">
+        <view class="item">
+          <view class="time">
+            <text class="iconfont icon-time"></text>
+            {{ item.start_time }}-{{ item.end_time }}
           </view>
-          <view class="r">立即预约</view>
+          <view class="title">{{ item.title }}</view>
+          <view class="action">
+            <view class="l">
+              <text class="iconfont icon-people"></text>
+              限定 {{ item.max_num }} 人
+            </view>
+            <view class="r">立即预约</view>
+          </view>
         </view>
-      </view>
-      <view class="item full">
+      </block>
+      <view class="item full" style="display: none">
         <view class="time">
           <text class="iconfont icon-time"></text>
           9:00-10:00
@@ -63,8 +65,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
+import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import Calendar from '@/components/calendar/calendar.vue'
+import { fetchActivityList } from '@/api/activity'
+import { getDateObj } from '@/utils/util'
+
+const currDay = ref(getDateObj().currDay)
+const currMonth = ref(getDateObj().currMonth)
+const currYear = ref(getDateObj().currYear)
+
+let list = ref<Array<any>>([])
+const getEventReservationList = () => {
+  const params = {
+    pageNum: 0,
+    pageSize: 5,
+  }
+  fetchActivityList(params)
+    .then((data: any) => {
+      list.value = data
+    })
+    .catch((err) => console.log(err))
+}
+onMounted(() => {
+  getEventReservationList()
+})
 </script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
