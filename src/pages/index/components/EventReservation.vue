@@ -32,8 +32,8 @@ const getEventReservationList = () => {
     pageSize: 5,
   }
   fetchActivityList(params)
-    .then((r: any) => {
-      list.value = r.data.list
+    .then((data: any) => {
+      list.value = data
     })
     .catch((err) => console.log(err))
 }
