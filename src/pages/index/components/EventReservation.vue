@@ -8,9 +8,9 @@
             <image :src="item.pic"></image>
           </view>
           <view class="info">
-            <view class="name">{{ item.prodName }}</view>
+            <view class="name">{{ item.title }}</view>
             <view class="bottom">
-              <view class="date">2022-02-25</view>
+              <view class="date">{{ item.datetime }}</view>
               <view class="btn">预约</view>
             </view>
           </view>
@@ -23,26 +23,21 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
-import { fetchGoodsList } from '@/api/goods'
-type goodsType = {
-  id: string
-  pic: string
-  prodName: string
-  price: number
-}
-let list = ref<Array<goodsType>>([])
+import { fetchActivityList } from '@/api/activity'
+
+let list = ref<Array<any>>([])
 const getEventReservationList = () => {
   const params = {
     pageNum: 0,
     pageSize: 5,
   }
-  fetchGoodsList(params)
+  fetchActivityList(params)
     .then((r: any) => {
-      list.value = r.data
+      list.value = r.data.list
     })
     .catch((err) => console.log(err))
 }
-onLoad(() => {
+onMounted(() => {
   getEventReservationList()
 })
 </script>
