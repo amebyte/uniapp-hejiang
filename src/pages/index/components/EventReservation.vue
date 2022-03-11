@@ -5,7 +5,7 @@
       <block v-for="(item, index) in list" :key="index">
         <view class="item">
           <view class="image">
-            <image :src="item.pic"></image>
+            <image :src="item.thumb"></image>
           </view>
           <view class="info">
             <view class="name">{{ item.title }}</view>
@@ -17,7 +17,7 @@
         </view>
       </block>
     </view>
-    <view class="more">查看更多活动</view>
+    <view class="more" @click="gotoPage">查看更多活动</view>
   </view>
 </template>
 <script setup lang="ts">
@@ -40,6 +40,12 @@ const getEventReservationList = () => {
 onMounted(() => {
   getEventReservationList()
 })
+
+const gotoPage = () => {
+  uni.navigateTo({
+    url: '/pages/discover/activity',
+  })
+}
 </script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
