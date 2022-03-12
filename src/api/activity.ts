@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { store } from '@/store'
 
 /**
  * 活动列表
@@ -6,7 +7,8 @@ import request from '@/utils/request'
  */
 export function fetchActivityList(data) {
   return new Promise((resolve, reject) => {
-    request.get!('&r=api/activity/list', data, { noAuth: true })
+    const isLogin = store.state.app.token
+    request.get!('&r=api/activity/list', data, { noAuth: isLogin ? false : true })
       .then((r) => {
         if (r.code === 0) {
           const data = r.data.list.map((o) => {
