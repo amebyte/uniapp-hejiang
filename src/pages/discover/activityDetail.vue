@@ -5,13 +5,16 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import { fetchActivityBookingAdd } from '@/api/activity'
+import { Tips } from '@/utils/util'
 const id = ref('')
 const bookingAdd = () => {
   fetchActivityBookingAdd({
     activity_id: id.value,
   })
     .then((r) => {
-      console.log('booking', r)
+      if (r.code === 0) {
+        Tips(r.msg)
+      }
     })
     .catch((err) => console.log(err))
 }

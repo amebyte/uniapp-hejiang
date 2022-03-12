@@ -41,7 +41,7 @@
               <text class="iconfont icon-people"></text>
               限定 {{ item.max_num }} 人
             </view>
-            <view class="r">立即预约</view>
+            <view class="r" @click="gotoDetail(item)">立即预约</view>
           </view>
         </view>
       </block>
@@ -87,6 +87,13 @@ const getEventReservationList = () => {
     })
     .catch((err) => console.log(err))
 }
+
+const gotoDetail = (item) => {
+  uni.navigateTo({
+    url: '/pages/discover/activityDetail?id=' + item.id,
+  })
+}
+
 onMounted(() => {
   getEventReservationList()
 })

@@ -6,7 +6,7 @@ import request from '@/utils/request'
  */
 export function fetchActivityList(data) {
   return new Promise((resolve, reject) => {
-    request.get!('&r=api/default/activity-list', data, { noAuth: true })
+    request.get!('&r=api/activity/list', data, { noAuth: true })
       .then((r) => {
         if (r.code === 0) {
           const data = r.data.list.map((o) => {
