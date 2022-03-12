@@ -27,7 +27,7 @@ export function fetchActivityList(data) {
  *
  */
 export function fetchActivityDetail(data) {
-  return request.get!('&r=api/activity/detail', data, { noAuth: false }, true)
+  return request.get!('&r=api/activity/detail', data, { noAuth: false })
 }
 
 /**

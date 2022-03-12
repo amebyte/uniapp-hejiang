@@ -87,7 +87,7 @@ export function fetchGoodsList(data) {
  */
 export function fetchGoodsDetail(data) {
   return new Promise((resolve, reject) => {
-    request.get!('&r=api/goods/detail&id=2&plugin=mall', data, { noAuth: true })
+    request.get!('&r=api/goods/detail&plugin=mall', data, { noAuth: true })
       .then((r) => {
         if (r.code === 0) {
           const d = r.data.goods

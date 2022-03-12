@@ -4,7 +4,7 @@ export const IMAGE_URL = '' // 静态资源的cos地址
 
 // export const HTTP_REQUEST_URL = process.uniEnv.HTTP_REQUEST_URL
 // export const HTTP_REQUEST_URL = 'https://mall.fsbaide.cn/'
-export const HTTP_REQUEST_URL = 'https://kaizhuo.eadts.cn/'
+export const HTTP_REQUEST_URL = 'https://kaizhuo.eadts.cn'
 
 export const HEADER = {
   'content-type': 'application/json',

@@ -16,7 +16,9 @@ const bookingAdd = () => {
   })
     .then((r) => {
       if (r.code === 0) {
-        Tips(r.msg)
+        Tips({ title: r.msg })
+      } else {
+        Tips({ title: r.msg })
       }
     })
     .catch((err) => console.log(err))
@@ -32,9 +34,12 @@ const getDetail = () => {
     .catch((err) => console.log(err))
 }
 
+onShow(() => {
+  getDetail()
+})
+
 onLoad((options) => {
   id.value = options.id as string
-  getDetail()
 })
 </script>
 <style lang="scss">
