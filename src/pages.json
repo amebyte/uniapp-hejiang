@@ -74,6 +74,13 @@
             "navigationBarTitleText": "活动中心",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "activityDetail",
+          "style": {
+            "navigationBarTitleText": "活动详情",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     },

@@ -11,7 +11,7 @@
             <view class="name">{{ item.title }}</view>
             <view class="bottom">
               <view class="date">{{ item.datetime }}</view>
-              <view class="btn">预约</view>
+              <view class="btn" @click="gotoDetail(item)">预约</view>
             </view>
           </view>
         </view>
@@ -44,6 +44,11 @@ onMounted(() => {
 const gotoPage = () => {
   uni.navigateTo({
     url: '/pages/discover/activity',
+  })
+}
+const gotoDetail = (item) => {
+  uni.navigateTo({
+    url: '/pages/discover/activityDetail?id=' + item.id,
   })
 }
 </script>

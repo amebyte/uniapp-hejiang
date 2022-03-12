@@ -21,3 +21,11 @@ export function fetchActivityList(data) {
       .catch((err) => console.log(err))
   })
 }
+
+/**
+ * 新增活动预约
+ *
+ */
+export function fetchActivityBookingAdd(data) {
+  return request.post!('&r=api/activity-booking/add', data, { noAuth: false }, true)
+}
