@@ -29,7 +29,15 @@ export function fetchActivityList(data) {
  *
  */
 export function fetchActivityDetail(data) {
-  return request.get!('&r=api/activity/detail', data, { noAuth: false })
+  return request.get!('&r=api/activity/detail', data, { noAuth: true })
+}
+
+/**
+ * 获取我已经预约的活动数
+ *
+ */
+export function fetchMyActivityBookCount() {
+  return request.get!('&r=api/activity-booking/my-book-count', {}, { noAuth: false })
 }
 
 /**

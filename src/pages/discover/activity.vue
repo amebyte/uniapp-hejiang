@@ -17,7 +17,10 @@
         <view class="day">{{ currDay }}</view>
         <view class="year-month">/{{ currYear }}.{{ currMonth }} <text class="iconfont icon-arrow-down"></text></view>
       </view>
-      <view class="subscribe-num">已预约<text>1</text>场活动</view>
+      <view class="subscribe-num"
+        >已预约<text>{{ myBookCount }}</text
+        >场活动</view
+      >
     </view>
     <!--预约次数 end-->
     <!--日历 start-->
@@ -68,7 +71,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import Calendar from '@/components/calendar/calendar.vue'
-import { fetchActivityList } from '@/api/activity'
+import { fetchActivityList, fetchMyActivityBookCount } from '@/api/activity'
 import { getDateObj } from '@/utils/util'
 
 const currDay = ref(getDateObj().currDay)
@@ -87,6 +90,16 @@ const getEventReservationList = () => {
     })
     .catch((err) => console.log(err))
 }
+const myBookCount = ref(0)
+const getMyActivityBookCount = () => {
+  fetchMyActivityBookCount()
+    .then((r) => {
+      if (r.code === 0) {
+        myBookCount.value = r.data.book_count
+      }
+    })
+    .catch((err) => console.log(err))
+}
 
 const gotoDetail = (item) => {
   uni.navigateTo({
@@ -96,6 +109,7 @@ const gotoDetail = (item) => {
 
 onMounted(() => {
   getEventReservationList()
+  getMyActivityBookCount()
 })
 </script>
 <style lang="scss">
