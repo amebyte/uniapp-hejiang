@@ -23,6 +23,14 @@ export function fetchActivityList(data) {
 }
 
 /**
+ * 活动详情
+ *
+ */
+export function fetchActivityDetail(data) {
+  return request.get!('&r=api/activity/detail', data, { noAuth: false }, true)
+}
+
+/**
  * 新增活动预约
  *
  */
