@@ -46,7 +46,7 @@
 </template>
 
 <script lang="ts">
-import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs, onMounted } from 'vue'
+import { ref, getCurrentInstance, reactive, toRef, watch, defineComponent, toRefs, onMounted } from 'vue'
 const MODES = {
   normal: 'normal',
   picker: 'picker',
@@ -216,6 +216,7 @@ export default defineComponent({
             element.clickable = false
           }
         }
+        console.log('props.dotDays.includes(element.id)', props.dotDays.includes(element.id))
         if (props.dotDays.includes(element.id)) {
           element.showDot = true
           element.dotColor = props.dotColor
@@ -247,13 +248,15 @@ export default defineComponent({
         if (element.id == selectedDate || element.id == beginDate || element.id == endDate) {
           element.className = state.selectedClassName
         }
-        element.style = getStyleById(element.id)
-        const param = getParamById(element.id)
-        element.showSubNum = param.showSubNum
-        element.subNum = param.subNum
-        element.subStyle = param.subStyle
-        element.showDot = param.showDot
-        element.dotColor = param.dotColor
+        if (props.daysStyle.length > 0) {
+          element.style = getStyleById(element.id)
+          const param = getParamById(element.id)
+          element.showSubNum = param.showSubNum
+          element.subNum = param.subNum
+          element.subStyle = param.subStyle
+          element.showDot = param.showDot
+          element.dotColor = param.dotColor
+        }
       })
       let title = `${year}年 ${month}月`
       switch (props.language) {
@@ -443,6 +446,32 @@ export default defineComponent({
       state.selectedClassName = selectedClassName
       refreshCalendar()
     })
+
+    watch(
+      () => props.daysStyle,
+      (nVal, oVal) => {
+        if (state.initFinished) {
+          refreshCalendar()
+        }
+      },
+      {
+        immediate: true,
+        deep: true,
+      }
+    )
+
+    watch(
+      () => props.dotDays,
+      (nVal, oVal) => {
+        if (state.initFinished) {
+          refreshCalendar()
+        }
+      },
+      {
+        immediate: true,
+        deep: true,
+      }
+    )
 
     return {
       ...toRefs(state),

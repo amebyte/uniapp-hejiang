@@ -133,6 +133,8 @@
 }
 
 .content-sub {
+    position: absolute;
+    bottom: 0;
     font-size: 8pt;
     display: flex;
     justify-content: center;
