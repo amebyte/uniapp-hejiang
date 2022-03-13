@@ -44,7 +44,7 @@
               <text class="iconfont icon-people"></text>
               限定 {{ item.max_num }} 人
             </view>
-            <view class="r" @click="gotoDetail(item)">立即预约</view>
+            <view class="r" @click="gotoDetail(item)">{{ item.is_booked ? '预约成功' : '立即预约' }}</view>
           </view>
         </view>
       </block>
