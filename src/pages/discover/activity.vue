@@ -28,7 +28,9 @@
       <Calendar />
     </view>
     <!--日历 end-->
-    <view class="activity-sessions"> - 当天共 <text>3</text> 场活动 - </view>
+    <view class="activity-sessions">
+      - 当天共 <text>{{ pagination.total_count }}</text> 场活动 -
+    </view>
     <!--日历 end-->
     <!--预约列表 start-->
     <view class="list">
@@ -77,16 +79,20 @@ import { getDateObj } from '@/utils/util'
 const currDay = ref(getDateObj().currDay)
 const currMonth = ref(getDateObj().currMonth)
 const currYear = ref(getDateObj().currYear)
+const date = `${currYear.value}-${currMonth.value}-${currDay.value}`
 
-let list = ref<Array<any>>([])
+const list = ref<Array<any>>([])
+const pagination = ref({}) as any
 const getEventReservationList = () => {
   const params = {
-    pageNum: 0,
-    pageSize: 5,
+    page: 1,
+    limit: 10,
+    date,
   }
   fetchActivityList(params)
     .then((data: any) => {
-      list.value = data
+      list.value = data.list
+      pagination.value = data.pagination
     })
     .catch((err) => console.log(err))
 }

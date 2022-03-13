@@ -11,11 +11,11 @@ export function fetchActivityList(data) {
     request.get!('&r=api/activity/list', data, { noAuth: isLogin ? false : true })
       .then((r) => {
         if (r.code === 0) {
-          const data = r.data.list.map((o) => {
+          const list = r.data.list.map((o) => {
             o.datetime = o.datetime.slice(0, 10)
             return o
           })
-          resolve(data)
+          resolve({ list, pagination: r.data.pagination })
         } else {
           reject(r)
         }
