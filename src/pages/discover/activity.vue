@@ -25,7 +25,7 @@
     <!--预约次数 end-->
     <!--日历 start-->
     <view class="calendar-wrap">
-      <Calendar />
+      <Calendar @onDayClick="onDayClick" @onMonthChange="onMonthChange" />
     </view>
     <!--日历 end-->
     <view class="activity-sessions">
@@ -83,7 +83,7 @@ const date = `${currYear.value}-${currMonth.value}-${currDay.value}`
 
 const list = ref<Array<any>>([])
 const pagination = ref({}) as any
-const getEventReservationList = () => {
+const getEventReservationList = (date) => {
   const params = {
     page: 1,
     limit: 10,
@@ -113,8 +113,19 @@ const gotoDetail = (item) => {
   })
 }
 
+const onDayClick = (event) => {
+  getEventReservationList(event.id)
+}
+
+const onMonthChange = (event) => {
+  const date = new Date(event) //得到当前日期原始模式
+  const currDay = date.getDate() // 得到当前日期
+  const currMonth = date.getMonth() + 1 //得到当前日期月份（注意： getMonth()方法一月为 0, 二月为 1, 以此类推。）
+  const currentYear = date.getFullYear()
+}
+
 onMounted(() => {
-  getEventReservationList()
+  getEventReservationList(date)
   getMyActivityBookCount()
 })
 </script>
