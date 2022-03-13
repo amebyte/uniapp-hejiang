@@ -27,6 +27,7 @@
     <view class="calendar-wrap">
       <Calendar @onDayClick="onDayClick" @onMonthChange="onMonthChange" />
     </view>
+    <view class="toggle-arrow"><text class="iconfont icon-arrow-down"></text></view>
     <!--日历 end-->
     <view class="activity-sessions">
       - 当天共 <text>{{ pagination.total_count }}</text> 场活动 -
@@ -203,13 +204,26 @@ onMounted(() => {
     }
   }
   .calendar-wrap {
-    background: #ffffff;
+    background-color: #fff;
     box-shadow: 0px 0px 14rpx 6rpx rgba(29, 233, 182, 0.11);
-    border-radius: 20rpx;
+    border-top-left-radius: 20rpx;
+    border-top-right-radius: 20rpx;
     margin-top: 40rpx;
-    margin-bottom: 40rpx;
     height: 280rpx;
     overflow: hidden;
+  }
+  .toggle-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-bottom-left-radius: 20rpx;
+    border-bottom-right-radius: 20rpx;
+    padding-top: 10rpx;
+    padding-bottom: 10rpx;
+    .iconfont {
+      font-size: 42rpx;
+    }
   }
   .activity-sessions {
     text-align: center;
