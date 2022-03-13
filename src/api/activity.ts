@@ -2,6 +2,28 @@ import request from '@/utils/request'
 import { store } from '@/store'
 
 /**
+ * 月活动标记
+ *
+ */
+export function fetchActivityDoByMonth(data) {
+  return new Promise((resolve, reject) => {
+    request.get!('&r=api/activity/dot-by-month', data, { noAuth: true })
+      .then((r) => {
+        if (r.code === 0) {
+          const list = r.data.list.map((o) => {
+            o.datetime = o.datetime.slice(0, 10)
+            return o
+          })
+          resolve({ list, pagination: r.data.pagination })
+        } else {
+          reject(r)
+        }
+      })
+      .catch((err) => console.log(err))
+  })
+}
+
+/**
  * 活动列表
  *
  */

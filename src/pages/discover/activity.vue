@@ -76,13 +76,14 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import Calendar from '@/components/calendar/calendar.vue'
-import { fetchActivityList, fetchMyActivityBookCount } from '@/api/activity'
+import { fetchActivityList, fetchMyActivityBookCount, fetchActivityDoByMonth } from '@/api/activity'
 import { getDateObj } from '@/utils/util'
 
 const currDay = ref(getDateObj().currDay)
 const currMonth = ref(getDateObj().currMonth)
 const currYear = ref(getDateObj().currYear)
 const date = `${currYear.value}-${currMonth.value}-${currDay.value}`
+const yearMonth = `${currYear.value}-${currMonth.value}`
 
 const list = ref<Array<any>>([])
 const pagination = ref({}) as any
@@ -96,6 +97,19 @@ const getEventReservationList = (date) => {
     .then((data: any) => {
       list.value = data.list
       pagination.value = data.pagination
+    })
+    .catch((err) => console.log(err))
+}
+
+const getActivityDoByMonth = (date) => {
+  const params = {
+    page: 1,
+    limit: 100,
+    date,
+  }
+  fetchActivityDoByMonth(params)
+    .then((r) => {
+      console.log('rrr', r)
     })
     .catch((err) => console.log(err))
 }
@@ -125,6 +139,8 @@ const onMonthChange = (event) => {
   const currDay = date.getDate() // 得到当前日期
   const currMonth = date.getMonth() + 1 //得到当前日期月份（注意： getMonth()方法一月为 0, 二月为 1, 以此类推。）
   const currentYear = date.getFullYear()
+  const currYearMontch = `${currentYear}-${currMonth < 10 ? '0' + currMonth : currMonth}`
+  getActivityDoByMonth(currYearMontch)
 }
 
 const isToggleArrow = ref(true)
@@ -134,6 +150,7 @@ const toggleArrow = () => {
 
 onMounted(() => {
   getEventReservationList(date)
+  getActivityDoByMonth(yearMonth)
   getMyActivityBookCount()
 })
 </script>
@@ -216,10 +233,9 @@ onMounted(() => {
     border-top-left-radius: 20rpx;
     border-top-right-radius: 20rpx;
     margin-top: 40rpx;
-
+    overflow: hidden;
     &.hide {
       height: 280rpx;
-      overflow: hidden;
     }
   }
   .toggle-arrow {
