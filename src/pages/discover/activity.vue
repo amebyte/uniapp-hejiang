@@ -25,7 +25,7 @@
     <!--预约次数 end-->
     <!--日历 start-->
     <view class="calendar-wrap" :class="isToggleArrow ? 'hide' : ''">
-      <Calendar @onDayClick="onDayClick" @onMonthChange="onMonthChange" />
+      <Calendar :days-style="daysStyle" @onDayClick="onDayClick" @onMonthChange="onMonthChange" />
     </view>
     <view class="toggle-arrow" @click="toggleArrow"
       ><text class="iconfont" :class="isToggleArrow ? 'icon-arrow-down' : 'icon-arrow-up'"></text
@@ -101,6 +101,7 @@ const getEventReservationList = (date) => {
     .catch((err) => console.log(err))
 }
 
+const daysStyle = ref([]) as any
 const getActivityDoByMonth = (date) => {
   const params = {
     page: 1,
@@ -108,8 +109,16 @@ const getActivityDoByMonth = (date) => {
     date,
   }
   fetchActivityDoByMonth(params)
-    .then((r) => {
-      console.log('rrr', r)
+    .then((data: any) => {
+      data.list.forEach((v) => {
+        daysStyle.value.push({
+          id: v.datetime,
+          style: 'border: 1px solid #90B1EF; border-radius: 30px;',
+          showSubNum: true,
+          subNum: v.count_num,
+          subStyle: 'color: #fff; background-color: #E60012;',
+        })
+      })
     })
     .catch((err) => console.log(err))
 }
