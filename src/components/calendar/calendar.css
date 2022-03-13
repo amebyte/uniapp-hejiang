@@ -76,17 +76,17 @@
 }
 
 .day-header {
-    color: #000;
+    color: #009688;
     font-size: 12pt;
 }
 
 .day-current-month {
-    color: #000;
+    color: #009688;
 }
 
 .today {
     color: #fff;
-    background-color: #91b2ef;
+    background-color: #009688;
     font-weight: bold;
     border-radius: 30px;
 }
@@ -160,13 +160,13 @@
 }
 
 .day-selected-round {
-    background: #28f;
+    background: #009688;
     color: #fff;
     border-radius: 30px;
 }
 
 .day-selected-square {
-    background: #28f;
+    background: #009688;
     color: #fff;
     border-radius: 3px;
 }

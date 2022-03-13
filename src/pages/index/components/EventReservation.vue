@@ -28,12 +28,12 @@ import { fetchActivityList } from '@/api/activity'
 let list = ref<Array<any>>([])
 const getEventReservationList = () => {
   const params = {
-    pageNum: 0,
-    pageSize: 5,
+    page: 1,
+    limit: 5,
   }
   fetchActivityList(params)
     .then((data: any) => {
-      list.value = data
+      list.value = data.list
     })
     .catch((err) => console.log(err))
 }
