@@ -24,10 +24,12 @@
     </view>
     <!--预约次数 end-->
     <!--日历 start-->
-    <view class="calendar-wrap">
+    <view class="calendar-wrap" :class="isToggleArrow ? 'hide' : ''">
       <Calendar @onDayClick="onDayClick" @onMonthChange="onMonthChange" />
     </view>
-    <view class="toggle-arrow"><text class="iconfont icon-arrow-down"></text></view>
+    <view class="toggle-arrow" @click="toggleArrow"
+      ><text class="iconfont" :class="isToggleArrow ? 'icon-arrow-down' : 'icon-arrow-up'"></text
+    ></view>
     <!--日历 end-->
     <view class="activity-sessions">
       - 当天共 <text>{{ pagination.total_count }}</text> 场活动 -
@@ -125,6 +127,11 @@ const onMonthChange = (event) => {
   const currentYear = date.getFullYear()
 }
 
+const isToggleArrow = ref(true)
+const toggleArrow = () => {
+  isToggleArrow.value = !isToggleArrow.value
+}
+
 onMounted(() => {
   getEventReservationList(date)
   getMyActivityBookCount()
@@ -209,8 +216,11 @@ onMounted(() => {
     border-top-left-radius: 20rpx;
     border-top-right-radius: 20rpx;
     margin-top: 40rpx;
-    height: 280rpx;
-    overflow: hidden;
+
+    &.hide {
+      height: 280rpx;
+      overflow: hidden;
+    }
   }
   .toggle-arrow {
     display: flex;
