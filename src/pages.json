@@ -46,7 +46,7 @@
       }
     },
     {
-      "path": "pages/discover-home/index",
+      "path": "pages/discover/index",
       "style": {
         "navigationBarTitleText": "发现首页"
       }
@@ -178,7 +178,7 @@
         "text": "商城"
       },
       {
-        "pagePath": "pages/discover-home/index",
+        "pagePath": "pages/discover/index",
         "iconPath": "static/images/footer-bar-discover-icon.png",
         "selectedIconPath": "static/images/footer-bar-discover-icon-on.png",
         "text": "发现"
