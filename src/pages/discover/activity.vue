@@ -53,20 +53,6 @@
           </view>
         </view>
       </block>
-      <view class="item full" style="display: none">
-        <view class="time">
-          <text class="iconfont icon-time"></text>
-          9:00-10:00
-        </view>
-        <view class="title"> 活动主题-活动标题名字活动标题名字活动标题名字活动标题名字活动标题名字活动标题名字 </view>
-        <view class="action">
-          <view class="l">
-            <text class="iconfont icon-people"></text>
-            限定 20 人
-          </view>
-          <view class="r">人数已满</view>
-        </view>
-      </view>
     </view>
     <!--预约列表 end-->
   </view>
