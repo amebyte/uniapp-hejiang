@@ -38,8 +38,8 @@ page {
     padding-right: 20rpx;
     margin-bottom: 20rpx;
     .item {
-      padding-top: 20rpx;
-      padding-bottom: 20rpx;
+      padding-top: 40rpx;
+      padding-bottom: 40rpx;
       background-color: #fff;
       box-shadow: 0px 0px 14px 6px rgba(29, 233, 182, 0.11);
       border-radius: 20px;
