@@ -66,17 +66,17 @@
   ],
   "subPackages": [
     {
-      "root": "pages/discover",
+      "root": "pages/activity",
       "pages": [
         {
-          "path": "activity",
+          "path": "index",
           "style": {
             "navigationBarTitleText": "活动中心",
             "enablePullDownRefresh": false
           }
         },
         {
-          "path": "activityDetail",
+          "path": "detail",
           "style": {
             "navigationBarTitleText": "活动详情",
             "enablePullDownRefresh": false
