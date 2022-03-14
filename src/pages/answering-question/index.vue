@@ -38,13 +38,13 @@ page {
     padding-right: 20rpx;
     margin-bottom: 20rpx;
     .item {
-      padding-top: 60rpx;
-      padding-bottom: 60rpx;
+      padding-top: 20rpx;
+      padding-bottom: 20rpx;
       background-color: #fff;
       box-shadow: 0px 0px 14px 6px rgba(29, 233, 182, 0.11);
       border-radius: 20px;
-      margin-top: 10rpx;
-      margin-bottom: 10rpx;
+      margin-top: 20rpx;
+      margin-bottom: 20rpx;
       .question-box {
         display: flex;
         padding-bottom: 20rpx;
