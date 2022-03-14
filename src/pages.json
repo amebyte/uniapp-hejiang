@@ -81,6 +81,13 @@
             "navigationBarTitleText": "活动详情",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "myBooking",
+          "style": {
+            "navigationBarTitleText": "我的预约",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     },
