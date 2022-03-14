@@ -85,6 +85,25 @@
       ]
     },
     {
+      "root": "pages/answering-question",
+      "pages": [
+        {
+          "path": "index",
+          "style": {
+            "navigationBarTitleText": "答疑列表",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "detail",
+          "style": {
+            "navigationBarTitleText": "答疑详情",
+            "enablePullDownRefresh": false
+          }
+        }
+      ]
+    },
+    {
       "root": "pages/order",
       "pages": [
         {

@@ -33,10 +33,21 @@
         </view>
       </view>
     </view>
-    <view class="more">查看更多答疑</view>
+    <view class="more" @click="gotoPage">查看更多答疑</view>
   </view>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const gotoPage = () => {
+  uni.navigateTo({
+    url: '/pages/answering-question/index',
+  })
+}
+const gotoDetail = (item) => {
+  uni.navigateTo({
+    url: '/pages/activity/detail?id=' + item.id,
+  })
+}
+</script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
 .wrapper {
