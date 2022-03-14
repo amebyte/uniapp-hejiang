@@ -38,7 +38,7 @@
     <!--预约列表 start-->
     <view class="list">
       <block v-for="(item, index) in list" :key="index">
-        <view class="item">
+        <view class="item" :class="item.book_count === item.max_num ? 'full' : ''">
           <view class="time">
             <text class="iconfont icon-time"></text>
             {{ item.start_time }}-{{ item.end_time }}
@@ -49,7 +49,7 @@
               <text class="iconfont icon-people"></text>
               限定 {{ item.max_num }} 人
             </view>
-            <view class="r" @click="gotoDetail(item)">{{ item.is_booked ? '预约成功' : '立即预约' }}</view>
+            <view class="r" @click="gotoDetail(item)">{{ renderBtnText(item) }}</view>
           </view>
         </view>
       </block>
@@ -135,6 +135,10 @@ const gotoDetail = (item) => {
 }
 
 const onDayClick = (event) => {
+  const dayArr = event.id.split('-')
+  currYear.value = dayArr[0]
+  currMonth.value = dayArr[1]
+  currDay.value = dayArr[2]
   getEventReservationList(event.id)
 }
 
@@ -145,6 +149,19 @@ const onMonthChange = (event) => {
   const currentYear = date.getFullYear()
   const currYearMontch = `${currentYear}-${currMonth < 10 ? '0' + currMonth : currMonth}`
   getActivityDoByMonth(currYearMontch)
+}
+
+const renderBtnText = (item) => {
+  let txt = ''
+  if (item.book_count === item.max_num) {
+    txt = '人数已满'
+  } else if (item.is_booked) {
+    txt = '预约成功'
+  } else {
+    txt = '立即预约'
+  }
+
+  return txt
 }
 
 const isToggleArrow = ref(true)
