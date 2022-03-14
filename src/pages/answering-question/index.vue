@@ -11,6 +11,16 @@
           <view class="content">水培是什么意思？</view>
         </view>
       </view>
+      <view class="item">
+        <view class="question-box">
+          <view class="label"><view class="text">问</view></view>
+          <view class="content">水培是什么意思？</view>
+        </view>
+        <view class="answers-box">
+          <view class="label"><view class="text">答</view></view>
+          <view class="content">水培是什么意思？</view>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -19,6 +29,9 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 </script>
 <style lang="scss">
+page {
+  background-color: #ebfffd;
+}
 .container {
   .list {
     padding-left: 20rpx;
@@ -27,7 +40,11 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue
     .item {
       padding-top: 60rpx;
       padding-bottom: 60rpx;
-      border-bottom: 3rpx solid #abf5ee;
+      background-color: #fff;
+      box-shadow: 0px 0px 14px 6px rgba(29, 233, 182, 0.11);
+      border-radius: 20px;
+      margin-top: 10rpx;
+      margin-bottom: 10rpx;
       .question-box {
         display: flex;
         padding-bottom: 20rpx;

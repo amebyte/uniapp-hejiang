@@ -97,8 +97,7 @@ export default defineComponent({
         {
           url: '../../static/images/skip/AAndQ.png',
           title: '答疑',
-          path: '/pages/discover/index',
-          switchTab: true,
+          path: '/pages/answering-question/index',
         },
         {
           url: '../../static/images/skip/brand.png',
