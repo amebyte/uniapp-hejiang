@@ -97,7 +97,7 @@
         {
           "path": "index",
           "style": {
-            "navigationBarTitleText": "答疑列表",
+            "navigationBarTitleText": "专家答疑",
             "enablePullDownRefresh": false
           }
         },

@@ -17,7 +17,7 @@
         <view class="day">{{ currDay }}</view>
         <view class="year-month">/{{ currYear }}.{{ currMonth }} <text class="iconfont icon-arrow-down"></text></view>
       </view>
-      <view class="subscribe-num"
+      <view class="subscribe-num" @click="gotoMyBooking"
         >已预约<text>{{ myBookCount }}</text
         >场活动</view
       >
@@ -117,6 +117,12 @@ const getMyActivityBookCount = () => {
 const gotoDetail = (item) => {
   uni.navigateTo({
     url: '/pages/activity/detail?id=' + item.id,
+  })
+}
+
+const gotoMyBooking = () => {
+  uni.navigateTo({
+    url: '/pages/activity/myBooking',
   })
 }
 

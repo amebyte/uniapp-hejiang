@@ -129,7 +129,7 @@
           <text class="iconfont icon-data icon"></text>
           <text>修改资料</text>
         </view>
-        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
+        <view class="box-item col-3" @click="toPage('/pages/my/address')">
           <text class="iconfont icon-address icon"></text>
           <text>收货地址</text>
         </view>

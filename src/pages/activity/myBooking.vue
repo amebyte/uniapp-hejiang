@@ -29,14 +29,9 @@
             <view v-for="(item, index2) in tab.data" :key="index2" class="list-item">
               <view class="item-number">
                 <text>预约编号：{{ item.order_no }}</text>
-                <template v-if="item.status == 0">
-                  <text v-if="item.sign == 'pintuan'">{{ item.is_pay == 1 ? '拼团中' : '待付款' }}</text>
-                </template>
-                <template v-else>
-                  <view>{{ item.status_text }}</view>
-                </template>
+                <view>{{ item.activity.status_text }}</view>
               </view>
-              <view class="list-item-content" @click="toDetail(item.id, item.sign)">
+              <view class="list-item-content" @click="toDetail(item.activity.id)">
                 <view>
                   <view class="flex">
                     <view class="product-img">
@@ -50,6 +45,9 @@
                         <text>
                           {{ item.activity.datetime }} {{ item.activity.start_time }}-{{ item.activity.end_time }}
                         </text>
+                      </view>
+                      <view class="product-num">
+                        <text class="font-color">限定{{ item.activity.max_num }}人</text>
                       </view>
                     </view>
                   </view>
@@ -220,9 +218,9 @@ export default defineComponent({
     /**
      * 订单详情
      */
-    const toDetail = (id, sign) => {
+    const toDetail = (id) => {
       uni.navigateTo({
-        url: `/pages/order/detail?id=${id}&sign=${sign}`,
+        url: `/pages/activity/detail?id=${id}`,
       })
     }
 
@@ -487,6 +485,7 @@ export default defineComponent({
   }
 
   .product-num {
+    font-size: 26rpx;
     display: flex;
     justify-content: space-between;
   }

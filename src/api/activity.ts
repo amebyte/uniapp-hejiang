@@ -64,6 +64,19 @@ export function fetchActivityBookingList(data) {
       .then((r) => {
         if (r.code === 0) {
           const list = r.data.list.map((o) => {
+            const nowTime = new Date().getTime()
+            const date_start_time = new Date(o.activity.date_start_time).getTime()
+            const date_end_time = new Date(o.activity.date_end_time).getTime()
+            // 进行中
+            if (date_start_time <= nowTime && date_end_time > nowTime) {
+              o.activity['status_text'] = '进行中'
+              // 未开始
+            } else if (date_start_time > nowTime) {
+              o.activity['status_text'] = '未开始'
+              // 已过期
+            } else if (date_end_time < nowTime) {
+              o.activity['status_text'] = '已过期'
+            }
             o.activity['datetime'] = o.activity.date_start_time.slice(0, 10)
             return o
           })
