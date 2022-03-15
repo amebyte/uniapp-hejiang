@@ -46,6 +46,11 @@
                       <view class="product-name">
                         {{ item.activity.title }}
                       </view>
+                      <view class="product-tag">
+                        <text>
+                          {{ item.activity.datetime }} {{ item.activity.start_time }}-{{ item.activity.end_time }}
+                        </text>
+                      </view>
                     </view>
                   </view>
                 </view>
@@ -131,14 +136,14 @@ export default defineComponent({
         }
         if (state.tabIndex) params.status = state.tabBars[state.tabIndex].status
         fetchActivityBookingList(params)
-          .then((res) => {
+          .then((res: any) => {
             activeTab.isLoading = false
             if (res.code === 0) {
-              activeTab.data = activeTab.data.concat(res.data.list)
-              activeTab.total = res.data.totalElements
+              activeTab.data = activeTab.data.concat(res.list)
+              activeTab.total = res.pagination.total_count
               activeTab.pageNum++
               state.refeshloading = false
-              if (activeTab.total <= activeTab.data.length || res.data.totalElements === 0) {
+              if (activeTab.total <= activeTab.data.length || res.pagination.total_count === 0) {
                 activeTab.allData = true
                 activeTab.loadingText = '没有更多了'
                 state.key++

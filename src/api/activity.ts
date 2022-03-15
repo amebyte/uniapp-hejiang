@@ -59,7 +59,21 @@ export function fetchActivityDetail(data) {
  *
  */
 export function fetchActivityBookingList(data) {
-  return request.get!('&r=api/activity-booking/list', data, { noAuth: false })
+  return new Promise((resolve, reject) => {
+    request.get!('&r=api/activity-booking/list', data, { noAuth: false })
+      .then((r) => {
+        if (r.code === 0) {
+          const list = r.data.list.map((o) => {
+            o.activity['datetime'] = o.activity.date_start_time.slice(0, 10)
+            return o
+          })
+          resolve({ code: r.code, list, pagination: r.data.pagination })
+        } else {
+          reject(r)
+        }
+      })
+      .catch((err) => console.log(err))
+  })
 }
 
 /**
