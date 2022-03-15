@@ -80,7 +80,7 @@
                     <template v-if="item.status == 1">
                       <!-- 待收货-->
                       <template v-if="item.is_confirm == 0">
-                        <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
+                        <view v-if="isShowExpressButton(item)" class="order-btn">物流 </view>
                         <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
                           >确认收货
                         </view>
@@ -117,7 +117,7 @@
                       </template>
                       <!-- 待收货-->
                       <template v-if="item.is_pay == 1 && item.is_confirm == 0 && item.sign != 'community'">
-                        <view v-if="isShowExpressButton(item)" class="order-btn" @click="logistics(item)">物流 </view>
+                        <view v-if="isShowExpressButton(item)" class="order-btn">物流 </view>
                         <view v-if="item.is_send == 1 && item.is_confirm == 0" class="order-btn" @click="confirm(item)"
                           >确认收货</view
                         >
@@ -149,7 +149,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { fetchOrderList } from '@/api/order'
+import { fetchActivityBookingList } from '@/api/activity'
 import { orderStatusEnum } from '@/utils/constant'
 import { Debounce } from '@/utils/util'
 import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
@@ -210,7 +210,7 @@ export default defineComponent({
           status: 0,
         }
         if (state.tabIndex) params.status = state.tabBars[state.tabIndex].status
-        fetchOrderList(params)
+        fetchActivityBookingList(params)
           .then((res) => {
             activeTab.isLoading = false
             if (res.code === 0) {
@@ -283,43 +283,6 @@ export default defineComponent({
       return false
     }
 
-    // 物流信息
-    const logistics = (orderDetail) => {
-      if (orderDetail.is_send == 1 && orderDetail.detailExpress.length == 0) {
-        // 兼容
-        let [id, express, express_no, customer_name, cover_pic] = [
-          orderDetail.id,
-          orderDetail.express,
-          orderDetail.express_no,
-          orderDetail.customer_name,
-          orderDetail.detail[0].goods_info.pic_url,
-        ]
-        uni.navigateTo({
-          url: `/pages/order/express-detail/express-detail?id=${id}&express=${express}&express_no=${express_no}&customer_name=${customer_name}&cover_pic=${cover_pic}`,
-        })
-      } else if (orderDetail.is_send == 1 && orderDetail.detailExpress.length == 1 && orderDetail.send_type != 2) {
-        let express = orderDetail.detailExpress[0].express
-        let express_no = orderDetail.detailExpress[0].express_no
-        let customer_name = orderDetail.detailExpress[0].customer_name
-        let cover_pic = orderDetail.detailExpress[0].expressRelation[0].orderDetail.goods_info.goods_attr.cover_pic
-        uni.navigateTo({
-          url:
-            `/pages/order/express-detail/express-detail?express=` +
-            express +
-            `&customer_name=` +
-            customer_name +
-            `&express_no=` +
-            express_no +
-            `&cover_pic=` +
-            cover_pic,
-        })
-      } else if (orderDetail.detailExpress.length >= 1) {
-        uni.navigateTo({
-          url: '/pages/order/express-list/express-list?order_id=' + orderDetail.id,
-        })
-      }
-    }
-
     const getClerkCode = (e) => {}
 
     // 订单评价
@@ -365,7 +328,6 @@ export default defineComponent({
       isShowExpressButton,
       loadMore,
       refresh,
-      logistics,
       getClerkCode,
       appraise,
       toDetail,

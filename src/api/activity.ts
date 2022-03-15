@@ -55,6 +55,14 @@ export function fetchActivityDetail(data) {
 }
 
 /**
+ * 我的活动预约
+ *
+ */
+export function fetchActivityBookingList(data) {
+  return request.get!('&r=api/activity-booking/list', data, { noAuth: false })
+}
+
+/**
  * 获取我已经预约的活动数
  *
  */
