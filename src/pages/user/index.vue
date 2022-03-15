@@ -133,7 +133,7 @@
           <text class="iconfont icon-address icon"></text>
           <text>收货地址</text>
         </view>
-        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
+        <view class="box-item col-3">
           <text class="iconfont icon-sign-out icon"></text>
           <text>退出账号</text>
         </view>
