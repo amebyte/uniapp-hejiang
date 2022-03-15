@@ -34,7 +34,7 @@ export function fetchActivityList(data) {
       .then((r) => {
         if (r.code === 0) {
           const list = r.data.list.map((o) => {
-            o.datetime = o.datetime.slice(0, 10)
+            o.datetime = o.date_start_time.slice(0, 10)
             return o
           })
           resolve({ list, pagination: r.data.pagination })

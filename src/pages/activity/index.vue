@@ -116,7 +116,7 @@ const getMyActivityBookCount = () => {
 
 const gotoDetail = (item) => {
   uni.navigateTo({
-    url: '/pages/discover/activityDetail?id=' + item.id,
+    url: '/pages/activity/detail?id=' + item.id,
   })
 }
 
