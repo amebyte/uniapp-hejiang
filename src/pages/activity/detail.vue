@@ -1,6 +1,7 @@
 <template>
   <view class="container">
     <view>{{ detail.title }}</view>
+    <view><rich-text :nodes="detail.content"></rich-text></view>
     <view @click="bookingAdd">预约</view>
   </view>
 </template>

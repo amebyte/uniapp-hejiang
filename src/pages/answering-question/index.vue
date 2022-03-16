@@ -44,7 +44,7 @@ const indexBanner = computed(() => store.state.banner.indexBanner)
 
 const gotoDetail = (item) => {
   uni.navigateTo({
-    url: '/pages/activity/detail?id=' + item.id,
+    url: '/pages/answering-question/detail?id=' + item.id,
   })
 }
 
@@ -52,7 +52,7 @@ const list = ref([]) as any
 const getAnsweringQuestionList = () => {
   const params = {
     page: 1,
-    limit: 5,
+    limit: 10,
   }
   fetchAnsweringQuestionList(params)
     .then((r) => {
@@ -62,6 +62,9 @@ const getAnsweringQuestionList = () => {
     })
     .catch((err) => console.log(err))
 }
+onMounted(() => {
+  getAnsweringQuestionList()
+})
 </script>
 <style lang="scss">
 page {

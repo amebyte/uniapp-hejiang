@@ -29,7 +29,7 @@ const gotoPage = () => {
 }
 const gotoDetail = (item) => {
   uni.navigateTo({
-    url: '/pages/activity/detail?id=' + item.id,
+    url: '/pages/answering-question/detail?id=' + item.id,
   })
 }
 const list = ref([]) as any
