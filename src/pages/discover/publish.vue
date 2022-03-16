@@ -22,6 +22,18 @@
           <text class="iconfont icon-arrow-down"></text>
         </view>
       </view>
+      <view class="cat-item">
+        <view class="item">＃水培</view>
+        <view class="item">＃水培水</view>
+        <view class="item">＃水培</view>
+        <view class="item">＃水培水培水培</view>
+        <view class="item on">＃水培水培</view>
+        <view class="item">＃水培水</view>
+        <view class="item">＃水培</view>
+        <view class="item">＃水培水培</view>
+        <view class="item">＃水培</view>
+        <view class="item">＃水培水培</view>
+      </view>
     </view>
   </view>
 </template>
@@ -114,6 +126,23 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue
         .iconfont {
           color: #1aa86c;
           font-size: 36rpx;
+        }
+      }
+    }
+    .cat-item {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      align-items: center;
+      .item {
+        color: #cacccb;
+        background: #ffffff;
+        border-radius: 27rpx;
+        padding: 30rpx;
+        margin: 20rpx;
+        &.on {
+          color: #fff;
+          background-color: #409e5b;
         }
       }
     }
