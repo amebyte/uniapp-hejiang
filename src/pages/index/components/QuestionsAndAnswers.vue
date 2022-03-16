@@ -2,41 +2,26 @@
   <view class="wrapper">
     <view class="title">专家答疑</view>
     <view class="list">
-      <view class="item">
-        <view class="question-box">
-          <view class="label"><view class="text">问</view></view>
-          <view class="content">水培是什么意思？</view>
+      <block v-for="(item, index) in list" :key="index">
+        <view class="item">
+          <view class="question-box">
+            <view class="label"><view class="text">问</view></view>
+            <view class="content">{{ item.title }}</view>
+          </view>
+          <view class="answers-box">
+            <view class="label"><view class="text">答</view></view>
+            <view class="content">{{ item.desc }}</view>
+          </view>
         </view>
-        <view class="answers-box">
-          <view class="label"><view class="text">答</view></view>
-          <view class="content">水培是什么意思？</view>
-        </view>
-      </view>
-      <view class="item">
-        <view class="question-box">
-          <view class="label"><view class="text">问</view></view>
-          <view class="content">水培是什么意思？水培是什么意思？水培是什么意思？水培是什么意思？水培是什么意思？</view>
-        </view>
-        <view class="answers-box">
-          <view class="label"><view class="text">答</view></view>
-          <view class="content">水培是什么意思？水培是什么意思？水培是什么意思？水培是什么意思？水培是什么意思？</view>
-        </view>
-      </view>
-      <view class="item">
-        <view class="question-box">
-          <view class="label"><view class="text">问</view></view>
-          <view class="content">水培是什么意思？</view>
-        </view>
-        <view class="answers-box">
-          <view class="label"><view class="text">答</view></view>
-          <view class="content">水培是什么意思？</view>
-        </view>
-      </view>
+      </block>
     </view>
     <view class="more" @click="gotoPage">查看更多答疑</view>
   </view>
 </template>
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { fetchAnsweringQuestionList } from '@/api/answeringQuestion'
+
 const gotoPage = () => {
   uni.navigateTo({
     url: '/pages/answering-question/index',
@@ -47,6 +32,23 @@ const gotoDetail = (item) => {
     url: '/pages/activity/detail?id=' + item.id,
   })
 }
+const list = ref([]) as any
+const getAnsweringQuestionList = () => {
+  const params = {
+    page: 1,
+    limit: 5,
+  }
+  fetchAnsweringQuestionList(params)
+    .then((r) => {
+      if (r.code === 0) {
+        list.value = r.data.list
+      }
+    })
+    .catch((err) => console.log(err))
+}
+onMounted(() => {
+  getAnsweringQuestionList()
+})
 </script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
