@@ -3,7 +3,7 @@
     <view class="title">专家答疑</view>
     <view class="list">
       <block v-for="(item, index) in list" :key="index">
-        <view class="item">
+        <view class="item" @click="gotoDetail(item)">
           <view class="question-box">
             <view class="label"><view class="text">问</view></view>
             <view class="content">{{ item.title }}</view>

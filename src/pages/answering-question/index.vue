@@ -13,26 +13,18 @@
       <view class="line right"><image src="/static/images/groupLine.png"></image></view>
     </view>
     <view class="list">
-      <view class="item">
-        <view class="question-box">
-          <view class="label"><view class="text">问</view></view>
-          <view class="content">水培是什么意思？</view>
+      <block v-for="(item, index) in list" :key="index">
+        <view class="item" @click="gotoDetail(item)">
+          <view class="question-box">
+            <view class="label"><view class="text">问</view></view>
+            <view class="content">{{ item.title }}</view>
+          </view>
+          <view class="answers-box">
+            <view class="label"><view class="text">答</view></view>
+            <view class="content">{{ item.desc }}</view>
+          </view>
         </view>
-        <view class="answers-box">
-          <view class="label"><view class="text">答</view></view>
-          <view class="content">水培是什么意思？</view>
-        </view>
-      </view>
-      <view class="item">
-        <view class="question-box">
-          <view class="label"><view class="text">问</view></view>
-          <view class="content">水培是什么意思？</view>
-        </view>
-        <view class="answers-box">
-          <view class="label"><view class="text">答</view></view>
-          <view class="content">水培是什么意思？</view>
-        </view>
-      </view>
+      </block>
     </view>
   </view>
 </template>
@@ -42,12 +34,34 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed }
 import AdSwiper from '@/components/ad-swiper/index.vue'
 import { useStore, mapActions } from 'vuex'
 import { BannerActionTypes } from '@/store/modules/banner/action-types'
+import { fetchAnsweringQuestionList } from '@/api/answeringQuestion'
 const store = useStore()
 const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
   $store: store,
 })
 fetchBanner()
 const indexBanner = computed(() => store.state.banner.indexBanner)
+
+const gotoDetail = (item) => {
+  uni.navigateTo({
+    url: '/pages/activity/detail?id=' + item.id,
+  })
+}
+
+const list = ref([]) as any
+const getAnsweringQuestionList = () => {
+  const params = {
+    page: 1,
+    limit: 5,
+  }
+  fetchAnsweringQuestionList(params)
+    .then((r) => {
+      if (r.code === 0) {
+        list.value = r.data.list
+      }
+    })
+    .catch((err) => console.log(err))
+}
 </script>
 <style lang="scss">
 page {
