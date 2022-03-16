@@ -52,6 +52,12 @@
       }
     },
     {
+      "path": "pages/discover/publish",
+      "style": {
+        "navigationBarTitleText": "发布内容"
+      }
+    },
+    {
       "path": "pages/auth/index",
       "style": {
         "navigationBarTitleText": "自动登录"

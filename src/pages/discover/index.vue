@@ -6,7 +6,7 @@
         <text class="iconfont icon-search"></text>
       </view>
       <view class="title">发现</view>
-      <view class="action">
+      <view class="action" @click="gotoPage('/pages/discover/publish')">
         <text>发布</text>
       </view>
     </view>
@@ -113,6 +113,11 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+const gotoPage = (url) => {
+  uni.navigateTo({
+    url: url,
+  })
+}
 </script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
