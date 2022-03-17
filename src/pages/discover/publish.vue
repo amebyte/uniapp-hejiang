@@ -1,5 +1,16 @@
 <template>
   <view class="container">
+    <!--top-bar start-->
+    <view class="top-bar">
+      <view class="search-icon">
+        <text class="iconfont icon-search"></text>
+      </view>
+      <view class="title"></view>
+      <view class="action" @click="submit">
+        <text>发布</text>
+      </view>
+    </view>
+    <!--top-bar end-->
     <view class="cells">
       <textarea
         class="textarea"
@@ -65,14 +76,44 @@ const currCat = ref({
 const selectCat = (item) => {
   currCat.value = item
 }
+const submit = () => {}
 </script>
 <style lang="scss">
+@import '@/static/css/variable.scss';
 .container {
-  padding-top: 20rpx;
+  padding-top: 30rpx;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  .top-bar {
+    display: flex;
+    justify-content: space-between;
+    color: $theme-font-color;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
+    margin-bottom: 30rpx;
+    .search-icon {
+      padding-left: 15rpx;
+      .icon-search {
+        font-size: 32rpx;
+      }
+    }
+    .title {
+      font-size: 28rpx;
+    }
+    .action {
+      text {
+        border: 2rpx solid #009688;
+        border-radius: 20rpx;
+        font-size: 20rpx;
+        font-family: PingFang SC;
+        font-weight: bold;
+        color: #00796b;
+        padding: 5rpx 20rpx;
+      }
+    }
+  }
   .cells {
     border-radius: 4rpx;
     height: 280rpx;
