@@ -15,26 +15,21 @@
       <app-upload-image :max-num="maxNum" background-color="#fff" @imageEvent="imageEvent"> </app-upload-image>
     </view>
     <view class="cat-btn-wrap">
-      <view class="cat-btn">
+      <view class="cat-btn" @click="toggleCatWrap">
         <view class="l">
           <view class="icon">＃</view>
-          <view class="txt">选择作业题目</view>
+          <view class="txt">{{ currCat.catname }}</view>
         </view>
         <view class="r">
           <text class="iconfont icon-arrow-down"></text>
         </view>
       </view>
-      <view class="cat-item">
-        <view class="item">＃水培</view>
-        <view class="item">＃水培水</view>
-        <view class="item">＃水培</view>
-        <view class="item">＃水培水培水培</view>
-        <view class="item on">＃水培水培</view>
-        <view class="item">＃水培水</view>
-        <view class="item">＃水培</view>
-        <view class="item">＃水培水培</view>
-        <view class="item">＃水培</view>
-        <view class="item">＃水培水培</view>
+      <view v-if="isShowCat" class="cat-item">
+        <block v-for="(item, index) in catList" :key="index">
+          <view class="item" :class="item.id === currCat.id ? 'on' : ''" @click="selectCat(item)"
+            >＃{{ item.catname }}</view
+          >
+        </block>
       </view>
     </view>
   </view>
@@ -48,6 +43,27 @@ const maxNum = ref(9)
 const imageList = ref([])
 const imageEvent = (e) => {
   imageList.value = e.imageList
+}
+const catList = ref([
+  { id: 1, catname: '水培' },
+  { id: 2, catname: '水培水培' },
+  { id: 3, catname: '水培水' },
+  { id: 4, catname: '水培' },
+  { id: 5, catname: '水培水培水培' },
+  { id: 6, catname: '水培' },
+  { id: 7, catname: '水培水培' },
+  { id: 8, catname: '水培水' },
+])
+const isShowCat = ref(false)
+const toggleCatWrap = () => {
+  isShowCat.value = !isShowCat.value
+}
+const currCat = ref({
+  id: null,
+  catname: '选择作业题目',
+})
+const selectCat = (item) => {
+  currCat.value = item
 }
 </script>
 <style lang="scss">
