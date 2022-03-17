@@ -13,7 +13,7 @@
             :class="{ 'other-border': diy ? true : false }"
             class="add-img dir-top-nowrap cross-center main-center"
           >
-            <image mode="aspectFill" class="add-img-icon" :src="defaultImg"></image>
+            <text class="iconfont icon-add-bold add-img-icon"></text>
             <text class="text">{{ text }}</text>
             <text v-if="showNumber" class="text">(最多{{ maxNum }}张)</text>
           </view>
@@ -274,9 +274,7 @@ export default defineComponent({
 }
 
 .upload-box .add-img-icon {
-  width: 56rpx;
   height: 56rpx;
-  margin-bottom: 10rpx;
 }
 
 .upload-box .img-box {

@@ -11,7 +11,7 @@
       />
       <view class="textarea-counter">0/1000</view>
     </view>
-    <view class="enclosure">
+    <view class="upload-image-wrap">
       <app-upload-image :max-num="maxNum" background-color="#fff" @imageEvent="imageEvent"> </app-upload-image>
     </view>
     <view class="cat-btn-wrap">
@@ -84,11 +84,14 @@ const imageEvent = (e) => {
       padding-top: 4rpx;
     }
   }
-  .enclosure {
+  .upload-image-wrap {
     display: flex;
     align-items: center;
     padding: 26rpx 10rpx;
+    padding-top: 0;
     box-sizing: border-box;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
   }
   .cat-btn-wrap {
     margin-left: 20rpx;
@@ -143,12 +146,15 @@ const imageEvent = (e) => {
       flex-wrap: wrap;
       justify-content: flex-start;
       align-items: center;
+      padding-bottom: 20rpx;
+      padding-right: 20rpx;
       .item {
         color: #cacccb;
         background: #ffffff;
         border-radius: 27rpx;
-        padding: 30rpx;
-        margin: 20rpx;
+        padding: 20rpx;
+        margin-top: 20rpx;
+        margin-left: 20rpx;
         &.on {
           color: #fff;
           background-color: #409e5b;
