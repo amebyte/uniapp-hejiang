@@ -115,7 +115,7 @@ export default defineComponent({
             }
             let fileName = ''
             uni.uploadFile({
-              url: self.$api.upload.file,
+              url: 'r=api/attachment/upload',
               filePath: e.tempFilePaths[i],
               name: 'file',
               fileType: 'image',
@@ -187,36 +187,23 @@ export default defineComponent({
               ctx.drawImage(image, 0, 0, image.width, image.height)
               let ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()
               let dataURL = canvas.toDataURL('image/' + ext)
-              uploadFile({
-                url: self.$api.upload.file,
-                maxNum: props.maxNum,
-                success: function ({ res, header }) {
-                  self
-                    .$request({
-                      url: self.$api.upload.file + '&name=base64',
-                      header: header,
-                      method: 'post',
-                      data: {
-                        database: dataURL,
-                      },
-                    })
-                    .then((res) => {
-                      if (res.code === 0) {
-                        state.imageList.push(res.data.url)
-                        checkMaxNum()
-                        emit('imageEvent', {
-                          imageList: state.imageList,
-                          sign: props.sign,
-                        })
-                      } else {
-                        uni.showModal({
-                          title: '',
-                          content: res.msg,
-                          showCancel: false,
-                        })
-                      }
-                    })
-                },
+              fetchUploadFile({
+                database: dataURL,
+              }).then((res) => {
+                if (res.code === 0) {
+                  state.imageList.push(res.data.url)
+                  checkMaxNum()
+                  emit('imageEvent', {
+                    imageList: state.imageList,
+                    sign: props.sign,
+                  })
+                } else {
+                  uni.showModal({
+                    title: '',
+                    content: res.msg,
+                    showCancel: false,
+                  })
+                }
               })
             }
           }
@@ -264,20 +251,20 @@ export default defineComponent({
 }
 
 .upload-box .title {
-  padding: 15#{rpx} 0 15#{rpx} 20#{rpx};
+  padding: 15rpx 0 15rpx 20rpx;
 }
 
 .upload-box .img {
-  width: 188#{rpx};
-  height: 188#{rpx};
-  margin: 10#{rpx};
+  width: 188rpx;
+  height: 188rpx;
+  margin: 10rpx;
   display: block;
 }
 
 .upload-box .add-img {
-  width: 188#{rpx};
-  height: 188#{rpx};
-  border: 1#{rpx} dotted $uni-weak-color-one;
+  width: 188rpx;
+  height: 188rpx;
+  border: 1rpx dotted $uni-weak-color-one;
   background-color: #fff;
 }
 
@@ -287,9 +274,9 @@ export default defineComponent({
 }
 
 .upload-box .add-img-icon {
-  width: 56#{rpx};
-  height: 56#{rpx};
-  margin-bottom: 10#{rpx};
+  width: 56rpx;
+  height: 56rpx;
+  margin-bottom: 10rpx;
 }
 
 .upload-box .img-box {
@@ -297,20 +284,20 @@ export default defineComponent({
 }
 
 .upload-box .remove {
-  width: 40#{rpx};
-  height: 40#{rpx};
+  width: 40rpx;
+  height: 40rpx;
   position: absolute;
   right: -5rpx;
   top: -10rpx;
   background: $uni-important-color-red;
   color: #fff;
   border-radius: 50%;
-  padding-bottom: 8#{rpx};
-  font-size: 24#{rpx};
+  padding-bottom: 8rpx;
+  font-size: 24rpx;
   z-index: 968;
 }
 
 .upload-box .add-img.other-border {
-  border: 1#{rpx} solid $uni-weak-color-one;
+  border: 1rpx solid $uni-weak-color-one;
 }
 </style>

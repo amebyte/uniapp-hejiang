@@ -11,7 +11,9 @@
       />
       <view class="textarea-counter">0/1000</view>
     </view>
-    <view class="enclosure"></view>
+    <view class="enclosure">
+      <app-upload-image :max-num="maxNum" background-color="#fff" @imageEvent="imageEvent"> </app-upload-image>
+    </view>
     <view class="cat-btn-wrap">
       <view class="cat-btn">
         <view class="l">
@@ -40,6 +42,13 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
+import appUploadImage from '@/components/app-upload-image/app-upload-image.vue'
+
+const maxNum = ref(9)
+const imageList = ref([])
+const imageEvent = (e) => {
+  imageList.value = e.imageList
+}
 </script>
 <style lang="scss">
 .container {

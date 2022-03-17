@@ -1,5 +1,5 @@
 import request from '@/utils/request'
 
 export function fetchUploadFile(data) {
-  return request.get!('&r=api/activity/detail', data, { noAuth: true })
+  return request.post!('&r=api/attachment/upload&name=base64', data, { noAuth: false }, true)
 }

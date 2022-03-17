@@ -1,5 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { HEADER, HEADERPARAMS, TOKENNAME, HTTP_REQUEST_URL, X_APP_PLATFORM, X_APP_VERSION } from '@/config/app'
+import {
+  HEADER,
+  HEADERPARAMS,
+  HEADER_FROM_DATA,
+  TOKENNAME,
+  HTTP_REQUEST_URL,
+  X_APP_PLATFORM,
+  X_APP_VERSION,
+} from '@/config/app'
 import { store } from '@/store'
 import Cache from '@/utils/cache'
 import { urlEncode } from '@/utils/util'
@@ -13,7 +21,7 @@ function baseRequest(
   url: string,
   method: RequestOptionsMethod,
   data = {},
-  { noAuth = false, noVerify = false }: any,
+  { noAuth = false, noVerify = false, isFile = false }: any,
   params: unknown
 ) {
   const token = store.state.app.token
@@ -22,6 +30,10 @@ function baseRequest(
 
   if (params) {
     header = JSON.parse(JSON.stringify(HEADERPARAMS))
+  }
+
+  if (isFile) {
+    header = JSON.parse(JSON.stringify(HEADER_FROM_DATA))
   }
 
   header['X-App-Platform'] = X_APP_PLATFORM

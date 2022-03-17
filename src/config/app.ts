@@ -14,6 +14,10 @@ export const HEADERPARAMS = {
   'content-type': 'application/x-www-form-urlencoded',
 }
 
+export const HEADER_FROM_DATA = {
+  'content-type': 'multipart/form-data',
+}
+
 export const TOKENNAME = 'X-Access-Token'
 
 // 缓存时间 0 永久
