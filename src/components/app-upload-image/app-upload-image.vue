@@ -26,6 +26,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, onMounted, toRefs } from 'vue'
 import { fetchUploadFile } from '@/api/upload'
+import { HTTP_REQUEST_URL } from '@/config/app'
 
 export default defineComponent({
   name: 'AppUploadImage',
@@ -105,7 +106,7 @@ export default defineComponent({
     // 选择图片
     const chooseImage = () => {
       let imageList = state.imageList
-      // #ifdef MP
+
       uni.chooseImage({
         count: props.maxNum,
         success: function (e: any) {
@@ -115,7 +116,7 @@ export default defineComponent({
             }
             let fileName = ''
             uni.uploadFile({
-              url: 'r=api/attachment/upload',
+              url: HTTP_REQUEST_URL + '/web/index.php?_mall_id=1&r=api/attachment/upload',
               filePath: e.tempFilePaths[i],
               name: 'file',
               fileType: 'image',
@@ -167,55 +168,54 @@ export default defineComponent({
           })
         },
       })
-      // #endif
 
       // #ifdef H5
-      uni.chooseImage({
-        count: Number(props.maxNum),
-        success: function (e: any) {
-          for (let i in e.tempFilePaths) {
-            if (Number(i) >= props.maxNum - imageList.length) {
-              break
-            }
-            let image = new Image()
-            image.src = e.tempFilePaths[i]
-            image.onload = () => {
-              let canvas = document.createElement('canvas')
-              canvas.width = image.width
-              canvas.height = image.height
-              let ctx = canvas.getContext('2d') as any
-              ctx.drawImage(image, 0, 0, image.width, image.height)
-              let ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()
-              let dataURL = canvas.toDataURL('image/' + ext)
-              fetchUploadFile({
-                database: dataURL,
-              }).then((res) => {
-                if (res.code === 0) {
-                  state.imageList.push(res.data.url)
-                  checkMaxNum()
-                  emit('imageEvent', {
-                    imageList: state.imageList,
-                    sign: props.sign,
-                  })
-                } else {
-                  uni.showModal({
-                    title: '',
-                    content: res.msg,
-                    showCancel: false,
-                  })
-                }
-              })
-            }
-          }
-        },
-        complete: function (e) {
-          // 触发事件 tabEvent
-          emit('imageEvent', {
-            imageList: imageList,
-            sign: props.sign,
-          })
-        },
-      })
+      //   uni.chooseImage({
+      //     count: Number(props.maxNum),
+      //     success: function (e: any) {
+      //       for (let i in e.tempFilePaths) {
+      //         if (Number(i) >= props.maxNum - imageList.length) {
+      //           break
+      //         }
+      //         let image = new Image()
+      //         image.src = e.tempFilePaths[i]
+      //         image.onload = () => {
+      //           let canvas = document.createElement('canvas')
+      //           canvas.width = image.width
+      //           canvas.height = image.height
+      //           let ctx = canvas.getContext('2d') as any
+      //           ctx.drawImage(image, 0, 0, image.width, image.height)
+      //           let ext = image.src.substring(image.src.lastIndexOf('.') + 1).toLowerCase()
+      //           let dataURL = canvas.toDataURL('image/' + ext)
+      //           fetchUploadFile({
+      //             database: dataURL,
+      //           }).then((res) => {
+      //             if (res.code === 0) {
+      //               state.imageList.push(res.data.url)
+      //               checkMaxNum()
+      //               emit('imageEvent', {
+      //                 imageList: state.imageList,
+      //                 sign: props.sign,
+      //               })
+      //             } else {
+      //               uni.showModal({
+      //                 title: '',
+      //                 content: res.msg,
+      //                 showCancel: false,
+      //               })
+      //             }
+      //           })
+      //         }
+      //       }
+      //     },
+      //     complete: function (e) {
+      //       // 触发事件 tabEvent
+      //       emit('imageEvent', {
+      //         imageList: imageList,
+      //         sign: props.sign,
+      //       })
+      //     },
+      //   })
       // #endif
     }
 
