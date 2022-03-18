@@ -29,7 +29,7 @@
       <view class="cat-btn" @click="toggleCatWrap">
         <view class="l">
           <view class="icon">＃</view>
-          <view class="txt">{{ currCat.catname }}</view>
+          <view class="txt">{{ currCat.title }}</view>
         </view>
         <view class="r">
           <text class="iconfont icon-arrow-down"></text>
@@ -38,7 +38,7 @@
       <view v-if="isShowCat" class="cat-item">
         <block v-for="(item, index) in catList" :key="index">
           <view class="item" :class="item.id === currCat.id ? 'on' : ''" @click="selectCat(item)"
-            >＃{{ item.catname }}</view
+            >＃{{ item.title }}</view
           >
         </block>
       </view>
@@ -49,6 +49,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import appUploadImage from '@/components/app-upload-image/app-upload-image.vue'
+import { fetchBlogTagList } from '@/api/blog'
 
 const maxNum = ref(9)
 const imageList = ref([])
@@ -56,14 +57,14 @@ const imageEvent = (e) => {
   imageList.value = e.imageList
 }
 const catList = ref([
-  { id: 1, catname: '水培' },
-  { id: 2, catname: '水培水培' },
-  { id: 3, catname: '水培水' },
-  { id: 4, catname: '水培' },
-  { id: 5, catname: '水培水培水培' },
-  { id: 6, catname: '水培' },
-  { id: 7, catname: '水培水培' },
-  { id: 8, catname: '水培水' },
+  { id: 1, title: '水培' },
+  { id: 2, title: '水培水培' },
+  { id: 3, title: '水培水' },
+  { id: 4, title: '水培' },
+  { id: 5, title: '水培水培水培' },
+  { id: 6, title: '水培' },
+  { id: 7, title: '水培水培' },
+  { id: 8, title: '水培水' },
 ])
 const isShowCat = ref(false)
 const toggleCatWrap = () => {
@@ -71,12 +72,24 @@ const toggleCatWrap = () => {
 }
 const currCat = ref({
   id: null,
-  catname: '选择作业题目',
+  title: '选择作业题目',
 })
 const selectCat = (item) => {
   currCat.value = item
 }
+
+const getBlogTagList = () => {
+  const param = { page: 1, limit: 99 }
+  fetchBlogTagList(param)
+    .then((r) => {
+      catList.value = r.data.list
+    })
+    .catch((err) => console.log(err))
+}
 const submit = () => {}
+onMounted(() => {
+  getBlogTagList()
+})
 </script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
