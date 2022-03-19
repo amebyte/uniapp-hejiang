@@ -13,8 +13,8 @@
     <!--top-bar end-->
     <view class="cells">
       <textarea
+        v-model="content"
         class="textarea"
-        name="content"
         placeholder="分享你的学习成果或者作业吧！ #作业题目"
         maxlength="2000"
         placeholder-class="phcolor-color"
@@ -49,23 +49,16 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import appUploadImage from '@/components/app-upload-image/app-upload-image.vue'
-import { fetchBlogTagList } from '@/api/blog'
+import { fetchBlogTagList, fetchBlogSave } from '@/api/blog'
+import { Tips } from '@/utils/util'
 
+const content = ref('')
 const maxNum = ref(9)
 const imageList = ref([])
 const imageEvent = (e) => {
   imageList.value = e.imageList
 }
-const catList = ref([
-  { id: 1, title: '水培' },
-  { id: 2, title: '水培水培' },
-  { id: 3, title: '水培水' },
-  { id: 4, title: '水培' },
-  { id: 5, title: '水培水培水培' },
-  { id: 6, title: '水培' },
-  { id: 7, title: '水培水培' },
-  { id: 8, title: '水培水' },
-])
+const catList = ref([]) as any
 const isShowCat = ref(false)
 const toggleCatWrap = () => {
   isShowCat.value = !isShowCat.value
@@ -86,7 +79,31 @@ const getBlogTagList = () => {
     })
     .catch((err) => console.log(err))
 }
-const submit = () => {}
+const submit = () => {
+  if (!content.value) {
+    Tips({ title: '请填写内容' })
+    return
+  }
+  if (imageList.value.length === 0) {
+    Tips({ title: '请上传图片' })
+    return
+  }
+  if (!currCat.value.id) {
+    Tips({ title: '请上选择标签' })
+    return
+  }
+  fetchBlogSave({
+    content: content.value,
+    images: imageList.value,
+    blog_tag_id: currCat.value.id,
+  })
+    .then((r) => {
+      if (r.code === 0) {
+        Tips({ title: '发布成功' })
+      }
+    })
+    .catch((err) => console.log(err))
+}
 onMounted(() => {
   getBlogTagList()
 })
