@@ -94,12 +94,15 @@ const submit = () => {
   }
   fetchBlogSave({
     content: content.value,
-    images: imageList.value,
+    images: JSON.stringify(imageList.value),
     blog_tag_id: currCat.value.id,
   })
     .then((r) => {
       if (r.code === 0) {
         Tips({ title: '发布成功' })
+        uni.switchTab({
+          url: '/pages/discover/index',
+        })
       }
     })
     .catch((err) => console.log(err))

@@ -112,12 +112,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { fetchBlogList } from '@/api/blog'
 const gotoPage = (url) => {
   uni.navigateTo({
     url: url,
   })
 }
+const list = ref([]) as any
+const getList = () => {
+  const param = { page: 1, limit: 10 }
+  fetchBlogList(param)
+    .then((r) => {
+      console.log('r', r)
+    })
+    .catch((err) => console.log(err))
+}
+onMounted(() => {
+  getList()
+})
 </script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
