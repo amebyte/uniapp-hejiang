@@ -43,19 +43,16 @@
     <!--banner-nav end-->
     <!--答疑列表 start-->
     <view class="list">
-      <view v-for="item in 3" :key="item" class="item">
-        <view class="recommend"><text>精选</text></view>
+      <view v-for="item in list" :key="item.id" class="item">
+        <view class="recommend" style="display: none"><text>精选</text></view>
         <view class="user-info">
           <view class="profile">
             <view class="l">
-              <image
-                src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-                mode="scaleToFill"
-              ></image>
+              <image :src="item.user.userInfo.avatar" mode="scaleToFill"></image>
             </view>
             <view class="r">
-              <view class="name">专家答疑</view>
-              <view class="desc">1小时前</view>
+              <view class="name">{{ item.user.nickname }}</view>
+              <view class="desc">{{ item.created_at }}</view>
             </view>
           </view>
           <view class="more">
@@ -63,33 +60,14 @@
           </view>
         </view>
         <view class="text-content">
-          专家答疑专家答疑专家答疑专家答疑专家答疑专家答疑专家答疑专家答疑专家答疑专家答疑专家答疑专家答疑
+          {{ item.content }}
         </view>
         <view class="image-list">
-          <view class="image">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
-          <view class="image">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
-          <view class="image">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
-          <view class="image">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
+          <block v-for="(val, index) in item.images" :key="index">
+            <view class="image">
+              <image :src="val" mode="scaleToFill"></image>
+            </view>
+          </block>
         </view>
         <view class="interact-status">
           <view class="status">
@@ -124,7 +102,9 @@ const getList = () => {
   const param = { page: 1, limit: 10 }
   fetchBlogList(param)
     .then((r) => {
-      console.log('r', r)
+      if (r.code === 0) {
+        list.value = r.data.list
+      }
     })
     .catch((err) => console.log(err))
 }
