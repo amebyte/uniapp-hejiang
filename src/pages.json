@@ -58,6 +58,12 @@
       }
     },
     {
+      "path": "pages/discover/discuss",
+      "style": {
+        "navigationBarTitleText": "内容详情"
+      }
+    },
+    {
       "path": "pages/auth/index",
       "style": {
         "navigationBarTitleText": "自动登录"

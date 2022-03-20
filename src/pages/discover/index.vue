@@ -43,7 +43,7 @@
     <!--banner-nav end-->
     <!--答疑列表 start-->
     <view class="list">
-      <view v-for="item in list" :key="item.id" class="item">
+      <view v-for="item in list" :key="item.id" class="item" @click="gotoDiscuss(item)">
         <view class="recommend" style="display: none"><text>精选</text></view>
         <view class="user-info">
           <view class="profile">
@@ -95,6 +95,11 @@ import { fetchBlogList } from '@/api/blog'
 const gotoPage = (url) => {
   uni.navigateTo({
     url: url,
+  })
+}
+const gotoDiscuss = (item) => {
+  uni.navigateTo({
+    url: `/pages/discover/discuss?id=${item.id}`,
   })
 }
 const list = ref([]) as any
