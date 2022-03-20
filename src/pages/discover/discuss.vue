@@ -2,7 +2,34 @@
   <view class="container">
     <view class="label-title">全部评论（501）</view>
     <view class="list-wrap">
-      <view class="cell-item"></view>
+      <view class="cell-item">
+        <image
+          src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLJUicgP739INv46OkEibtyeZNESdyJCC0EMHeYXnhaW6yMdDvCYuQP8L537WlibydwvJBPdc9B4FS7Q/132"
+          class="avatar"
+        ></image>
+        <view class="detail">
+          <view class="header-box">
+            <view class="nickname">coboy</view>
+            <view class="fabulous">123 <text class="iconfont icon-good"></text></view>
+          </view>
+          <view class="content"> 我一直没懂赛前问一个主教练如何评价对手的主教练， 记者究竟是想得到什么答案？ </view>
+          <view class="footer"> 昨天 22:12 </view>
+        </view>
+      </view>
+      <view class="cell-item">
+        <image
+          src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLJUicgP739INv46OkEibtyeZNESdyJCC0EMHeYXnhaW6yMdDvCYuQP8L537WlibydwvJBPdc9B4FS7Q/132"
+          class="avatar"
+        ></image>
+        <view class="detail">
+          <view class="header-box">
+            <view class="nickname">coboy</view>
+            <view class="fabulous">123 <text class="iconfont icon-good"></text></view>
+          </view>
+          <view class="content"> 我一直没懂赛前问一个主教练如何评价对手的主教练， 记者究竟是想得到什么答案？ </view>
+          <view class="footer"> 昨天 22:12 </view>
+        </view>
+      </view>
     </view>
     <view class="operation">
       <view class="operation-left">
@@ -55,11 +82,54 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue
     }
   }
   .list-wrap {
+    margin-left: 40rpx;
+    margin-right: 40rpx;
     .cell-item {
       display: flex;
       align-items: flex-start;
       justify-content: space-between;
       padding-bottom: 44rpx;
+      .avatar {
+        width: 64rpx;
+        height: 64rpx;
+        border-radius: 32rpx;
+        display: block;
+        flex-shrink: 0;
+      }
+      .detail {
+        padding-left: 16rpx;
+        box-sizing: border-box;
+        .header-box {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          font-size: 30rpx;
+          .nickname {
+            color: #1aa86c;
+          }
+          .fabulous {
+            color: #9a9a9a;
+            .iconfont {
+              font-size: 32rpx;
+            }
+          }
+        }
+        .content {
+          font-size: 32rpx;
+          color: #333;
+          text-align: justify;
+          padding-top: 8rpx;
+          word-break: break-all;
+          word-wrap: break-word;
+        }
+        .footer {
+          display: flex;
+          align-items: center;
+          font-size: 24rpx;
+          margin-top: 16rpx;
+          color: #9a9a9a;
+        }
+      }
     }
   }
   .operation {
@@ -77,7 +147,7 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue
     padding-bottom: env(safe-area-inset-bottom);
     .operation-left {
       .textarea {
-        height: 100rpx;
+        height: 80rpx;
         background: #ededed;
         color: #999;
         border-radius: 8rpx;
