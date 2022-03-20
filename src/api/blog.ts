@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import { store } from '@/store'
 /**
  * 标签列表
  *
@@ -29,4 +30,21 @@ export function fetchBlogSave(data) {
  */
 export function fetchBlogCommentSave(data) {
   return request.post!('&r=api/blog-comment/save', data, { noAuth: false }, true)
+}
+
+/**
+ * 博文评论列表
+ *
+ */
+export function fetchBlogCommentList(data) {
+  const isLogin = store.state.app.token
+  return request.get!('&r=api/blog-comment/list', data, { noAuth: isLogin ? false : true })
+}
+
+/**
+ * 博文评论点赞
+ *
+ */
+export function fetchBlogCommentLikeSave(data) {
+  return request.post!('&r=api/blog-comment-like/save', data, { noAuth: false }, true)
 }

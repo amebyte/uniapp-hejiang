@@ -1,35 +1,22 @@
 <template>
   <view class="container">
-    <view class="label-title">全部评论（501）</view>
+    <view class="label-title">全部评论（{{ comment_total_count }}）</view>
     <view class="list-wrap">
-      <view class="cell-item">
-        <image
-          src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLJUicgP739INv46OkEibtyeZNESdyJCC0EMHeYXnhaW6yMdDvCYuQP8L537WlibydwvJBPdc9B4FS7Q/132"
-          class="avatar"
-        ></image>
-        <view class="detail">
-          <view class="header-box">
-            <view class="nickname">coboy</view>
-            <view class="fabulous">123 <text class="iconfont icon-good"></text></view>
+      <block v-for="(item, index) in list" :key="index">
+        <view class="cell-item">
+          <image :src="item.user.userInfo.avatar" class="avatar"></image>
+          <view class="detail">
+            <view class="header-box">
+              <view class="nickname">{{ item.user.nickname }}</view>
+              <view class="fabulous" @click="handleLike(item)"
+                >{{ item.like_count }} <text class="iconfont icon-good"></text
+              ></view>
+            </view>
+            <view class="content">{{ item.content }}</view>
+            <view class="footer"> {{ item.created_at }} </view>
           </view>
-          <view class="content"> 我一直没懂赛前问一个主教练如何评价对手的主教练， 记者究竟是想得到什么答案？ </view>
-          <view class="footer"> 昨天 22:12 </view>
         </view>
-      </view>
-      <view class="cell-item">
-        <image
-          src="https://thirdwx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLJUicgP739INv46OkEibtyeZNESdyJCC0EMHeYXnhaW6yMdDvCYuQP8L537WlibydwvJBPdc9B4FS7Q/132"
-          class="avatar"
-        ></image>
-        <view class="detail">
-          <view class="header-box">
-            <view class="nickname">coboy</view>
-            <view class="fabulous">123 <text class="iconfont icon-good"></text></view>
-          </view>
-          <view class="content"> 我一直没懂赛前问一个主教练如何评价对手的主教练， 记者究竟是想得到什么答案？ </view>
-          <view class="footer"> 昨天 22:12 </view>
-        </view>
-      </view>
+      </block>
     </view>
     <view class="operation">
       <view class="operation-left">
@@ -51,11 +38,38 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
-import { fetchBlogCommentSave } from '@/api/blog'
+import { fetchBlogCommentList, fetchBlogCommentSave, fetchBlogCommentLikeSave } from '@/api/blog'
 import { Tips } from '@/utils/util'
 
 const id = ref('') as any
 const content = ref('')
+
+const list = ref([]) as any
+const comment_total_count = ref(0)
+const getList = () => {
+  const param = {
+    page: 1,
+    limit: 10,
+  }
+  fetchBlogCommentList(param)
+    .then((r) => {
+      if (r.code === 0) {
+        list.value = r.data.list
+        comment_total_count.value = r.data.pagination.total_count
+      }
+    })
+    .catch((err) => console.log(err))
+}
+
+const handleLike = (item) => {
+  const param = {
+    blog_id: id.value,
+    comment_id: item.id,
+  }
+  fetchBlogCommentLikeSave(param)
+    .then((r) => {})
+    .catch((err) => console.log(err))
+}
 
 const sumbit = () => {
   if (!content.value) {
@@ -77,7 +91,7 @@ const sumbit = () => {
 
 onLoad((options) => {
   id.value = options.id
-  console.log('id.value', id.value)
+  getList()
 })
 </script>
 <style lang="scss">
@@ -126,6 +140,7 @@ onLoad((options) => {
         flex-shrink: 0;
       }
       .detail {
+        flex: 1;
         padding-left: 16rpx;
         box-sizing: border-box;
         .header-box {
