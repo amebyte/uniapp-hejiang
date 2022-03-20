@@ -8,8 +8,9 @@
           <view class="detail">
             <view class="header-box">
               <view class="nickname">{{ item.user.nickname }}</view>
-              <view class="fabulous" @click="handleLike(item)"
-                >{{ item.like_count }} <text class="iconfont icon-good"></text
+              <view class="fabulous" :class="item.is_liked ? 'on' : ''" @click="handleLike(item, index)"
+                >{{ item.like_count === '0' ? '赞' : item.like_count }}
+                <text class="iconfont" :class="item.is_liked ? 'icon-good-fill' : 'icon-good'"></text
               ></view>
             </view>
             <view class="content">{{ item.content }}</view>
@@ -38,7 +39,12 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
-import { fetchBlogCommentList, fetchBlogCommentSave, fetchBlogCommentLikeSave } from '@/api/blog'
+import {
+  fetchBlogCommentList,
+  fetchBlogCommentSave,
+  fetchBlogCommentLikeSave,
+  fetchBlogCommentLikeDelete,
+} from '@/api/blog'
 import { Tips } from '@/utils/util'
 
 const id = ref('') as any
@@ -61,14 +67,28 @@ const getList = () => {
     .catch((err) => console.log(err))
 }
 
-const handleLike = (item) => {
+const handleLike = (item, index) => {
   const param = {
     blog_id: id.value,
     comment_id: item.id,
   }
-  fetchBlogCommentLikeSave(param)
-    .then((r) => {})
-    .catch((err) => console.log(err))
+  if (item.is_liked) {
+    fetchBlogCommentLikeDelete({ id: item.blogCommentLike.id, ...param })
+      .then((r) => {
+        if (r.code === 0) {
+          getList()
+        }
+      })
+      .catch((err) => console.log(err))
+  } else {
+    fetchBlogCommentLikeSave({ id: item.blogCommentLike && item.blogCommentLike.id, is_delete: 0, ...param })
+      .then((r) => {
+        if (r.code === 0) {
+          getList()
+        }
+      })
+      .catch((err) => console.log(err))
+  }
 }
 
 const sumbit = () => {
@@ -152,9 +172,15 @@ onLoad((options) => {
             color: #1aa86c;
           }
           .fabulous {
+            width: 80rpx;
+            height: 40rpx;
+            line-height: 40rpx;
             color: #9a9a9a;
             .iconfont {
               font-size: 32rpx;
+            }
+            &.on {
+              color: #1aa86c;
             }
           }
         }

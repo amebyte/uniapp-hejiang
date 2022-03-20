@@ -48,3 +48,11 @@ export function fetchBlogCommentList(data) {
 export function fetchBlogCommentLikeSave(data) {
   return request.post!('&r=api/blog-comment-like/save', data, { noAuth: false }, true)
 }
+
+/**
+ * 博文评论点赞删除
+ *
+ */
+export function fetchBlogCommentLikeDelete(data) {
+  return request.post!('&r=api/blog-comment-like/delete', data, { noAuth: false }, true)
+}
