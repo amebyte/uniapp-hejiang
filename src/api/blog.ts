@@ -22,3 +22,11 @@ export function fetchBlogList(data) {
 export function fetchBlogSave(data) {
   return request.post!('&r=api/blog/save', data, { noAuth: false }, true)
 }
+
+/**
+ * 保存博文评论
+ *
+ */
+export function fetchBlogCommentSave(data) {
+  return request.post!('&r=api/blog-comment/save', data, { noAuth: false }, true)
+}

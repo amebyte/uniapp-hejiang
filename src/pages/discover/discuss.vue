@@ -34,6 +34,7 @@
     <view class="operation">
       <view class="operation-left">
         <textarea
+          v-model="content"
           class="textarea"
           placeholder="请发表您的评论"
           maxlength="2000"
@@ -42,7 +43,7 @@
         />
       </view>
       <view class="operation-right">
-        <view class="sumbit">发布</view>
+        <view class="sumbit" @click="sumbit">发布</view>
       </view>
     </view>
   </view>
@@ -50,6 +51,34 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
+import { fetchBlogCommentSave } from '@/api/blog'
+import { Tips } from '@/utils/util'
+
+const id = ref('') as any
+const content = ref('')
+
+const sumbit = () => {
+  if (!content.value) {
+    Tips({ title: '请填写评论内容' })
+    return
+  }
+  fetchBlogCommentSave({
+    content: content.value,
+    blog_id: id.value,
+  })
+    .then((r) => {
+      if (r.code === 0) {
+        Tips({ title: '评论成功' })
+        content.value = ''
+      }
+    })
+    .catch((err) => console.log(err))
+}
+
+onLoad((options) => {
+  id.value = options.id
+  console.log('id.value', id.value)
+})
 </script>
 <style lang="scss">
 .container {
