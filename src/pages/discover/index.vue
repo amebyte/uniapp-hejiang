@@ -43,7 +43,7 @@
     <!--banner-nav end-->
     <!--答疑列表 start-->
     <view class="list">
-      <view v-for="item in list" :key="item.id" class="item" @click="gotoDiscuss(item)">
+      <view v-for="item in list" :key="item.id" class="item">
         <view class="recommend" style="display: none"><text>精选</text></view>
         <view class="user-info">
           <view class="profile">
@@ -59,10 +59,10 @@
             <text class="iconfont icon-more"></text>
           </view>
         </view>
-        <view class="text-content">
+        <view class="text-content" @click="gotoDiscuss(item)">
           {{ item.content }}
         </view>
-        <view class="image-list">
+        <view class="image-list" @click="gotoDiscuss(item)">
           <block v-for="(val, index) in item.images" :key="index">
             <view class="image">
               <image :src="val" mode="scaleToFill"></image>
@@ -70,13 +70,13 @@
           </block>
         </view>
         <view class="interact-status">
-          <view class="status">
-            <text class="iconfont icon-love"></text>
-            <text class="txt">6544</text>
+          <view class="status" :class="item.is_liked ? 'on' : ''" @click="handleLike(item)">
+            <text class="iconfont" :class="item.is_liked ? 'icon-love-fill' : 'icon-love'"></text>
+            <text class="txt">{{ item.like_count === '0' ? '赞' : item.like_count }}</text>
           </view>
-          <view class="status">
+          <view class="status" @click="gotoDiscuss(item)">
             <text class="iconfont icon-comment"></text>
-            <text class="txt">65</text>
+            <text class="txt">{{ item.comment_count }}</text>
           </view>
           <view class="status">
             <text class="iconfont icon-uninterested"></text>
@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { fetchBlogList } from '@/api/blog'
+import { fetchBlogList, fetchBlogLikeSave, fetchBlogLikeDelete } from '@/api/blog'
 const gotoPage = (url) => {
   uni.navigateTo({
     url: url,
@@ -113,6 +113,31 @@ const getList = () => {
     })
     .catch((err) => console.log(err))
 }
+
+const handleLike = (item) => {
+  const param = {
+    blog_id: item.id,
+    comment_id: item.id,
+  }
+  if (item.is_liked) {
+    fetchBlogLikeDelete({ id: item.blogLike.id, ...param })
+      .then((r) => {
+        if (r.code === 0) {
+          getList()
+        }
+      })
+      .catch((err) => console.log(err))
+  } else {
+    fetchBlogLikeSave({ id: item.blogLike && item.blogLike.id, is_delete: 0, ...param })
+      .then((r) => {
+        if (r.code === 0) {
+          getList()
+        }
+      })
+      .catch((err) => console.log(err))
+  }
+}
+
 onMounted(() => {
   getList()
 })
@@ -286,16 +311,18 @@ onMounted(() => {
         padding-left: 20rpx;
         > .status {
           margin-right: 40rpx;
+          color: #a6a6a6;
           .iconfont {
             font-size: 50rpx;
-            color: #a6a6a6;
           }
           .txt {
             font-size: 21rpx;
             font-family: Hiragino Sans GB;
             font-weight: bold;
-            color: #a6a6a6;
             padding-left: 10rpx;
+          }
+          &.on {
+            color: #80c269;
           }
         }
       }

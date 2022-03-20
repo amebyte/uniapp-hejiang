@@ -8,7 +8,7 @@
           <view class="detail">
             <view class="header-box">
               <view class="nickname">{{ item.user.nickname }}</view>
-              <view class="fabulous" :class="item.is_liked ? 'on' : ''" @click="handleLike(item, index)"
+              <view class="fabulous" :class="item.is_liked ? 'on' : ''" @click="handleLike(item)"
                 >{{ item.like_count === '0' ? '赞' : item.like_count }}
                 <text class="iconfont" :class="item.is_liked ? 'icon-good-fill' : 'icon-good'"></text
               ></view>
@@ -56,6 +56,7 @@ const getList = () => {
   const param = {
     page: 1,
     limit: 10,
+    blog_id: id.value,
   }
   fetchBlogCommentList(param)
     .then((r) => {
@@ -67,7 +68,7 @@ const getList = () => {
     .catch((err) => console.log(err))
 }
 
-const handleLike = (item, index) => {
+const handleLike = (item) => {
   const param = {
     blog_id: id.value,
     comment_id: item.id,

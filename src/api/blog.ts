@@ -13,7 +13,8 @@ export function fetchBlogTagList(data) {
  *
  */
 export function fetchBlogList(data) {
-  return request.get!('&r=api/blog/list', data, { noAuth: true })
+  const isLogin = store.state.app.token
+  return request.get!('&r=api/blog/list', data, { noAuth: isLogin ? false : true })
 }
 
 /**
@@ -22,6 +23,22 @@ export function fetchBlogList(data) {
  */
 export function fetchBlogSave(data) {
   return request.post!('&r=api/blog/save', data, { noAuth: false }, true)
+}
+
+/**
+ * 博文点赞
+ *
+ */
+export function fetchBlogLikeSave(data) {
+  return request.post!('&r=api/blog-like/save', data, { noAuth: false }, true)
+}
+
+/**
+ * 博文点赞删除
+ *
+ */
+export function fetchBlogLikeDelete(data) {
+  return request.post!('&r=api/blog-like/delete', data, { noAuth: false }, true)
 }
 
 /**
