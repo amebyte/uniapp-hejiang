@@ -1,5 +1,9 @@
 <template>
   <view class="container">
+    <view class="label-title">全部评论（501）</view>
+    <view class="list-wrap">
+      <view class="cell-item"></view>
+    </view>
     <view class="operation">
       <view class="operation-left">
         <textarea
@@ -22,6 +26,42 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue
 </script>
 <style lang="scss">
 .container {
+  .label-title {
+    font-size: 30rpx;
+    font-weight: bold;
+    position: relative;
+    padding: 20rpx 0;
+    margin-left: 30rpx;
+    margin-right: 30rpx;
+    margin-bottom: 20rpx;
+    &::after {
+      content: '';
+      position: absolute;
+      left: -18rpx;
+      top: 32%;
+      width: 6rpx;
+      height: 36%;
+      background: #1aa86c;
+      background-image: initial;
+      background-position-x: initial;
+      background-position-y: initial;
+      background-size: initial;
+      background-repeat-x: initial;
+      background-repeat-y: initial;
+      background-attachment: initial;
+      background-origin: initial;
+      background-clip: initial;
+      background-color: #1aa86c;
+    }
+  }
+  .list-wrap {
+    .cell-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding-bottom: 44rpx;
+    }
+  }
   .operation {
     width: 100%;
     height: 100rpx;
@@ -54,7 +94,7 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue
       display: flex;
       justify-content: center;
       align-items: center;
-      color: #666;
+      color: #1aa86c;
     }
     &::before {
       content: '';
