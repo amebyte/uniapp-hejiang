@@ -4,14 +4,14 @@
       <view class="operation-left">
         <textarea
           class="textarea"
-          placeholder="请友善交流"
+          placeholder="请发表您的评论"
           maxlength="2000"
           placeholder-class="phcolor-color"
           auto-focus
         />
       </view>
       <view class="operation-right">
-        <view class="sumbit">发送</view>
+        <view class="sumbit">发布</view>
       </view>
     </view>
   </view>
@@ -35,6 +35,27 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue
     bottom: 0;
     z-index: 99999;
     padding-bottom: env(safe-area-inset-bottom);
+    .operation-left {
+      .textarea {
+        height: 100rpx;
+        background: #ededed;
+        color: #999;
+        border-radius: 8rpx;
+        font-size: 28rpx;
+        display: flex;
+        align-items: center;
+        padding-left: 20rpx;
+        box-sizing: border-box;
+        padding-top: 20rpx;
+      }
+    }
+    .operation-right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #666;
+    }
     &::before {
       content: '';
       position: absolute;
