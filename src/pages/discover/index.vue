@@ -52,19 +52,16 @@
 </template>
 
 <script setup lang="ts">
+import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
-import { fetchBlogList, fetchBlogLikeSave, fetchBlogLikeDelete } from '@/api/blog'
+import { fetchBlogList } from '@/api/blog'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 const gotoPage = (url) => {
   uni.navigateTo({
     url: url,
   })
 }
-const gotoDiscuss = (item) => {
-  uni.navigateTo({
-    url: `/pages/discover/discuss?id=${item.id}`,
-  })
-}
+
 const list = ref([]) as any
 const getList = () => {
   const param = { page: 1, limit: 10 }
@@ -77,31 +74,7 @@ const getList = () => {
     .catch((err) => console.log(err))
 }
 
-const handleLike = (item) => {
-  const param = {
-    blog_id: item.id,
-    comment_id: item.id,
-  }
-  if (item.is_liked) {
-    fetchBlogLikeDelete({ id: item.blogLike.id, ...param })
-      .then((r) => {
-        if (r.code === 0) {
-          getList()
-        }
-      })
-      .catch((err) => console.log(err))
-  } else {
-    fetchBlogLikeSave({ id: item.blogLike && item.blogLike.id, is_delete: 0, ...param })
-      .then((r) => {
-        if (r.code === 0) {
-          getList()
-        }
-      })
-      .catch((err) => console.log(err))
-  }
-}
-
-onMounted(() => {
+onShow(() => {
   getList()
 })
 </script>

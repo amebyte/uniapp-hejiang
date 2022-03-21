@@ -18,6 +18,15 @@ export function fetchBlogList(data) {
 }
 
 /**
+ * 博文详情
+ *
+ */
+export function fetchBlogDetail(data) {
+  const isLogin = store.state.app.token
+  return request.get!('&r=api/blog/detail', data, { noAuth: isLogin ? false : true })
+}
+
+/**
  * 保存博文
  *
  */

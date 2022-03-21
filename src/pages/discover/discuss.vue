@@ -1,5 +1,8 @@
 <template>
   <view class="container">
+    <view class="blog-content">
+      <BlogItem v-if="item" :item="item" :is-detail="true" />
+    </view>
     <view class="label-title">全部评论（{{ comment_total_count }}）</view>
     <view class="list-wrap">
       <block v-for="(item, index) in list" :key="index">
@@ -39,7 +42,9 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
+import BlogItem from '@/components/blog-item/blog-item.vue'
 import {
+  fetchBlogDetail,
   fetchBlogCommentList,
   fetchBlogCommentSave,
   fetchBlogCommentLikeSave,
@@ -49,6 +54,17 @@ import { Tips } from '@/utils/util'
 
 const id = ref('') as any
 const content = ref('')
+const item = ref(null) as any
+
+const getDetail = () => {
+  fetchBlogDetail({ id: id.value })
+    .then((r) => {
+      if (r.code === 0) {
+        item.value = r.data
+      }
+    })
+    .catch((err) => console.log(err))
+}
 
 const list = ref([]) as any
 const comment_total_count = ref(0)
@@ -105,6 +121,7 @@ const sumbit = () => {
       if (r.code === 0) {
         Tips({ title: '评论成功' })
         content.value = ''
+        getList()
       }
     })
     .catch((err) => console.log(err))
@@ -112,11 +129,14 @@ const sumbit = () => {
 
 onLoad((options) => {
   id.value = options.id
+  getDetail()
   getList()
 })
 </script>
 <style lang="scss">
 .container {
+  .blog-content {
+  }
   .label-title {
     font-size: 30rpx;
     font-weight: bold;

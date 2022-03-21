@@ -18,10 +18,10 @@
     <view class="text-content" @click="gotoDiscuss(item)">
       {{ item.content }}
     </view>
-    <view class="image-list" @click="gotoDiscuss(item)">
+    <view class="image-list">
       <block v-for="(val, index) in item.images" :key="index">
         <view class="image">
-          <image :src="val" mode="scaleToFill"></image>
+          <image :src="val" mode="scaleToFill" @click="previewImage(index)"></image>
         </view>
       </block>
     </view>
@@ -44,15 +44,18 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
-import { fetchBlogList, fetchBlogLikeSave, fetchBlogLikeDelete } from '@/api/blog'
+import { fetchBlogLikeSave, fetchBlogLikeDelete } from '@/api/blog'
 const props = defineProps({
   item: { type: Object, required: true },
+  isDetail: { type: Boolean },
 })
 const emits = defineEmits(['getList'])
 const gotoDiscuss = (item) => {
-  uni.navigateTo({
-    url: `/pages/discover/discuss?id=${item.id}`,
-  })
+  if (!props.isDetail) {
+    uni.navigateTo({
+      url: `/pages/discover/discuss?id=${item.id}`,
+    })
+  }
 }
 
 const handleLike = (item) => {
@@ -77,6 +80,15 @@ const handleLike = (item) => {
       })
       .catch((err) => console.log(err))
   }
+}
+
+// 图片预览
+const previewImage = (index) => {
+  let imageList = props.item.images
+  uni.previewImage({
+    current: imageList[index],
+    urls: imageList,
+  })
 }
 </script>
 <style lang="scss">
