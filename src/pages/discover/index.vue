@@ -43,47 +43,9 @@
     <!--banner-nav end-->
     <!--答疑列表 start-->
     <view class="list">
-      <view v-for="item in list" :key="item.id" class="item">
-        <view class="recommend" style="display: none"><text>精选</text></view>
-        <view class="user-info">
-          <view class="profile">
-            <view class="l">
-              <image :src="item.user.userInfo.avatar" mode="scaleToFill"></image>
-            </view>
-            <view class="r">
-              <view class="name">{{ item.user.nickname }}</view>
-              <view class="desc">{{ item.created_at }}</view>
-            </view>
-          </view>
-          <view class="more">
-            <text class="iconfont icon-more"></text>
-          </view>
-        </view>
-        <view class="text-content" @click="gotoDiscuss(item)">
-          {{ item.content }}
-        </view>
-        <view class="image-list" @click="gotoDiscuss(item)">
-          <block v-for="(val, index) in item.images" :key="index">
-            <view class="image">
-              <image :src="val" mode="scaleToFill"></image>
-            </view>
-          </block>
-        </view>
-        <view class="interact-status">
-          <view class="status" :class="item.is_liked ? 'on' : ''" @click="handleLike(item)">
-            <text class="iconfont" :class="item.is_liked ? 'icon-love-fill' : 'icon-love'"></text>
-            <text class="txt">{{ item.like_count === '0' ? '赞' : item.like_count }}</text>
-          </view>
-          <view class="status" @click="gotoDiscuss(item)">
-            <text class="iconfont icon-comment"></text>
-            <text class="txt">{{ item.comment_count }}</text>
-          </view>
-          <view class="status">
-            <text class="iconfont icon-uninterested"></text>
-            <text class="txt">不感兴趣</text>
-          </view>
-        </view>
-      </view>
+      <block v-for="item in list" :key="item.id">
+        <BlogItem :item="item" @get-list="getList" />
+      </block>
     </view>
     <!--答疑列表 end-->
   </view>
@@ -92,6 +54,7 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { fetchBlogList, fetchBlogLikeSave, fetchBlogLikeDelete } from '@/api/blog'
+import BlogItem from '@/components/blog-item/blog-item.vue'
 const gotoPage = (url) => {
   uni.navigateTo({
     url: url,
