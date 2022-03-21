@@ -87,7 +87,7 @@
     <view class="user-order">
       <view class="box-header two_sides"> 我的内容 </view>
       <view class="box-content row">
-        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
+        <view class="box-item col-3" @click="toPage('/pages/my/myBlog')">
           <text class="iconfont icon-picture icon"></text>
           <text>我的作品</text>
         </view>

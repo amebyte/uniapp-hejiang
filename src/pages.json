@@ -187,6 +187,14 @@
             "navigationBarBackgroundColor": "#00796B",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "myBlog",
+          "style": {
+            "navigationBarTitleText": "我的作品",
+            "navigationBarBackgroundColor": "#00796B",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }

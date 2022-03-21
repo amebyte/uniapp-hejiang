@@ -11,36 +11,6 @@
       </view>
     </view>
     <!--top-bar end-->
-    <!--banner-nav start-->
-    <view class="banner-nav">
-      <view class="content">
-        <view class="item">
-          <view class="l">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
-          <view class="r">
-            <view class="name">合作伙伴</view>
-            <view class="desc">我们的合作伙伴</view>
-          </view>
-        </view>
-        <view class="item">
-          <view class="l">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
-          <view class="r">
-            <view class="name">品牌中心</view>
-            <view class="desc">诠释我们的品牌</view>
-          </view>
-        </view>
-      </view>
-    </view>
-    <!--banner-nav end-->
     <!--发现列表 start-->
     <view class="list">
       <block v-for="item in list" :key="item.id">
