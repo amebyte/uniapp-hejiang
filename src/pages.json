@@ -195,6 +195,14 @@
             "navigationBarBackgroundColor": "#00796B",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "myComment",
+          "style": {
+            "navigationBarTitleText": "我的评论",
+            "navigationBarBackgroundColor": "#00796B",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     }

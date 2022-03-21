@@ -11,7 +11,7 @@
         </view>
         <view class="user-right">
           <view class="user-right-top">
-            <text class="username">{{ userInfo.nickName }}</text>
+            <text class="username">{{ userInfo.nickname }}</text>
             <view class="user-level"
               >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
               <text class="iconfont icon-arrow-right-bold"></text
@@ -91,7 +91,7 @@
           <text class="iconfont icon-picture icon"></text>
           <text>我的作品</text>
         </view>
-        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
+        <view class="box-item col-3" @click="toPage('/pages/my/myComment')">
           <text class="iconfont icon-comment icon"></text>
           <text>我的评论</text>
         </view>
