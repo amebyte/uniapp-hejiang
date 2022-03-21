@@ -168,6 +168,7 @@ onLoad((options) => {
   .list-wrap {
     margin-left: 40rpx;
     margin-right: 40rpx;
+    margin-bottom: 100rpx;
     .cell-item {
       display: flex;
       align-items: flex-start;

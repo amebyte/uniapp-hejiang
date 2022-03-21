@@ -60,7 +60,7 @@
     {
       "path": "pages/discover/discuss",
       "style": {
-        "navigationBarTitleText": "内容详情"
+        "navigationBarTitleText": "作品详情"
       }
     },
     {
@@ -192,7 +192,6 @@
           "path": "myBlog",
           "style": {
             "navigationBarTitleText": "我的作品",
-            "navigationBarBackgroundColor": "#00796B",
             "enablePullDownRefresh": false
           }
         },
@@ -200,7 +199,6 @@
           "path": "myComment",
           "style": {
             "navigationBarTitleText": "我的评论",
-            "navigationBarBackgroundColor": "#00796B",
             "enablePullDownRefresh": false
           }
         }

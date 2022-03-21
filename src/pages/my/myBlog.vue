@@ -15,7 +15,6 @@
             >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
             <text class="iconfont icon-arrow-right-bold"></text
           ></view>
-          <view class="user-person">点击刷新</view>
         </view>
         <view class="user-right-bottom">
           <view>欢迎来到{{ userInfo.nickname }}的作品中心</view>
@@ -153,21 +152,6 @@ onShow(() => {
             font-size: 15rpx;
           }
         }
-
-        .user-person {
-          height: 30rpx;
-          line-height: 30rpx;
-          font-size: 20rpx;
-          background-color: #ffcc00;
-          border-radius: 10rpx;
-          padding-left: 10rpx;
-          padding-right: 10rpx;
-          color: #f33333;
-
-          .iconfont {
-            font-size: 15rpx;
-          }
-        }
       }
 
       .user-right-bottom {
@@ -190,13 +174,14 @@ onShow(() => {
       right: 40rpx;
       color: #fff;
       text {
-        border: 2rpx solid #009688;
+        border: 2rpx solid #fff;
         border-radius: 20rpx;
         font-size: 20rpx;
         font-family: PingFang SC;
         font-weight: bold;
-        color: #00796b;
+        color: #fff;
         padding: 5rpx 20rpx;
+        padding-top: 8rpx;
       }
     }
   }
