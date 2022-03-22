@@ -3,10 +3,10 @@
     <view class="recommend" style="display: none"><text>精选</text></view>
     <view class="user-info">
       <view class="profile">
-        <view class="l">
+        <view class="l" @click="gotoMyBlog">
           <image :src="item.user.userInfo.avatar" mode="scaleToFill"></image>
         </view>
-        <view class="r">
+        <view class="r" @click="gotoMyBlog">
           <view class="name">{{ item.user.nickname }}</view>
           <view class="desc">{{ item.created_at }}</view>
         </view>
@@ -52,12 +52,21 @@ const props = defineProps({
   item: { type: Object, required: true },
   isDetail: { type: Boolean },
   isDel: { type: Boolean },
+  isList: { type: Boolean },
 })
 const emits = defineEmits(['getList'])
 const gotoDiscuss = (item) => {
   if (!props.isDetail) {
     uni.navigateTo({
       url: `/pages/discover/discuss?id=${item.id}`,
+    })
+  }
+}
+
+const gotoMyBlog = () => {
+  if (props.isList) {
+    uni.navigateTo({
+      url: `/pages/my/myBlog?userid=${props.item.user_id}`,
     })
   }
 }

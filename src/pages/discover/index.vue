@@ -44,7 +44,7 @@
     <!--发现列表 start-->
     <view class="list">
       <block v-for="item in list" :key="item.id">
-        <BlogItem :item="item" @get-list="getList" />
+        <BlogItem :item="item" :is-list="true" @get-list="getList" />
       </block>
     </view>
     <!--发现列表 end-->

@@ -26,7 +26,7 @@
     <!--发现列表 start-->
     <view class="list">
       <block v-for="item in list" :key="item.id">
-        <BlogItem :item="item" :is-del="true" @get-list="getList" />
+        <BlogItem :item="item" :is-del="isDel" @get-list="getList" />
       </block>
     </view>
     <!--发现列表 end-->
@@ -40,8 +40,9 @@ import { fetchBlogMyList } from '@/api/blog'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 
 import { store } from '@/store'
-let userInfo = ref(store.state.app.userInfo)
-
+const userInfo = ref(store.state.app.userInfo)
+const isDel = ref(false)
+const userid = ref('')
 const gotoPage = (url) => {
   uni.navigateTo({
     url: url,
@@ -50,7 +51,7 @@ const gotoPage = (url) => {
 
 const list = ref([]) as any
 const getList = () => {
-  const param = { page: 1, limit: 10 }
+  const param = { page: 1, limit: 10, userid: userid.value }
   fetchBlogMyList(param)
     .then((r) => {
       if (r.code === 0) {
@@ -62,6 +63,10 @@ const getList = () => {
 
 onShow(() => {
   getList()
+})
+onLoad((options) => {
+  userid.value = options.userid || ''
+  isDel.value = options.userid ? false : true
 })
 </script>
 <style lang="scss">
