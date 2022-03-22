@@ -6,17 +6,17 @@
         <view class="item-wrapper">
           <moveBox :index="item.id" :move-name="moveName" @changeMoveName="changeMoveName" @action="deleteByMove">
             <view class="cell-item">
-              <image :src="item.user.userInfo.avatar" />
+              <image :src="item.user.userInfo.avatar" class="avatar" />
               <view class="detail">
                 <view class="header-box">
                   <view class="nickname">{{ item.user.nickname }}</view>
-                  <view class="fabulous" :class="item.is_liked ? 'on' : ''"
-                    >{{ item.like_count === '0' ? '赞' : item.like_count }}
-                    <text class="iconfont" :class="item.is_liked ? 'icon-good-fill' : 'icon-good'"></text
-                  ></view>
+                  <view class="desc"><text>评论了您的作品</text></view>
                 </view>
                 <view class="content">{{ item.content }}</view>
                 <view class="footer"> {{ item.created_at }} </view>
+              </view>
+              <view class="thumb">
+                <image :src="item.blog.images[0]" mode="aspectFill" class="thumb" />
               </view>
             </view>
           </moveBox>
@@ -117,19 +117,20 @@ onLoad((options) => {
     }
   }
   .list-wrap {
-    margin-left: 40rpx;
-    margin-right: 40rpx;
+    margin-left: 20rpx;
+    margin-right: 20rpx;
     .item-wrapper {
       position: relative;
       overflow: hidden;
-      padding: 8rpx 0;
+      padding: 10rpx 0;
       .cell-item {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
-        padding-bottom: 44rpx;
+        padding: 20rpx;
         background-color: #fff;
-        image {
+        border-radius: 10rpx;
+        .avatar {
           width: 64rpx;
           height: 64rpx;
           border-radius: 32rpx;
@@ -143,29 +144,22 @@ onLoad((options) => {
           .header-box {
             display: flex;
             align-items: flex-start;
-            justify-content: space-between;
+            justify-content: flex-start;
             font-size: 30rpx;
             .nickname {
               color: #1aa86c;
+              padding-right: 10rpx;
             }
-            .fabulous {
-              width: 80rpx;
-              height: 40rpx;
-              line-height: 40rpx;
-              color: #9a9a9a;
-              .iconfont {
-                font-size: 32rpx;
-              }
-              &.on {
-                color: #1aa86c;
-              }
+            .desc {
+              font-size: 24rpx;
             }
           }
           .content {
-            font-size: 32rpx;
+            font-size: 24rpx;
             color: #333;
             text-align: justify;
             padding-top: 8rpx;
+            padding-right: 20rpx;
             word-break: break-all;
             word-wrap: break-word;
           }
@@ -176,6 +170,10 @@ onLoad((options) => {
             margin-top: 16rpx;
             color: #9a9a9a;
           }
+        }
+        .thumb {
+          width: 100rpx;
+          height: 100rpx;
         }
       }
     }
