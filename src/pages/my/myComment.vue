@@ -1,5 +1,8 @@
 <template>
   <view class="container">
+    <!--提示 start-->
+    <MessageModal v-if="isShowMessage" @closeMessage="closeMessage"> </MessageModal>
+    <!--提示 end-->
     <view class="label-title">全部评论（{{ comment_total_count }}）</view>
     <view class="list-wrap">
       <block v-for="(item, index) in list" :key="index">
@@ -32,6 +35,8 @@ import BlogItem from '@/components/blog-item/blog-item.vue'
 import moveBox from '@/components/move-box/index.vue'
 import { fetchBlogCommentMyList, fetchBlogCommentDelete } from '@/api/blog'
 import { Tips } from '@/utils/util'
+import MessageModal from './component/MessageModal.vue'
+import Cache from '@/utils/cache'
 
 const moveName = ref('') as any
 
@@ -80,8 +85,16 @@ const deleteByMove = (id) => {
   })
 }
 
+let isShowMessage = ref(true)
+const closeMessage = () => {
+  isShowMessage.value = false
+  Cache.set('isShowMessageMyComment', 'false')
+}
+
 onLoad((options) => {
   getList()
+  const flag = Cache.get('isShowMessageMyComment')
+  isShowMessage.value = flag === 'false' ? false : true
 })
 </script>
 <style lang="scss">
@@ -95,7 +108,7 @@ onLoad((options) => {
     padding: 20rpx 0;
     margin-left: 30rpx;
     margin-right: 30rpx;
-    margin-bottom: 20rpx;
+    margin-bottom: 10rpx;
     &::after {
       content: '';
       position: absolute;
