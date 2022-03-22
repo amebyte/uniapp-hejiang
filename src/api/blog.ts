@@ -18,6 +18,22 @@ export function fetchBlogList(data) {
 }
 
 /**
+ * 我的博文列表
+ *
+ */
+export function fetchBlogMyList(data) {
+  return request.get!('&r=api/blog/my-list', data, { noAuth: false })
+}
+
+/**
+ * 我的博文删除
+ *
+ */
+export function fetchBlogDelete(data) {
+  return request.post!('&r=api/blog/delete', data, { noAuth: false }, true)
+}
+
+/**
  * 博文详情
  *
  */
@@ -90,4 +106,12 @@ export function fetchBlogCommentLikeDelete(data) {
 export function fetchBlogCommentMyList(data) {
   const isLogin = store.state.app.token
   return request.get!('&r=api/blog-comment/my-list', data, { noAuth: isLogin ? false : true })
+}
+
+/**
+ * 我的博文评论删除
+ *
+ */
+export function fetchBlogCommentDelete(data) {
+  return request.post!('&r=api/blog-comment/delete', data, { noAuth: false }, true)
 }

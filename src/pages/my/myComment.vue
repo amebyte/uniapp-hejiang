@@ -30,7 +30,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 import moveBox from '@/components/move-box/index.vue'
-import { fetchBlogCommentMyList } from '@/api/blog'
+import { fetchBlogCommentMyList, fetchBlogCommentDelete } from '@/api/blog'
 import { Tips } from '@/utils/util'
 
 const moveName = ref('') as any
@@ -41,11 +41,6 @@ const moveName = ref('') as any
 const changeMoveName = (name) => {
   moveName.value = name
 }
-
-/**
- * 滑动删除商
- */
-const deleteByMove = (id) => {}
 
 const list = ref([]) as any
 const comment_total_count = ref(0)
@@ -62,6 +57,27 @@ const getList = () => {
       }
     })
     .catch((err) => console.log(err))
+}
+
+/**
+ * 滑动删除商
+ */
+const deleteByMove = (id) => {
+  uni.showModal({
+    title: '评论删除确认',
+    content: `您确定要删除该评论吗`,
+    success: (e) => {
+      if (e.confirm) {
+        fetchBlogCommentDelete({ id })
+          .then((r) => {
+            if (r.code === 0) {
+              getList()
+            }
+          })
+          .catch((err) => console.log(err))
+      }
+    },
+  })
 }
 
 onLoad((options) => {

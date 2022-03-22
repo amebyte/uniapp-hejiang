@@ -26,7 +26,7 @@
     <!--发现列表 start-->
     <view class="list">
       <block v-for="item in list" :key="item.id">
-        <BlogItem :item="item" @get-list="getList" />
+        <BlogItem :item="item" :is-del="true" @get-list="getList" />
       </block>
     </view>
     <!--发现列表 end-->
@@ -36,7 +36,7 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
-import { fetchBlogList } from '@/api/blog'
+import { fetchBlogMyList } from '@/api/blog'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 
 import { store } from '@/store'
@@ -51,7 +51,7 @@ const gotoPage = (url) => {
 const list = ref([]) as any
 const getList = () => {
   const param = { page: 1, limit: 10 }
-  fetchBlogList(param)
+  fetchBlogMyList(param)
     .then((r) => {
       if (r.code === 0) {
         list.value = r.data.list

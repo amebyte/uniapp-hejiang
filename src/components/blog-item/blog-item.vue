@@ -11,8 +11,11 @@
           <view class="desc">{{ item.created_at }}</view>
         </view>
       </view>
-      <view class="more">
-        <text class="iconfont icon-more"></text>
+      <view class="more-wrap">
+        <view v-if="isDel" class="more" @click="toggleDelBtn">
+          <text class="iconfont icon-more"></text>
+        </view>
+        <view v-if="isShowDel" class="del">删除</view>
       </view>
     </view>
     <view class="text-content" @click="gotoDiscuss(item)">
@@ -48,6 +51,7 @@ import { fetchBlogLikeSave, fetchBlogLikeDelete } from '@/api/blog'
 const props = defineProps({
   item: { type: Object, required: true },
   isDetail: { type: Boolean },
+  isDel: { type: Boolean },
 })
 const emits = defineEmits(['getList'])
 const gotoDiscuss = (item) => {
@@ -56,6 +60,11 @@ const gotoDiscuss = (item) => {
       url: `/pages/discover/discuss?id=${item.id}`,
     })
   }
+}
+
+const isShowDel = ref(false)
+const toggleDelBtn = () => {
+  isShowDel.value = !isShowDel.value
 }
 
 const handleLike = (item) => {
@@ -145,13 +154,29 @@ const previewImage = (index) => {
         }
       }
     }
-    .more {
-      width: 40rpx;
-      overflow: hidden;
-      margin-left: 10rpx;
-      .icon-more {
-        font-size: 60rpx;
-        color: #bfbfbf;
+    .more-wrap {
+      position: relative;
+      .more {
+        width: 40rpx;
+        overflow: hidden;
+        margin-left: 10rpx;
+        .icon-more {
+          font-size: 60rpx;
+          color: #bfbfbf;
+        }
+      }
+      .del {
+        position: absolute;
+        bottom: -60rpx;
+        right: -20rpx;
+        width: 80rpx;
+        font-size: 28rpx;
+        text-align: center;
+        border: 2rpx solid #80c269;
+        color: #80c269;
+        border-radius: 5rpx;
+        padding-top: 10rpx;
+        padding-bottom: 10rpx;
       }
     }
   }
