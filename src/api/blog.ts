@@ -82,3 +82,12 @@ export function fetchBlogCommentLikeSave(data) {
 export function fetchBlogCommentLikeDelete(data) {
   return request.post!('&r=api/blog-comment-like/delete', data, { noAuth: false }, true)
 }
+
+/**
+ * 我的博文评论列表
+ *
+ */
+export function fetchBlogCommentMyList(data) {
+  const isLogin = store.state.app.token
+  return request.get!('&r=api/blog-comment/my-list', data, { noAuth: isLogin ? false : true })
+}
