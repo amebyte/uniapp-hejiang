@@ -15,7 +15,7 @@
         <view v-if="isDel" class="more" @click="toggleDelBtn">
           <text class="iconfont icon-more"></text>
         </view>
-        <view v-if="isShowDel" class="del">删除</view>
+        <view v-if="isShowDel" class="del" @click="blogDelete">删除</view>
       </view>
     </view>
     <view class="text-content" @click="gotoDiscuss(item)">
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
-import { fetchBlogLikeSave, fetchBlogLikeDelete } from '@/api/blog'
+import { fetchBlogLikeSave, fetchBlogLikeDelete, fetchBlogDelete } from '@/api/blog'
 const props = defineProps({
   item: { type: Object, required: true },
   isDetail: { type: Boolean },
@@ -89,6 +89,24 @@ const handleLike = (item) => {
       })
       .catch((err) => console.log(err))
   }
+}
+
+const blogDelete = () => {
+  uni.showModal({
+    title: '作品删除确认',
+    content: `您确定要删除该作品吗？`,
+    success: (e) => {
+      if (e.confirm) {
+        fetchBlogDelete({ id: props.item.id })
+          .then((r) => {
+            if (r.code === 0) {
+              emits('getList')
+            }
+          })
+          .catch((err) => console.log(err))
+      }
+    },
+  })
 }
 
 // 图片预览

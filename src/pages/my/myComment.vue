@@ -65,7 +65,7 @@ const getList = () => {
 const deleteByMove = (id) => {
   uni.showModal({
     title: '评论删除确认',
-    content: `您确定要删除该评论吗`,
+    content: `您确定要删除该评论吗？`,
     success: (e) => {
       if (e.confirm) {
         fetchBlogCommentDelete({ id })
