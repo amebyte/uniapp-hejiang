@@ -12,22 +12,6 @@ const normalizeTeacherNames = (data) => {
 }
 
 /**
- * 收藏添加
- *
- */
-export function fetchGoodsFavoriteAdd(data) {
-  return request.get!('&r=api/user/favorite-add', data, { noAuth: false })
-}
-
-/**
- * 收藏删除
- *
- */
-export function fetchGoodsFavoriteRemove(data) {
-  return request.get!('&r=api/user/favorite-remove', data, { noAuth: false })
-}
-
-/**
  * 热搜商品
  *
  */

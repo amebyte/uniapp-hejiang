@@ -29,7 +29,7 @@ import { CartActionTypes } from '@/store/modules/cart/action-types'
 import { fetchAddCart } from '@/api/cart'
 import { toLogin } from '@/libs/login'
 import { Tips } from '@/utils/util'
-import { fetchGoodsFavoriteAdd, fetchGoodsFavoriteRemove } from '@/api/goods'
+import { fetchFavoriteAdd, fetchFavoriteRemove } from '@/api/favorite'
 
 export default defineComponent({
   name: 'DetailFooterBar',
@@ -88,7 +88,7 @@ export default defineComponent({
      */
     const toggleFavourite = () => {
       if (isFavoriteLocal.value) {
-        fetchGoodsFavoriteRemove({ goods_id: props.goodsId })
+        fetchFavoriteRemove({ goods_id: props.goodsId })
           .then((r) => {
             if (r.code === 0) {
               isFavoriteLocal.value = false
@@ -96,7 +96,7 @@ export default defineComponent({
           })
           .catch((err) => console.log('fetchGoodsFavoriteRemove:', err))
       } else {
-        fetchGoodsFavoriteAdd({ goods_id: props.goodsId })
+        fetchFavoriteAdd({ goods_id: props.goodsId })
           .then((r) => {
             if (r.code === 0) {
               isFavoriteLocal.value = true

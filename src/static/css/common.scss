@@ -59,3 +59,43 @@
 .col-5{
     @include make-col(20%);
 }
+
+.t-omit {
+    /* 
+        单行文本显示、超出省略 
+        注意:在flex部分布局下使用可能会冲突  
+    */
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+}
+
+.t-omit-two {
+    /* 
+        两行文本超出省略显示  
+        注意:在flex部分布局下使用可能会冲突
+    */
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    white-space: normal !important;
+}
+
+.t-omit-three {
+    /* 
+        三行文本超出省略显示  
+        注意:在flex部分布局下使用可能会冲突
+    */
+    word-break: break-all;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+}

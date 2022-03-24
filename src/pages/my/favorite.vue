@@ -39,7 +39,7 @@
             @click="setDef('left')"
           >
             <view>
-              <text class="t-omit">{{ leftSet | category }}</text>
+              <text class="t-omit">{{ setCategory(leftSet) }}</text>
             </view>
             <view
               class="bd-image"
@@ -56,7 +56,7 @@
             @click="setDef('right')"
           >
             <view>
-              <text class="t-omit">{{ rightSet | setStatus }}</text>
+              <text class="t-omit">{{ setStatus(rightSet) }}</text>
             </view>
             <view
               class="bd-image"
@@ -70,9 +70,7 @@
             {{ touch ? '完成' : '管理' }}
           </view>
           <view class="f-good-icon" @click="setListStyle()">
-            <image
-              :src="listStyle ? '/static/image/icon/favorite/square.png' : '/static/image/icon/favorite/row.png'"
-            ></image>
+            <image :src="listStyle ? '/static/icon/image/square.png' : '/static/icon/image/row.png'"></image>
           </view>
         </view>
         <view class="f-select" :style="{ transform: 'translateY(' + typeY + 'rpx)' }">
@@ -104,6 +102,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed } from 'vue'
 import { store } from '@/store'
+import { fetchFavoriteGoodsCats, fetchFavoriteGoodsList } from '@/api/favorite'
 export default defineComponent({
   name: 'FavoritePage',
   setup() {
@@ -134,7 +133,27 @@ export default defineComponent({
       goods_page: 1,
       topic_page: 1,
       topicShow: false,
+      statusData: [
+        {
+          name: '全部状态',
+          id: 0,
+        },
+        // {
+        //   name: '优惠',
+        //   id: 3,
+        // },
+        {
+          name: '低库存',
+          id: 1,
+        },
+        {
+          name: '失效',
+          id: 2,
+        },
+      ],
     })
+
+    const catList = ref([]) as any
 
     const tabs = ref([
       {
@@ -189,28 +208,11 @@ export default defineComponent({
 
     const setDef = (key) => {
       if (key === 'right') {
-        state.statusList = [
-          {
-            name: '全部状态',
-            id: 0,
-          },
-          {
-            name: '优惠',
-            id: 3,
-          },
-          {
-            name: '低库存',
-            id: 1,
-          },
-          {
-            name: '失效',
-            id: 2,
-          },
-        ]
+        state.statusList = state.statusData
         state.rotate.left = 0
         state.typeY = -800
       } else {
-        state.statusList = catList
+        state.statusList = catList.value
         state.rotate.right = 0
         state.typeY = -800
       }
@@ -234,9 +236,78 @@ export default defineComponent({
       }
     }
 
+    const setCategory = (index) => {
+      for (let i = 0; i < catList.value.length; i++) {
+        if (catList.value[i].id === index) {
+          return catList.value[i].name
+        }
+      }
+    }
+
     const setStatus = (index) => {
       state.selectStatus = index
+      for (let i = 0; i < state.statusData.length; i++) {
+        if (state.statusData[i].id === index) {
+          return state.statusData[i].name
+        }
+      }
     }
+
+    const sureStatus = (s) => {
+      state.goods_page = 1
+
+      state.typeY = -800
+      state.show = false
+      if (s === 1) {
+        if (state.rotate.left !== 0) {
+          state.leftSet = state.selectStatus
+        }
+        if (state.rotate.right !== 0) {
+          state.rightSet = state.selectStatus
+        }
+
+        this.getFavorite()
+        for (let i in state.rotate) {
+          state.rotate[i] = 0
+        }
+      } else {
+        state.leftSet = 0
+        state.rightSet = 0
+        this.getFavorite()
+        for (let i in state.rotate) {
+          state.rotate[i] = 0
+        }
+      }
+    }
+
+    const getCats = () => {
+      fetchFavoriteGoodsCats()
+        .then((r) => {
+          catList.value = r.data.list
+        })
+        .catch((err) => console.log('fetchFavoriteGoodsCats:', err))
+    }
+
+    const getFavorite = (bool?) => {
+      fetchFavoriteGoodsList({
+        cat_id: state.leftSet,
+        status: state.rightSet,
+        page: state.goods_page,
+      })
+        .then((r) => {
+          if (!bool) {
+            state.list = r.data.list
+          } else {
+            state.list.push(...r.data.list)
+          }
+        })
+        .catch((err) => console.log('fetchFavoriteGoodsList:', err))
+    }
+
+    onLoad(() => {
+      getCats()
+      getFavorite()
+    })
 
     return {
       ...toRefs(state),
@@ -247,6 +318,8 @@ export default defineComponent({
       setDef,
       setListStyle,
       setStatus,
+      sureStatus,
+      setCategory,
     }
   },
 })
@@ -380,7 +453,7 @@ export default defineComponent({
       }
       .f-select {
         position: absolute;
-        top: 0;
+        top: 160rpx;
         width: 750upx;
         transition: 0.5s;
         z-index: 8;
@@ -426,5 +499,16 @@ export default defineComponent({
       }
     }
   }
+}
+
+.bd-image {
+  background-image: url('../../static/icon/image/bottom.png');
+  background-size: 102% 102%;
+  width: 11upx !important;
+  height: 6upx;
+  transition: 0.3s;
+  margin-right: 16upx;
+  background-repeat: no-repeat;
+  padding-left: 0 !important;
 }
 </style>
