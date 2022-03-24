@@ -22,4 +22,5 @@ export type goodsType = {
   curriculum_end_time?: string
   sales?: number
   subtitle?: string
+  favorite?: boolean
 }

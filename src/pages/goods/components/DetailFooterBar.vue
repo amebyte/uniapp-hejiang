@@ -5,7 +5,7 @@
       <text class="txt">首页</text>
     </view>
     <view class="item" @click="toggleFavourite">
-      <text v-if="!isFavorite" class="iconfont icon-favorite"></text>
+      <text v-if="!isFavoriteLocal" class="iconfont icon-favorite"></text>
       <text v-else class="iconfont icon-favorite-filling"></text>
       <text class="txt">收藏</text>
     </view>
@@ -29,6 +29,7 @@ import { CartActionTypes } from '@/store/modules/cart/action-types'
 import { fetchAddCart } from '@/api/cart'
 import { toLogin } from '@/libs/login'
 import { Tips } from '@/utils/util'
+import { fetchGoodsFavoriteAdd, fetchGoodsFavoriteRemove } from '@/api/goods'
 
 export default defineComponent({
   name: 'DetailFooterBar',
@@ -41,6 +42,13 @@ export default defineComponent({
       type: Number,
       default: 0,
     },
+    isFavorite: {
+      type: Boolean,
+    },
+    goodsId: {
+      type: Number,
+      default: 0,
+    },
   },
   emits: ['setIsOpenAttrWindow', 'setIsBuyNow'],
   setup(props, { emit }) {
@@ -48,10 +56,14 @@ export default defineComponent({
     const isLogin = computed(mapGetters(['isLogin']).isLogin.bind({ $store: store }))
 
     let cartCount = ref(0)
-    let isFavorite = ref(false)
+    let isFavoriteLocal = ref(props.isFavorite)
 
     watchEffect(() => {
       cartCount.value = props.cartNum
+    })
+
+    watchEffect(() => {
+      isFavoriteLocal.value = props.isFavorite
     })
 
     /**
@@ -75,7 +87,23 @@ export default defineComponent({
      * toggle收藏
      */
     const toggleFavourite = () => {
-      console.log('toggleFavourite')
+      if (isFavoriteLocal.value) {
+        fetchGoodsFavoriteRemove({ goods_id: props.goodsId })
+          .then((r) => {
+            if (r.code === 0) {
+              isFavoriteLocal.value = false
+            }
+          })
+          .catch((err) => console.log('fetchGoodsFavoriteRemove:', err))
+      } else {
+        fetchGoodsFavoriteAdd({ goods_id: props.goodsId })
+          .then((r) => {
+            if (r.code === 0) {
+              isFavoriteLocal.value = true
+            }
+          })
+          .catch((err) => console.log('fetchGoodsFavoriteAdd:', err))
+      }
     }
     /**
      * 打开属性加入购物车
@@ -132,7 +160,7 @@ export default defineComponent({
     }
     return {
       cartCount,
-      isFavorite,
+      isFavoriteLocal,
       gotoHandler,
       toggleFavourite,
       joinCart,

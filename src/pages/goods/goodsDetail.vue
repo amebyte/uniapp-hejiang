@@ -24,6 +24,8 @@
     <!--底部导航栏 start-->
     <DetailFooterBar
       ref="detailFooterBarRef"
+      :goods-id="goodsInfo.id"
+      :is-favorite="goodsInfo.favorite"
       :cart-num="cart_num"
       :create-cart-param="createCartParam"
       @setIsOpenAttrWindow="setIsOpenAttrWindow"

@@ -1,5 +1,6 @@
 import request from '@/utils/request'
 import { goodsType } from '@/types'
+import { store } from '@/store'
 
 const normalizeTeacherNames = (data) => {
   let teacherNames = ''
@@ -8,6 +9,22 @@ const normalizeTeacherNames = (data) => {
       teacherNames += o.name + ','
     })
   return teacherNames.slice(0, teacherNames.length - 1)
+}
+
+/**
+ * 收藏添加
+ *
+ */
+export function fetchGoodsFavoriteAdd(data) {
+  return request.get!('&r=api/user/favorite-add', data, { noAuth: false })
+}
+
+/**
+ * 收藏删除
+ *
+ */
+export function fetchGoodsFavoriteRemove(data) {
+  return request.get!('&r=api/user/favorite-remove', data, { noAuth: false })
 }
 
 /**
@@ -86,8 +103,9 @@ export function fetchGoodsList(data) {
  *
  */
 export function fetchGoodsDetail(data) {
+  const isLogin = store.state.app.token
   return new Promise((resolve, reject) => {
-    request.get!('&r=api/goods/detail&plugin=mall', data, { noAuth: true })
+    request.get!('&r=api/goods/detail&plugin=mall', data, { noAuth: isLogin ? false : true })
       .then((r) => {
         if (r.code === 0) {
           const d = r.data.goods
@@ -125,6 +143,7 @@ export function fetchGoodsDetail(data) {
               teacherNames: normalizeTeacherNames(d.curriculum_content),
               sales: d.sales,
               subtitle: d.subtitle,
+              favorite: d.favorite,
             }
             return data
           }
