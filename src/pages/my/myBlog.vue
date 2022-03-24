@@ -38,9 +38,8 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { onMounted, ref } from 'vue'
 import { fetchBlogMyList } from '@/api/blog'
 import BlogItem from '@/components/blog-item/blog-item.vue'
-
 import { store } from '@/store'
-const localUserInfo = ref(store.state.app.userInfo)
+
 const userInfo = ref({}) as any
 const isDel = ref(false)
 const userid = ref('')
@@ -60,12 +59,12 @@ const getList = () => {
         const member = r.data.member
         if (member) {
           userInfo.value = {
-            avatar: member.avatar,
+            avatar: member.userInfo.avatar,
             nickname: member.nickname,
             identity: { member_level: member.identity.member_level },
           }
         } else {
-          userInfo.value = localUserInfo
+          userInfo.value = store.state.app.userInfo
         }
       }
     })
