@@ -40,7 +40,8 @@ import { fetchBlogMyList } from '@/api/blog'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 
 import { store } from '@/store'
-const userInfo = ref(store.state.app.userInfo)
+const localUserInfo = ref(store.state.app.userInfo)
+const userInfo = ref({}) as any
 const isDel = ref(false)
 const userid = ref('')
 const gotoPage = (url) => {
@@ -56,6 +57,16 @@ const getList = () => {
     .then((r) => {
       if (r.code === 0) {
         list.value = r.data.list
+        const member = r.data.member
+        if (member) {
+          userInfo.value = {
+            avatar: member.avatar,
+            nickname: member.nickname,
+            identity: { member_level: member.identity.member_level },
+          }
+        } else {
+          userInfo.value = localUserInfo
+        }
       }
     })
     .catch((err) => console.log(err))
