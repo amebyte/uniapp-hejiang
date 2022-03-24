@@ -33,6 +33,16 @@ export function fetchWechatH5Register(data) {
   return request.get!('&r=plugin/wechat/api/passport/login-url', data, { noAuth: true }, true)
 }
 
+/**
+ * 用户登出
+ * @param data object
+ *
+ *	smsCode
+ */
+export function fetchLogout() {
+  return request.get!('&r=plugin/mobile/api/passport/logout', {}, { noAuth: true })
+}
+
 // #ifdef H5
 /**
  * 获取微信公众号js配置

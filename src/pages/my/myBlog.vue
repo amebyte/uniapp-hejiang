@@ -68,10 +68,11 @@ const getList = () => {
         }
       }
     })
-    .catch((err) => console.log(err))
+    .catch((err) => console.log('fetchBlogMyList:', err))
 }
 
 onShow(() => {
+  console.log('onShow')
   getList()
 })
 onLoad((options) => {

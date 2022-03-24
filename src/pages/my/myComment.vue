@@ -18,7 +18,7 @@
                 <view class="content">{{ item.content }}</view>
                 <view class="footer"> {{ item.created_at }} </view>
               </view>
-              <view class="thumb">
+              <view class="thumb" @click="gotoDiscuss(item.blog)">
                 <image :src="item.blog.images[0]" mode="aspectFill" class="thumb" />
               </view>
             </view>
@@ -89,6 +89,12 @@ let isShowMessage = ref(true)
 const closeMessage = () => {
   isShowMessage.value = false
   Cache.set('isShowMessageMyComment', 'false')
+}
+
+const gotoDiscuss = (item) => {
+  uni.navigateTo({
+    url: `/pages/discover/discuss?id=${item.id}`,
+  })
 }
 
 onLoad((options) => {

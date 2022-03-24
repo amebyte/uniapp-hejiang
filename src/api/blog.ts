@@ -22,7 +22,8 @@ export function fetchBlogList(data) {
  *
  */
 export function fetchBlogMyList(data) {
-  return request.get!('&r=api/blog/my-list', data, { noAuth: false })
+  const isLogin = store.state.app.token
+  return request.get!('&r=api/blog/my-list', data, { noAuth: isLogin ? false : true })
 }
 
 /**

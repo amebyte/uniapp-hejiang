@@ -133,7 +133,7 @@
           <text class="iconfont icon-address icon"></text>
           <text>收货地址</text>
         </view>
-        <view class="box-item col-3">
+        <view class="box-item col-3" @click="logout">
           <text class="iconfont icon-sign-out icon"></text>
           <text>退出账号</text>
         </view>
@@ -155,6 +155,9 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { store } from '@/store'
+import { fetchLogout } from '@/api/public'
+import { AppMutationTypes } from '@/store/modules/app/mutation-types'
+import { Tips } from '@/utils/util'
 let isLogin = ref(store.getters.isLogin)
 let userInfo = ref(store.state.app.userInfo)
 let orderCounts = ref({}) as any
@@ -172,6 +175,19 @@ const gotoMemberCenter = () => {
   uni.navigateTo({
     url: `/pages/my/memberCenter`,
   })
+}
+const logout = () => {
+  fetchLogout()
+    .then((r) => {
+      if (r.code === 0) {
+        store.commit(AppMutationTypes.LOGOUT)
+        Tips({ title: '退出登录成功' })
+        uni.navigateTo({
+          url: `/pages/my/login`,
+        })
+      }
+    })
+    .catch((err) => console.log('fetchLogout:', fetchLogout))
 }
 </script>
 <style lang="scss">
