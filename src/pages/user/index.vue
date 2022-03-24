@@ -95,7 +95,7 @@
           <text class="iconfont icon-comment icon"></text>
           <text>我的评论</text>
         </view>
-        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
+        <view class="box-item col-3" @click="toPage('/pages/my/favorite')">
           <text class="iconfont icon-love icon"></text>
           <text>我的收藏</text>
         </view>

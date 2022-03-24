@@ -201,6 +201,12 @@
             "navigationBarTitleText": "我的评论",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "favorite",
+          "style": {
+            "navigationBarTitleText": "我的收藏"
+          }
         }
       ]
     }
