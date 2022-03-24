@@ -54,12 +54,22 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
+import { store } from '@/store'
 import { fetchBlogList } from '@/api/blog'
 import BlogItem from '@/components/blog-item/blog-item.vue'
+
+let isLogin = ref(store.getters.isLogin)
+
 const gotoPage = (url) => {
-  uni.navigateTo({
-    url: url,
-  })
+  if (isLogin.value) {
+    uni.navigateTo({
+      url: url,
+    })
+  } else {
+    uni.navigateTo({
+      url: '/pages/my/login',
+    })
+  }
 }
 
 const list = ref([]) as any

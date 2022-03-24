@@ -25,6 +25,11 @@
           </moveBox>
         </view>
       </block>
+      <template v-if="list.length === 0">
+        <view class="no-list">
+          <AppNoGoods background="#f7f7f7" :title="'暂无相关评论'" color="#999999" :is-image="1" />
+        </view>
+      </template>
     </view>
   </view>
 </template>
@@ -36,6 +41,7 @@ import moveBox from '@/components/move-box/index.vue'
 import { fetchBlogCommentMyList, fetchBlogCommentDelete } from '@/api/blog'
 import { Tips } from '@/utils/util'
 import MessageModal from './component/MessageModal.vue'
+import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 import Cache from '@/utils/cache'
 
 const moveName = ref('') as any
@@ -195,6 +201,9 @@ onLoad((options) => {
           height: 100rpx;
         }
       }
+    }
+    .no-list {
+      margin-top: 120rpx;
     }
   }
 }

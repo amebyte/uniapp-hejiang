@@ -5,22 +5,35 @@
     </view>
     <!--头像和用户信息 start-->
     <view class="user-info-header" style="">
-      <view class="user-avatar">
-        <image :src="userInfo.avatar" />
-      </view>
-      <view class="user-right">
-        <view class="user-right-top">
-          <text class="username">{{ userInfo.nickname }}</text>
-          <view class="user-level"
-            >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
-            <text class="iconfont icon-arrow-right-bold"></text
-          ></view>
+      <block v-if="userInfo">
+        <view class="user-avatar">
+          <image :src="userInfo.avatar" />
         </view>
-        <view class="user-right-bottom">
-          <view>欢迎来到{{ userInfo.nickname }}的作品中心</view>
+        <view class="user-right">
+          <view class="user-right-top">
+            <text class="username">{{ userInfo.nickname }}</text>
+            <view class="user-level"
+              >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
+              <text class="iconfont icon-arrow-right-bold"></text
+            ></view>
+          </view>
+          <view class="user-right-bottom">
+            <view>欢迎来到{{ userInfo.nickname }}的作品中心</view>
+          </view>
         </view>
-      </view>
-      <view class="setup"><text @click="gotoPage('/pages/discover/publish')">发布</text></view>
+        <view class="setup"><text @click="gotoPage('/pages/discover/publish')">发布</text></view>
+      </block>
+      <block v-else>
+        <view class="user-no-head" @click="goLogin">
+          <text class="iconfont icon-no-head"></text>
+        </view>
+        <view class="user-right">
+          <view class="user-right-top" @click="goLogin">
+            <text class="username">授权登录</text>
+          </view>
+          <view class="user-right-bottom" @click="goLogin">授权登录之后享受更多优惠福利</view>
+        </view>
+      </block>
     </view>
     <!--头像和用户信息 end-->
     <!--发现列表 start-->
@@ -28,6 +41,11 @@
       <block v-for="item in list" :key="item.id">
         <BlogItem :item="item" :is-del="isDel" @get-list="getList" />
       </block>
+      <template v-if="list.length === 0">
+        <view class="no-list">
+          <AppNoGoods background="#f7f7f7" :title="'暂无相关作品'" color="#999999" :is-image="1" />
+        </view>
+      </template>
     </view>
     <!--发现列表 end-->
   </view>
@@ -38,9 +56,10 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { onMounted, ref } from 'vue'
 import { fetchBlogMyList } from '@/api/blog'
 import BlogItem from '@/components/blog-item/blog-item.vue'
+import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 import { store } from '@/store'
 
-const userInfo = ref({}) as any
+const userInfo = ref(null) as any
 const isDel = ref(false)
 const userid = ref('')
 const gotoPage = (url) => {
@@ -69,6 +88,12 @@ const getList = () => {
       }
     })
     .catch((err) => console.log('fetchBlogMyList:', err))
+}
+
+const goLogin = () => {
+  uni.navigateTo({
+    url: `/pages/my/login`,
+  })
 }
 
 onShow(() => {
@@ -203,6 +228,9 @@ onLoad((options) => {
   }
   .list {
     margin: 20rpx;
+    .no-list {
+      margin-top: 120rpx;
+    }
   }
 }
 </style>
