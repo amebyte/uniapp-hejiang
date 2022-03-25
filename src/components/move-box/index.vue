@@ -30,6 +30,10 @@ export default defineComponent({
       type: String as any,
       default: '',
     },
+    disabled: {
+      type: Boolean,
+      default: true,
+    },
   },
   emits: ['changeMoveName', 'action'],
   setup(props, { emit }) {
@@ -43,7 +47,9 @@ export default defineComponent({
      * @param e
      */
     const listTouchStart = (e) => {
-      state.listTouchStart = e.touches[0].pageX
+      if (props.disabled) {
+        state.listTouchStart = e.touches[0].pageX
+      }
     }
 
     /**
@@ -51,7 +57,9 @@ export default defineComponent({
      * @param e
      */
     const listTouchMove = (e) => {
-      state.listTouchDirection = e.touches[0].pageX - state.listTouchStart > 0 ? 'right' : 'left'
+      if (props.disabled) {
+        state.listTouchDirection = e.touches[0].pageX - state.listTouchStart > 0 ? 'right' : 'left'
+      }
     }
 
     /**
@@ -59,13 +67,15 @@ export default defineComponent({
      * @param e
      */
     const listTouchEnd = (e) => {
-      if (state.listTouchDirection == 'left') {
-        const moveName = e.currentTarget.dataset.target
-        emit('changeMoveName', moveName)
-      } else {
-        emit('changeMoveName', null)
+      if (props.disabled) {
+        if (state.listTouchDirection == 'left') {
+          const moveName = e.currentTarget.dataset.target
+          emit('changeMoveName', moveName)
+        } else {
+          emit('changeMoveName', null)
+        }
+        state.listTouchDirection = null
       }
-      state.listTouchDirection = null
     }
 
     const action = () => {

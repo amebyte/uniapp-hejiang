@@ -105,10 +105,20 @@
               style="background-color: #ffffff"
               @tap="setTouch(index)"
             >
-              <view v-if="!item.touch" class="f-radio-no"></view>
-              <view v-if="item.touch" class="f-radio-yes"></view>
+              <view v-if="!item.touch" class="f-radio-no">
+                <text class="iconfont icon-radio-uncheck"></text>
+              </view>
+              <view v-if="item.touch" class="f-radio-yes">
+                <text class="iconfont icon-radio-checked"></text>
+              </view>
             </view>
-            <moveBox :index="item.id" :move-name="moveName" @changeMoveName="changeMoveName" @action="deleteByMove">
+            <moveBox
+              :index="item.id"
+              :move-name="moveName"
+              :disabled="!touch"
+              @changeMoveName="changeMoveName"
+              @action="deleteByMove"
+            >
               <view class="f-item u-border-bottom dir-left-nowrap" @click="routeUrl(item)">
                 <image class="f-img" :src="item.cover_pic" />
                 <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
@@ -151,27 +161,84 @@
           >
             <view class="dir-left-nowrap" @click="setTouchAll(allTouch)">
               <view class="f-radio">
-                <view v-if="!allTouch" class="f-kon"></view>
-                <view v-if="allTouch" class="f-touch"></view>
+                <view v-if="!allTouch" class="f-kon">
+                  <text class="iconfont icon-radio-uncheck"></text>
+                </view>
+                <view v-if="allTouch" class="f-touch">
+                  <text class="iconfont icon-radio-checked"></text>
+                </view>
               </view>
               <text>全选</text>
             </view>
             <button :class="touchNumber > 0 ? 'f-button-t ' : 'f-button-m'" @click="remove">删除</button>
           </view>
         </block>
+        <block v-else>
+          <view class="f-list dir-left-wrap">
+            <view v-for="(item, index) in list" :key="index" class="f-list-item" @click="handleTouchend(item, index)">
+              <view class="f-img">
+                <image :src="item.cover_pic"></image>
+                <view v-if="item.status_type === 3" class="f-invalid f-icon dir-left-nowrap cross-center main-between">
+                </view>
+                <view
+                  v-if="item.status_type === 1"
+                  class="f-low-price f-icon dir-left-nowrap cross-center main-between"
+                >
+                </view>
+                <view
+                  v-if="item.status_type === 2"
+                  class="f-low-stock f-icon dir-left-nowrap cross-center main-between"
+                >
+                </view>
+                <view class="f-radio">
+                  <view v-if="touch && !item.touch" class="f-kon"
+                    ><text class="iconfont icon-radio-uncheck"></text
+                  ></view>
+                  <view v-if="item.touch" class="f-touch"><text class="iconfont icon-radio-checked"></text></view>
+                </view>
+              </view>
+              <view class="f-text dir-top-nowrap main-between">
+                <text class="t-omit-two">{{ item.name }}</text>
+                <template v-if="item.is_negotiable == 1">
+                  <view :style="{ color: theme.color, 'margin-bottom': '8rpx' }">价格面议</view>
+                </template>
+                <view v-else class="dir-left-nowrap main-between">
+                  <text class="f-price" :style="{ color: theme.color }">{{ item.price_content }}</text>
+                  <text class="f-sales">{{ item.sales }}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view v-if="touch" class="f-delete-box"></view>
+          <view
+            class="f-delete dir-left-nowrap main-between cross-center"
+            :class="touch ? 'f-delete-show' : 'f-delete-hidden'"
+          >
+            <view class="dir-left-nowrap" @click="setTouchAll(allTouch)">
+              <view class="f-radio">
+                <view v-if="!allTouch" class="f-kon"><text class="iconfont icon-radio-uncheck"></text></view>
+                <view v-if="allTouch" class="f-touch"><text class="iconfont icon-radio-checked"></text></view>
+              </view>
+              <text>全选</text>
+            </view>
+            <button :class="touchNumber > 0 ? 'f-button-t ' : 'f-button-m'" @click="remove">删除</button>
+          </view>
+        </block>
+        <app-no-goods v-if="list.length === 0" background="#f7f7f7"></app-no-goods>
       </view>
     </view>
   </view>
 </template>
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
-import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed } from 'vue'
+import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed, watch } from 'vue'
 import moveBox from '@/components/move-box/index.vue'
 import { store } from '@/store'
 import { fetchFavoriteGoodsCats, fetchFavoriteGoodsList } from '@/api/favorite'
+import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 export default defineComponent({
   name: 'FavoritePage',
-  components: { moveBox },
+  components: { moveBox, AppNoGoods },
   setup() {
     const state = reactive({
       getCurrent: 0,
@@ -373,6 +440,14 @@ export default defineComponent({
       }
     }
 
+    const handleTouchend = (item, index) => {
+      if (!state.touch) {
+        routeUrl(item)
+      } else if (state.touch) {
+        setTouch(index)
+      }
+    }
+
     const deleteByMove = (index) => {
       if (state.getCurrent === 0) {
         this.$request({
@@ -474,6 +549,41 @@ export default defineComponent({
       getFavorite()
     })
 
+    watch(
+      () => state.rotate,
+      (data) => {
+        if (data.left === 0 && data.right === 0) {
+          state.show = false
+        }
+        if (data.left !== 0) {
+          state.selectStatus = state.leftSet
+        }
+        if (data.right !== 0) {
+          state.selectStatus = state.rightSet
+        }
+      },
+      { deep: true }
+    )
+
+    watch(
+      () => state.list,
+      (data) => {
+        let touch = 0
+        for (let i = 0; i < data.length; i++) {
+          if (data[i].touch) {
+            touch++
+          }
+        }
+        state.touchNumber = touch
+        if (touch === data.length) {
+          state.allTouch = true
+        } else {
+          state.allTouch = false
+        }
+      },
+      { deep: true }
+    )
+
     return {
       ...toRefs(state),
       tabs,
@@ -493,11 +603,13 @@ export default defineComponent({
       setTouchAll,
       routeUrl,
       remove,
+      handleTouchend,
     }
   },
 })
 </script>
 <style lang="scss">
+@import '@/static/css/variable.scss';
 .container {
   .favorite-wrap {
     position: relative;
@@ -679,23 +791,22 @@ export default defineComponent({
         width: 85upx;
         height: 248upx;
         .f-radio-no {
-          border-radius: 50%;
           width: 40upx;
           height: 40upx;
-          border: 1upx solid #868686;
         }
         .f-radio-yes {
           width: 40upx;
           height: 40upx;
-          background-size: 100% 100%;
-          background-repeat: no-repeat;
-          border-radius: 50%;
-          background-image: url('./image/touch.png');
+        }
+        .iconfont {
+          font-size: 36rpx;
+          color: $top-background-color;
         }
       }
       .f-item {
         width: 750upx;
         padding: 24upx;
+        background-color: #fff;
         .f-img {
           width: 200upx;
           height: 200upx;
@@ -781,7 +892,7 @@ export default defineComponent({
       }
 
       .f-list {
-        padding: 0 24upx;
+        padding: 0 20upx;
         .f-list-item {
           height: 492upx;
           width: 344upx;
@@ -811,17 +922,11 @@ export default defineComponent({
             .f-kon {
               width: 40upx;
               height: 40upx;
-              border-radius: 50%;
-              border: 1upx solid #868686;
             }
             .f-touch {
               width: 40upx;
               height: 40upx;
-              background-size: 101% 101%;
-              background-repeat: no-repeat;
-              border-radius: 50%;
               z-index: 1;
-              background-image: url('./image/touch.png');
             }
           }
         }
@@ -913,17 +1018,14 @@ export default defineComponent({
             .f-kon {
               width: 40upx;
               height: 40upx;
-              border-radius: 50%;
-              border: 1upx solid #868686;
             }
             .f-touch {
               width: 40upx;
               height: 40upx;
-              background-size: 101% 101%;
-              background-repeat: no-repeat;
-              border-radius: 50%;
-              z-index: 1;
-              background-image: url('./image/touch.png');
+            }
+            .iconfont {
+              font-size: 36rpx;
+              color: $top-background-color;
             }
           }
         }
