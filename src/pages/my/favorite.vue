@@ -143,6 +143,21 @@
               </view>
             </moveBox>
           </view>
+
+          <view v-if="touch" class="f-delete-box"></view>
+          <view
+            class="f-delete dir-left-nowrap main-between cross-center"
+            :class="touch ? 'f-delete-show' : 'f-delete-hidden'"
+          >
+            <view class="dir-left-nowrap" @click="setTouchAll(allTouch)">
+              <view class="f-radio">
+                <view v-if="!allTouch" class="f-kon"></view>
+                <view v-if="allTouch" class="f-touch"></view>
+              </view>
+              <text>全选</text>
+            </view>
+            <button :class="touchNumber > 0 ? 'f-button-t ' : 'f-button-m'" @click="remove">删除</button>
+          </view>
         </block>
       </view>
     </view>
@@ -332,41 +347,30 @@ export default defineComponent({
       }
     }
 
-    const editHandle = (index) => {
-      state.goods_page = 1
-      if (index === 0) {
-        state.is_goods = true
-        state.left = 0
-        state.statusTop = 85
-        setTimeout(() => {
-          state.getCurrent = index
-        })
-        getFavorite()
-      } else if (index === 1) {
-        setTimeout(() => {
-          state.is_goods = false
-        }, 500)
-        state.getCurrent = index
-        state.left = 375
-        state.typeY = -800
-        state.statusTop = -85
-        for (let i in state.rotate) {
-          state.rotate[i] = 0
+    const editHandle = () => {
+      if (state.touch) {
+        for (let i = 0; i < state.list.length; i++) {
+          state.list[i].touch = false
         }
-        state.show = false
-        if (!state.listStyle) {
-          for (let i = 0; i < state.list.length; i++) {
-            state.list[i].touch = false
-          }
-          state.touch = false
-          state.allTouch = false
+        state.touch = false
+        state.allTouch = false
+      } else {
+        state.touch = !state.touch
+        for (let i = 0; i < state.list.length; i++) {
+          state.list[i].show = false
         }
-        // this.getTopicList()
       }
     }
 
     const setTouch = (index) => {
       state.list[index].touch = !state.list[index].touch
+    }
+
+    const setTouchAll = (allTouch) => {
+      state.allTouch = !allTouch
+      for (let i = 0; i < state.list.length; i++) {
+        state.list[i].touch = state.allTouch
+      }
     }
 
     const deleteByMove = (index) => {
@@ -402,6 +406,34 @@ export default defineComponent({
           url: item.page_url,
         })
       }
+    }
+
+    const remove = () => {
+      let goods_ids = []
+      for (let i = 0; i < state.list.length; i++) {
+        if (state.list[i].touch) {
+          goods_ids.push(state.list[i].id)
+        }
+      }
+      if (goods_ids.length === 0) return
+      this.$request({
+        url: this.$api.user.favorite_batch_remove,
+        method: 'post',
+        data: {
+          goods_ids: JSON.stringify(goods_ids),
+        },
+      })
+      for (let i = 0; i < state.list.length; i++) {
+        for (let j = 0; j < goods_ids.length; j++) {
+          if (goods_ids[j] === state.list[i].id) {
+            this.$delete(this.list, i)
+          }
+        }
+      }
+      uni.showToast({
+        title: '取消收藏成功',
+        icon: 'none',
+      })
     }
 
     const getCats = () => {
@@ -458,7 +490,9 @@ export default defineComponent({
       editHandle,
       deleteByMove,
       setTouch,
+      setTouchAll,
       routeUrl,
+      remove,
     }
   },
 })
@@ -641,6 +675,24 @@ export default defineComponent({
       padding-top: 166upx;
       visibility: visible;
       transition: all 0.3s ease-in-out;
+      .f-radio {
+        width: 85upx;
+        height: 248upx;
+        .f-radio-no {
+          border-radius: 50%;
+          width: 40upx;
+          height: 40upx;
+          border: 1upx solid #868686;
+        }
+        .f-radio-yes {
+          width: 40upx;
+          height: 40upx;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          border-radius: 50%;
+          background-image: url('./image/touch.png');
+        }
+      }
       .f-item {
         width: 750upx;
         padding: 24upx;
