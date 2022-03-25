@@ -113,7 +113,7 @@
               </view>
             </view>
             <moveBox
-              :index="item.id"
+              :index="index"
               :move-name="moveName"
               :disabled="!touch"
               @changeMoveName="changeMoveName"
@@ -234,7 +234,12 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed, watch } from 'vue'
 import moveBox from '@/components/move-box/index.vue'
 import { store } from '@/store'
-import { fetchFavoriteGoodsCats, fetchFavoriteGoodsList } from '@/api/favorite'
+import {
+  fetchFavoriteBatchRemove,
+  fetchFavoriteGoodsCats,
+  fetchFavoriteGoodsList,
+  fetchFavoriteRemove,
+} from '@/api/favorite'
 import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 export default defineComponent({
   name: 'FavoritePage',
@@ -450,24 +455,25 @@ export default defineComponent({
 
     const deleteByMove = (index) => {
       if (state.getCurrent === 0) {
-        this.$request({
-          url: this.$api.user.favorite_remove,
-          method: 'get',
-          data: {
-            goods_id: this.list[index].id,
-          },
+        fetchFavoriteRemove({
+          goods_id: state.list[index].id,
         })
-        this.$delete(this.list, index)
+          .then((r) => {
+            if (r.code === 0) {
+              state.list.splice(index, 1)
+            }
+          })
+          .catch((err) => console.log('fetchFavoriteRemove:', err))
       } else {
-        this.$request({
-          url: this.$api.topic.favorite,
-          data: {
-            id: this.topicList[index].id,
-            is_favorite: 'no_love',
-          },
-          method: 'post',
-        })
-        this.$delete(this.topicList, index)
+        // this.$request({
+        //   url: this.$api.topic.favorite,
+        //   data: {
+        //     id: this.topicList[index].id,
+        //     is_favorite: 'no_love',
+        //   },
+        //   method: 'post',
+        // })
+        // this.$delete(this.topicList, index)
       }
       uni.showToast({
         title: '取消收藏成功',
@@ -484,24 +490,20 @@ export default defineComponent({
     }
 
     const remove = () => {
-      let goods_ids = []
+      let goods_ids = [] as any[]
       for (let i = 0; i < state.list.length; i++) {
         if (state.list[i].touch) {
           goods_ids.push(state.list[i].id)
         }
       }
       if (goods_ids.length === 0) return
-      this.$request({
-        url: this.$api.user.favorite_batch_remove,
-        method: 'post',
-        data: {
-          goods_ids: JSON.stringify(goods_ids),
-        },
+      fetchFavoriteBatchRemove({
+        goods_ids: JSON.stringify(goods_ids),
       })
       for (let i = 0; i < state.list.length; i++) {
         for (let j = 0; j < goods_ids.length; j++) {
           if (goods_ids[j] === state.list[i].id) {
-            this.$delete(this.list, i)
+            state.list.splice(i, 1)
           }
         }
       }

@@ -17,6 +17,14 @@ export function fetchFavoriteRemove(data) {
 }
 
 /**
+ * 收藏批量删除
+ *
+ */
+export function fetchFavoriteBatchRemove(data) {
+  return request.post!('&r=api/user/favorite-batch-remove', data, { noAuth: false }, true)
+}
+
+/**
  * 收藏商品类目
  *
  */
