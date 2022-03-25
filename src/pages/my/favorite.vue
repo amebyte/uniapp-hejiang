@@ -66,7 +66,7 @@
               }"
             ></view>
           </view>
-          <view class="f-good-btn" @click="edit">
+          <view class="f-good-btn" @click="editHandle">
             {{ touch ? '完成' : '管理' }}
           </view>
           <view class="f-good-icon" @click="setListStyle()">
@@ -254,7 +254,7 @@ export default defineComponent({
           state.touch = false
           state.allTouch = false
         }
-        this.getTopicList()
+        // this.getTopicList()
       }
     }
 
@@ -332,6 +332,78 @@ export default defineComponent({
       }
     }
 
+    const editHandle = (index) => {
+      state.goods_page = 1
+      if (index === 0) {
+        state.is_goods = true
+        state.left = 0
+        state.statusTop = 85
+        setTimeout(() => {
+          state.getCurrent = index
+        })
+        getFavorite()
+      } else if (index === 1) {
+        setTimeout(() => {
+          state.is_goods = false
+        }, 500)
+        state.getCurrent = index
+        state.left = 375
+        state.typeY = -800
+        state.statusTop = -85
+        for (let i in state.rotate) {
+          state.rotate[i] = 0
+        }
+        state.show = false
+        if (!state.listStyle) {
+          for (let i = 0; i < state.list.length; i++) {
+            state.list[i].touch = false
+          }
+          state.touch = false
+          state.allTouch = false
+        }
+        // this.getTopicList()
+      }
+    }
+
+    const setTouch = (index) => {
+      state.list[index].touch = !state.list[index].touch
+    }
+
+    const deleteByMove = (index) => {
+      if (state.getCurrent === 0) {
+        this.$request({
+          url: this.$api.user.favorite_remove,
+          method: 'get',
+          data: {
+            goods_id: this.list[index].id,
+          },
+        })
+        this.$delete(this.list, index)
+      } else {
+        this.$request({
+          url: this.$api.topic.favorite,
+          data: {
+            id: this.topicList[index].id,
+            is_favorite: 'no_love',
+          },
+          method: 'post',
+        })
+        this.$delete(this.topicList, index)
+      }
+      uni.showToast({
+        title: '取消收藏成功',
+        icon: 'none',
+      })
+    }
+
+    const routeUrl = (item) => {
+      if (item.status_type !== 3) {
+        uni.navigateTo({
+          url: item.page_url,
+        })
+      }
+    }
+
     const getCats = () => {
       fetchFavoriteGoodsCats()
         .then((r) => {
@@ -383,6 +455,10 @@ export default defineComponent({
       sureStatus,
       setCategory,
       changeMoveName,
+      editHandle,
+      deleteByMove,
+      setTouch,
+      routeUrl,
     }
   },
 })
@@ -562,7 +638,7 @@ export default defineComponent({
       }
     }
     .good-list {
-      margin-top: 166upx;
+      padding-top: 166upx;
       visibility: visible;
       transition: all 0.3s ease-in-out;
       .f-item {
