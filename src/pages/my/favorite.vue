@@ -239,6 +239,7 @@ import {
   fetchFavoriteGoodsCats,
   fetchFavoriteGoodsList,
   fetchFavoriteRemove,
+  fetchMyBlogLikeList,
 } from '@/api/favorite'
 import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 export default defineComponent({
@@ -270,7 +271,7 @@ export default defineComponent({
       shareShow: false,
       shareItem: {},
       goods_page: 1,
-      topic_page: 1,
+      blog_like_page: 1,
       topicShow: false,
       statusData: [
         {
@@ -341,7 +342,7 @@ export default defineComponent({
           state.touch = false
           state.allTouch = false
         }
-        // this.getTopicList()
+        getMyBlogLikeList()
       }
     }
 
@@ -535,6 +536,12 @@ export default defineComponent({
           }
         })
         .catch((err) => console.log('fetchFavoriteGoodsList:', err))
+    }
+
+    const getMyBlogLikeList = () => {
+      fetchMyBlogLikeList({ page: state.blog_like_page })
+        .then((r) => {})
+        .catch((err) => console.log('fetchMyBlogLikeList:', err))
     }
 
     const moveName = ref('') as any

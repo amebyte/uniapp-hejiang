@@ -39,3 +39,11 @@ export function fetchFavoriteGoodsCats() {
 export function fetchFavoriteGoodsList(data) {
   return request.get!('&r=api/user/my-new-favorite-goods', data, { noAuth: false })
 }
+
+/**
+ * 收藏作品列表
+ *
+ */
+export function fetchMyBlogLikeList(data) {
+  return request.get!('&r=api/user/my-blog-like-list', data, { noAuth: false })
+}
