@@ -95,16 +95,68 @@
           </view>
         </view>
       </view>
+
+      <view v-if="is_goods" class="good-list" :class="getCurrent === 0 ? 'good-show' : 'good-hidden'">
+        <block v-if="listStyle">
+          <view v-for="(item, index) in list" :key="index" class="dir-left-nowrap">
+            <view
+              v-if="touch"
+              class="f-radio box-grow-0 dir-top-nowrap main-center cross-center"
+              style="background-color: #ffffff"
+              @tap="setTouch(index)"
+            >
+              <view v-if="!item.touch" class="f-radio-no"></view>
+              <view v-if="item.touch" class="f-radio-yes"></view>
+            </view>
+            <moveBox :index="item.id" :move-name="moveName" @changeMoveName="changeMoveName" @action="deleteByMove">
+              <view class="f-item u-border-bottom dir-left-nowrap" @click="routeUrl(item)">
+                <image class="f-img" :src="item.cover_pic" />
+                <!-- 此层wrap在此为必写的，否则可能会出现标题定位错误 -->
+                <view class="f-content dir-top-wrap main-between">
+                  <text class="t-omit-two f-title">{{ item.name }}</text>
+                  <view>
+                    <view v-if="item.status_type === 3" class="f-invalid dir-left-nowrap cross-center main-between">
+                      <image src="/static/image/icon/invalid.png"></image>
+                      <text>失效</text>
+                    </view>
+                    <view v-if="item.status_type === 2" class="f-low-stock dir-left-nowrap cross-center main-between">
+                      <image src="/static/image/icon/low_stock.png"></image>
+                      <text>低库存</text>
+                    </view>
+                    <view v-if="item.status_type === 1" class="f-low-price dir-left-nowrap">
+                      <view class="dir-left-nowrap main-between cross-center">
+                        <image src="/static/image/icon/low_price.png"></image>
+                        比收藏时降价{{ item.low_price }}元
+                      </view>
+                    </view>
+                    <view v-if="item.status_type !== 3" class="dir-left-nowrap main-between">
+                      <template v-if="item.is_negotiable == 1">
+                        <view :style="{ color: theme.color, 'margin-bottom': '8rpx' }">价格面议</view>
+                      </template>
+                      <view v-else class="dir-top-wrap main-between">
+                        <text class="f-price" :style="{ color: theme.color }">{{ item.price_content }}</text>
+                        <text class="f-scale">{{ item.sales }}</text>
+                      </view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </moveBox>
+          </view>
+        </block>
+      </view>
     </view>
   </view>
 </template>
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed } from 'vue'
+import moveBox from '@/components/move-box/index.vue'
 import { store } from '@/store'
 import { fetchFavoriteGoodsCats, fetchFavoriteGoodsList } from '@/api/favorite'
 export default defineComponent({
   name: 'FavoritePage',
+  components: { moveBox },
   setup() {
     const state = reactive({
       getCurrent: 0,
@@ -182,7 +234,7 @@ export default defineComponent({
         setTimeout(() => {
           state.getCurrent = index
         })
-        this.getFavorite()
+        getFavorite()
       } else if (index === 1) {
         setTimeout(() => {
           state.is_goods = false
@@ -266,14 +318,14 @@ export default defineComponent({
           state.rightSet = state.selectStatus
         }
 
-        this.getFavorite()
+        getFavorite()
         for (let i in state.rotate) {
           state.rotate[i] = 0
         }
       } else {
         state.leftSet = 0
         state.rightSet = 0
-        this.getFavorite()
+        getFavorite()
         for (let i in state.rotate) {
           state.rotate[i] = 0
         }
@@ -304,6 +356,15 @@ export default defineComponent({
         .catch((err) => console.log('fetchFavoriteGoodsList:', err))
     }
 
+    const moveName = ref('') as any
+
+    /**
+     * 滑动回调
+     */
+    const changeMoveName = (name) => {
+      moveName.value = name
+    }
+
     onLoad(() => {
       getCats()
       getFavorite()
@@ -313,6 +374,7 @@ export default defineComponent({
       ...toRefs(state),
       tabs,
       theme,
+      moveName,
       closeMask,
       emitHandle,
       setDef,
@@ -320,6 +382,7 @@ export default defineComponent({
       setStatus,
       sureStatus,
       setCategory,
+      changeMoveName,
     }
   },
 })
@@ -496,6 +559,263 @@ export default defineComponent({
             margin-right: 23upx;
           }
         }
+      }
+    }
+    .good-list {
+      margin-top: 166upx;
+      visibility: visible;
+      transition: all 0.3s ease-in-out;
+      .f-item {
+        width: 750upx;
+        padding: 24upx;
+        .f-img {
+          width: 200upx;
+          height: 200upx;
+          border-radius: 23upx;
+          margin-right: 24upx;
+        }
+        .f-content {
+          width: 478upx;
+        }
+        .f-title {
+          font-size: 26upx;
+          color: #353535;
+        }
+        .f-invalid {
+          width: 128upx;
+          height: 42upx;
+          line-height: 42upx;
+          background-color: #f7f7f7;
+          padding: 0 27upx 0 18upx;
+          > text {
+            font-size: 23upx;
+            color: #999999;
+          }
+          > image {
+            width: 24upx;
+            height: 24upx;
+          }
+        }
+        .f-low-stock {
+          width: 148upx;
+          height: 42upx;
+          line-height: 42upx;
+          background-color: #ffecec;
+          padding: 0 27upx 0 18upx;
+          > text {
+            font-size: 23upx;
+            color: #ff4544;
+          }
+          > image {
+            width: 24upx;
+            height: 24upx;
+          }
+        }
+        .f-low-price {
+          height: 42upx;
+          line-height: 42upx;
+          display: inline-block;
+          background-color: #ffecec;
+          padding: 0 27upx 0 18upx;
+          position: relative;
+          font-size: 23upx;
+          color: #ff4544;
+          > text {
+            font-size: 23upx;
+            color: #ff4544;
+            vertical-align: center;
+          }
+          image {
+            width: 24upx;
+            height: 24upx;
+            margin-right: 14upx;
+          }
+        }
+        .f-delete-icon {
+          width: 46upx;
+          height: 50upx;
+          padding: 8upx;
+        }
+        .f-share-icon {
+          width: 46upx;
+          height: 46upx;
+          padding: 8upx;
+          margin-right: 10upx;
+        }
+        .f-price {
+          font-size: 24upx;
+          margin-top: 12upx;
+        }
+        .f-scale {
+          font-size: 21upx;
+          color: #b0b0b0;
+        }
+      }
+
+      .f-list {
+        padding: 0 24upx;
+        .f-list-item {
+          height: 492upx;
+          width: 344upx;
+          border-radius: 12upx;
+          margin-top: 14upx;
+          background-color: #fff;
+          overflow: hidden;
+        }
+        .f-list-item:nth-child(odd) {
+          margin-right: 15upx;
+        }
+        .f-img {
+          width: 344upx;
+          height: 344upx;
+          position: relative;
+          > image {
+            width: 344upx;
+            height: 344upx;
+          }
+          .f-radio {
+            width: 40upx;
+            height: 40upx;
+            border-radius: 50%;
+            position: absolute;
+            top: 10upx;
+            right: 10upx;
+            .f-kon {
+              width: 40upx;
+              height: 40upx;
+              border-radius: 50%;
+              border: 1upx solid #868686;
+            }
+            .f-touch {
+              width: 40upx;
+              height: 40upx;
+              background-size: 101% 101%;
+              background-repeat: no-repeat;
+              border-radius: 50%;
+              z-index: 1;
+              background-image: url('./image/touch.png');
+            }
+          }
+        }
+        .f-invalid {
+          width: 112upx;
+          background-image: url('./image/invalid.png');
+        }
+        .f-low-price {
+          width: 112upx;
+          background-image: url('./image/low_price.png');
+        }
+        .f-low-stock {
+          width: 152upx;
+          background-image: url('./image/low_stock.png');
+        }
+        .f-icon {
+          bottom: 24upx;
+          left: 0;
+          height: 46upx;
+          padding: 0 18upx 0 17upx;
+          position: absolute;
+          border-top-right-radius: 25upx;
+          border-bottom-right-radius: 25upx;
+          background-repeat: no-repeat;
+          background-size: 100% 100%;
+        }
+        .f-text {
+          width: 100%;
+          height: 148upx;
+          padding-bottom: 10upx;
+          > text {
+            font-size: 26upx;
+            padding: 18upx 23upx 0 23upx;
+          }
+          > view {
+            padding: 0 23upx 0 23upx;
+            margin-bottom: 18upx;
+          }
+          .f-price {
+            font-size: 21upx;
+          }
+          .f-sales {
+            font-size: 23upx;
+            color: #999999;
+          }
+        }
+      }
+      .f-delete-box {
+        width: 100%;
+        height: 100upx;
+      }
+      .f-delete {
+        position: fixed;
+        width: 100%;
+        height: 100upx;
+        border-top: 1px solid #e2e2e2;
+        background-color: #ffffff;
+        z-index: 8;
+        left: 0;
+        transition: all 0.3s ease-in-out;
+        font-size: 26upx;
+        padding: 0 24upx;
+        > button {
+          width: 138upx;
+          height: 64upx;
+          line-height: 64upx;
+          border-radius: 32upx;
+          background-color: #ffffff;
+          margin: 0;
+          border-width: 1upx;
+          border-style: solid;
+          transform: rotateZ(360deg);
+        }
+        .f-button-m {
+          border-color: #999999;
+          color: #999999;
+        }
+        .f-button-t {
+          border-color: #ff4544;
+          color: #ff4544;
+        }
+        > view {
+          width: 103upx;
+          .f-radio {
+            width: 40upx;
+            height: 40upx;
+            border-radius: 50%;
+            margin-right: 10upx;
+            .f-kon {
+              width: 40upx;
+              height: 40upx;
+              border-radius: 50%;
+              border: 1upx solid #868686;
+            }
+            .f-touch {
+              width: 40upx;
+              height: 40upx;
+              background-size: 101% 101%;
+              background-repeat: no-repeat;
+              border-radius: 50%;
+              z-index: 1;
+              background-image: url('./image/touch.png');
+            }
+          }
+        }
+      }
+      .f-delete-show {
+        bottom: 0;
+        visibility: visible;
+      }
+      .f-delete-hidden {
+        bottom: -101upx;
+        visibility: hidden;
+      }
+
+      &.good-show {
+        opacity: 1;
+        visibility: visible;
+      }
+      &.good-hidden {
+        opacity: 0;
+        visibility: hidden;
       }
     }
   }
