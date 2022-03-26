@@ -9,6 +9,7 @@
           <view class="share"> <text class="iconfont icon-share"></text> 分享 </view>
         </view>
       </view>
+      <view class="sub-info">{{ detail.desc }}</view>
     </view>
     <view class="detail">
       <image src="/static/icon/goods-detail.png"></image>
@@ -49,6 +50,7 @@ onLoad((options) => {
   .header {
     background-color: #fff;
     border-radius: 15rpx;
+    padding-bottom: 20rpx;
     .title {
       font-size: 42rpx;
       font-weight: 500;
@@ -98,13 +100,20 @@ onLoad((options) => {
         }
       }
     }
+    .sub-info {
+      background-color: #ebfffd;
+      padding: 20rpx;
+      font-size: 24rpx;
+      border-radius: 16rpx;
+      margin: 0 20rpx;
+    }
   }
   .detail {
-    width: 702upx;
     padding: 20upx 0;
     background-color: #ffffff;
     border-radius: 15upx;
     margin-top: 24upx;
+    min-height: 800rpx;
     image {
       width: 100%;
       height: 80rpx;
