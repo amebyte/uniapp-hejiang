@@ -228,8 +228,8 @@
       </view>
 
       <view v-if="!is_goods" class="blog-like-list" :class="getCurrent === 1 ? 'good-show' : 'good-hidden'">
-        <block v-for="item in blogLikeList" :key="item.id">
-          <BlogItem :item="item.blog" />
+        <block v-for="(item, index) in blogLikeList" :key="item.id">
+          <BlogItem :item="item.blog" :index="index" @delete="deleteBlogLike" />
         </block>
         <template v-if="blogLikeList.length === 0">
           <view class="no-list">
@@ -526,6 +526,10 @@ export default defineComponent({
       })
     }
 
+    const deleteBlogLike = (index) => {
+      state.blogLikeList.splice(index, 1)
+    }
+
     const getCats = () => {
       fetchFavoriteGoodsCats()
         .then((r) => {
@@ -641,6 +645,7 @@ export default defineComponent({
       routeUrl,
       remove,
       handleTouchend,
+      deleteBlogLike,
     }
   },
 })

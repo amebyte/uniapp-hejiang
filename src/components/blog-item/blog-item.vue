@@ -53,8 +53,9 @@ const props = defineProps({
   isDetail: { type: Boolean },
   isDel: { type: Boolean },
   isList: { type: Boolean },
+  index: { type: Number, default: 0 },
 })
-const emits = defineEmits(['getList'])
+const emits = defineEmits(['getList', 'delete'])
 const gotoDiscuss = (item) => {
   if (!props.isDetail) {
     uni.navigateTo({
@@ -86,6 +87,7 @@ const handleLike = (item) => {
       .then((r) => {
         if (r.code === 0) {
           emits('getList')
+          emits('delete', props.index)
         }
       })
       .catch((err) => console.log(err))
