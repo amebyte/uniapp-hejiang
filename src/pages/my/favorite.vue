@@ -226,6 +226,17 @@
         </block>
         <app-no-goods v-if="list.length === 0" background="#f7f7f7"></app-no-goods>
       </view>
+
+      <view v-if="!is_goods" class="blog-like-list" :class="getCurrent === 1 ? 'good-show' : 'good-hidden'">
+        <block v-for="item in blogLikeList" :key="item.id">
+          <BlogItem :item="item.blog" />
+        </block>
+        <template v-if="blogLikeList.length === 0">
+          <view class="no-list">
+            <AppNoGoods background="#f7f7f7" :title="'暂无相关作品'" color="#999999" :is-image="1" />
+          </view>
+        </template>
+      </view>
     </view>
   </view>
 </template>
@@ -233,6 +244,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed, watch } from 'vue'
 import moveBox from '@/components/move-box/index.vue'
+import BlogItem from '@/components/blog-item/blog-item.vue'
 import { store } from '@/store'
 import {
   fetchFavoriteBatchRemove,
@@ -244,7 +256,7 @@ import {
 import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 export default defineComponent({
   name: 'FavoritePage',
-  components: { moveBox, AppNoGoods },
+  components: { moveBox, AppNoGoods, BlogItem },
   setup() {
     const state = reactive({
       getCurrent: 0,
@@ -263,7 +275,7 @@ export default defineComponent({
       typeY: -800,
       show: false,
       list: [] as any[],
-      topicList: [],
+      blogLikeList: [] as any[],
       timeOutEvent: -1,
       touch: false,
       allTouch: false,
@@ -538,9 +550,15 @@ export default defineComponent({
         .catch((err) => console.log('fetchFavoriteGoodsList:', err))
     }
 
-    const getMyBlogLikeList = () => {
+    const getMyBlogLikeList = (bool?) => {
       fetchMyBlogLikeList({ page: state.blog_like_page })
-        .then((r) => {})
+        .then((r) => {
+          if (!bool) {
+            state.blogLikeList = r.data.list
+          } else {
+            state.blogLikeList.push(...r.data.list)
+          }
+        })
         .catch((err) => console.log('fetchMyBlogLikeList:', err))
     }
 
@@ -556,6 +574,16 @@ export default defineComponent({
     onLoad(() => {
       getCats()
       getFavorite()
+    })
+
+    onReachBottom(() => {
+      if (state.getCurrent === 0) {
+        state.goods_page++
+        getFavorite(true)
+      } else {
+        state.blog_like_page++
+        getMyBlogLikeList(true)
+      }
     })
 
     watch(
@@ -1056,6 +1084,13 @@ export default defineComponent({
         opacity: 0;
         visibility: hidden;
       }
+    }
+    .blog-like-list {
+      padding-top: 126upx;
+      visibility: visible;
+      transition: all 0.3s ease-in-out;
+      padding-left: 20rpx;
+      padding-right: 20rpx;
     }
   }
 }
