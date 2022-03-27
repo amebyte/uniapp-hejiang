@@ -43,21 +43,21 @@ const getDetail = () => {
 
 const handleLike = () => {
   const param = {
-    answering_question_id: detail.id,
+    answering_question_id: detail.value.id,
   }
-  if (detail.is_liked) {
-    fetchAnsweringQuestionLikeDelete({ id: detail.like.id, ...param })
+  if (detail.value.is_liked) {
+    fetchAnsweringQuestionLikeDelete({ id: detail.value.like.id, ...param })
       .then((r) => {
         if (r.code === 0) {
-          detail.is_liked = false
+          detail.value.is_liked = false
         }
       })
       .catch((err) => console.log(err))
   } else {
-    fetchAnsweringQuestionLikeSave({ id: detail.like && detail.like.id, is_delete: 0, ...param })
+    fetchAnsweringQuestionLikeSave({ id: detail.value.like && detail.value.like.id, is_delete: 0, ...param })
       .then((r) => {
         if (r.code === 0) {
-          detail.is_liked = true
+          detail.value.is_liked = true
         }
       })
       .catch((err) => console.log(err))
