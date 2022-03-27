@@ -47,3 +47,11 @@ export function fetchFavoriteGoodsList(data) {
 export function fetchMyBlogLikeList(data) {
   return request.get!('&r=api/user/my-blog-like-list', data, { noAuth: false })
 }
+
+/**
+ * 收藏作品列表
+ *
+ */
+export function fetchMyAnsweringQuestionLikeList(data) {
+  return request.get!('&r=api/user/my-answering_question-like-list', data, { noAuth: false })
+}

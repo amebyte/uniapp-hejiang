@@ -20,21 +20,39 @@ import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed, 
 import MessageModal from './component/MessageModal.vue'
 import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 import Cache from '@/utils/cache'
+import { fetchMyAnsweringQuestionLikeList } from '@/api/favorite'
 
 export default defineComponent({
   name: 'FavoritePage',
+  components: {
+    AppNoGoods,
+  },
   setup() {
     const total_count = ref(0)
     const list = ref([]) as any
     const isShowMessage = ref(true)
     const closeMessage = () => {
       isShowMessage.value = false
-      Cache.set('isShowMessageMyComment', 'false')
+      Cache.set('isShowMessageFavoriteAnswer', 'false')
+    }
+
+    const page = ref(1)
+    const getList = (bool?) => {
+      fetchMyAnsweringQuestionLikeList({ page: page.value })
+        .then((r) => {
+          if (!bool) {
+            list.value = r.data.list
+          } else {
+            list.value.push(...r.data.list)
+          }
+        })
+        .catch((err) => console.log('fetchMyAnsweringQuestionLikeList:', err))
     }
 
     onLoad(() => {
-      const flag = Cache.get('isShowMessageMyComment')
+      const flag = Cache.get('isShowMessageFavoriteAnswer')
       isShowMessage.value = flag === 'false' ? false : true
+      getList()
     })
     return {
       total_count,

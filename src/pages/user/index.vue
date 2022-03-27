@@ -114,7 +114,7 @@
           <text class="iconfont icon-calendar icon"></text>
           <text>我的预约</text>
         </view>
-        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
+        <view class="box-item col-3" @click="toPage('/pages/my/favoriteAnswer')">
           <text class="iconfont icon-question icon"></text>
           <text>我的答疑</text>
         </view>
