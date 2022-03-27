@@ -5,7 +5,9 @@
       <view class="title-bar">
         <view class="title-bar-left"><text class="iconfont icon-calendar"></text>{{ detail.created_at }}</view>
         <view class="title-bar-right">
-          <view class="favorite"> <text class="iconfont icon-love"></text> 收藏 </view>
+          <view class="favorite" @click="handleLike">
+            <text class="iconfont" :class="detail.is_liked ? 'icon-love-fill' : 'icon-love'"></text> 收藏
+          </view>
           <view class="share"> <text class="iconfont icon-share"></text> 分享 </view>
         </view>
       </view>
@@ -21,7 +23,11 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import { Tips } from '@/utils/util'
-import { fetchAnsweringQuestionDetail } from '@/api/answeringQuestion'
+import {
+  fetchAnsweringQuestionDetail,
+  fetchAnsweringQuestionLikeDelete,
+  fetchAnsweringQuestionLikeSave,
+} from '@/api/answeringQuestion'
 const id = ref('')
 
 const detail = ref({}) as any
@@ -33,6 +39,29 @@ const getDetail = () => {
       }
     })
     .catch((err) => console.log(err))
+}
+
+const handleLike = () => {
+  const param = {
+    answering_question_id: detail.id,
+  }
+  if (detail.is_liked) {
+    fetchAnsweringQuestionLikeDelete({ id: detail.like.id, ...param })
+      .then((r) => {
+        if (r.code === 0) {
+          detail.is_liked = false
+        }
+      })
+      .catch((err) => console.log(err))
+  } else {
+    fetchAnsweringQuestionLikeSave({ id: detail.like && detail.like.id, is_delete: 0, ...param })
+      .then((r) => {
+        if (r.code === 0) {
+          detail.is_liked = true
+        }
+      })
+      .catch((err) => console.log(err))
+  }
 }
 
 onShow(() => {

@@ -60,7 +60,7 @@ export function fetchBlogLikeSave(data) {
 }
 
 /**
- * 博文点赞删除
+ * 博文点赞取消
  *
  */
 export function fetchBlogLikeDelete(data) {
@@ -93,7 +93,7 @@ export function fetchBlogCommentLikeSave(data) {
 }
 
 /**
- * 博文评论点赞删除
+ * 博文评论点赞取消
  *
  */
 export function fetchBlogCommentLikeDelete(data) {
