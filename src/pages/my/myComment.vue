@@ -71,7 +71,7 @@ const getList = () => {
 }
 
 /**
- * 滑动删除商
+ * 滑动删除
  */
 const deleteByMove = (id) => {
   uni.showModal({

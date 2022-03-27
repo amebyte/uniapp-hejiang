@@ -53,5 +53,5 @@ export function fetchMyBlogLikeList(data) {
  *
  */
 export function fetchMyAnsweringQuestionLikeList(data) {
-  return request.get!('&r=api/user/my-answering_question-like-list', data, { noAuth: false })
+  return request.get!('&r=api/user/my-answering-question-like-list', data, { noAuth: false })
 }

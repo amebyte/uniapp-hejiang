@@ -1,11 +1,19 @@
 <template>
   <view class="wrapper">
     <text class="iconfont icon-message"></text>
-    <view class="content"> 可以左滑动进行删除评论 </view>
+    <view class="content"> {{ msg }} </view>
     <text class="iconfont icon-close-bold" @click="closeMessage"></text>
   </view>
 </template>
 <script setup lang="ts">
+interface Props {
+  msg?: string
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  msg: '可以左滑动进行删除评论',
+})
+
 const emits = defineEmits(['closeMessage'])
 
 const closeMessage = () => {
