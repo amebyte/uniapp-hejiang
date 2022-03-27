@@ -5,7 +5,7 @@
       <view class="search-icon">
         <text class="iconfont icon-search"></text>
       </view>
-      <view class="title">发现</view>
+      <view class="title"></view>
       <view class="action" @click="gotoPage('/pages/discover/publish')">
         <text>发布</text>
       </view>

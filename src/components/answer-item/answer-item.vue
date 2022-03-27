@@ -30,7 +30,7 @@ const gotoDetail = (item) => {
   padding-bottom: 40rpx;
   background-color: #fff;
   box-shadow: 0px 0px 14px 6px rgba(29, 233, 182, 0.11);
-  border-radius: 20px;
+  border-radius: 20rpx;
   margin-top: 20rpx;
   margin-bottom: 20rpx;
   .question-box {

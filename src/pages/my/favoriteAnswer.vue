@@ -3,7 +3,7 @@
     <!--提示 start-->
     <MessageModal v-if="isShowMessage" :msg="'可以左滑动进行删除'" @closeMessage="closeMessage"> </MessageModal>
     <!--提示 end-->
-    <view class="label-title">全部答疑</view>
+    <view class="label-title">收藏的答疑</view>
     <view class="list-wrap">
       <block v-for="(item, index) in list" :key="index">
         <view class="item-wrapper">
@@ -79,7 +79,10 @@ export default defineComponent({
         content: `您确定要删除该答疑吗？`,
         success: (e) => {
           if (e.confirm) {
-            fetchAnsweringQuestionLikeDelete({ id: list.value[index].id })
+            fetchAnsweringQuestionLikeDelete({
+              id: list.value[index].id,
+              answering_question_id: list.value[index].answering_question_id,
+            })
               .then((r) => {
                 if (r.code === 0) {
                   list.value.splice(index, 1)
@@ -144,7 +147,13 @@ export default defineComponent({
     .item-wrapper {
       position: relative;
       overflow: hidden;
-      padding: 10rpx 0;
+      border-radius: 8px;
+      .cu-item {
+        .item {
+          box-shadow: none;
+          border-radius: 8px;
+        }
+      }
     }
     .no-list {
       margin-top: 120rpx;
