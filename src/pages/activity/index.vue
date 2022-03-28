@@ -49,7 +49,10 @@
               <text class="iconfont icon-people"></text>
               限定 {{ item.max_num }} 人
             </view>
-            <view class="r" @click="gotoDetail(item)">{{ renderBtnText(item) }}</view>
+            <view class="r" @click="gotoDetail(item)">
+              <text v-if="renderBtnText(item) === '预约成功'" class="iconfont icon-selected"></text>
+              {{ renderBtnText(item) }}
+            </view>
           </view>
         </view>
       </block>
