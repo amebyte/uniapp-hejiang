@@ -1,5 +1,5 @@
 <template>
-  <view class="thumb">
+  <view class="thumb" @click="gotoDetail(item)">
     <view class="pictrue">
       <image :src="item.thumb"></image>
     </view>
@@ -13,6 +13,13 @@ import { onMounted, ref } from 'vue'
 const props = defineProps({
   item: { type: Object, required: true },
 })
+
+// 跳转详情
+const gotoDetail = (item) => {
+  uni.navigateTo({
+    url: `/pages/article/articleDetail?id=${item.id}`,
+  })
+}
 </script>
 <style lang="scss">
 .thumb {
