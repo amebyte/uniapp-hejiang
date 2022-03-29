@@ -27,6 +27,7 @@ import AnserItem from '@/components/answer-item/answer-item.vue'
 import { useStore, mapActions } from 'vuex'
 import { BannerActionTypes } from '@/store/modules/banner/action-types'
 import { fetchAnsweringQuestionList } from '@/api/answeringQuestion'
+import { fetchArticleList } from '@/api/article'
 const store = useStore()
 const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
   $store: store,
@@ -48,8 +49,25 @@ const getAnsweringQuestionList = () => {
     })
     .catch((err) => console.log(err))
 }
-onMounted(() => {
+
+const getArticleList = () => {
+  const params = {
+    page: 1,
+    limit: 10,
+    article_cat_id: 4,
+  }
+  fetchArticleList(params)
+    .then((r) => {
+      if (r.code === 0) {
+        console.log('rr', r)
+      }
+    })
+    .catch((err) => console.log('fetchArticleList:', err))
+}
+
+onLoad(() => {
   getAnsweringQuestionList()
+  getArticleList()
 })
 </script>
 <style lang="scss">
