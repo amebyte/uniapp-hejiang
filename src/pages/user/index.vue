@@ -23,7 +23,7 @@
             <view v-else @click="toPage('/pages/my/setMobile')">设置手机号码</view>
           </view>
         </view>
-        <view class="setup"><text class="iconfont icon-setting"></text></view>
+        <view class="setup" @click="toPage('/pages/my/setting')"><text class="iconfont icon-setting"></text></view>
       </block>
       <block v-else>
         <view class="user-no-head" @click="goLogin">
