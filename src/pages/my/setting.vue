@@ -1,31 +1,39 @@
 <template>
   <view class="bd-setting">
-    <view class="bd-item dir-left-nowrap main-between cross-center" @click="router('/pages/registered/authentication')">
+    <view
+      class="bd-item dir-left-nowrap main-between cross-center"
+      style="display: none"
+      @click="router('/pages/registered/authentication')"
+    >
       <text>手机号</text>
       <view>
         <text>{{ setIphone(userInfo.mobile) }}</text>
-        <image src="/static/image/icon/arrow-right.png" class="bd-arrow"></image>
+        <text class="iconfont icon-arrow-right"></text>
       </view>
     </view>
-    <view class="bd-item dir-left-nowrap main-between cross-center" @click="router('/pages/registered/password')">
+    <view
+      class="bd-item dir-left-nowrap main-between cross-center"
+      style="display: none"
+      @click="router('/pages/registered/password')"
+    >
       <text>登入密码</text>
       <view>
         <text>修改</text>
-        <image src="/static/image/icon/arrow-right.png" class="bd-arrow"></image>
+        <text class="iconfont icon-arrow-right"></text>
       </view>
     </view>
     <view class="bd-item dir-left-nowrap main-between cross-center" @click="setAvatar">
       <text>头像</text>
       <view class="cross-center">
         <image class="bd-avatar" :src="userInfo.avatar"></image>
-        <image src="/static/image/icon/arrow-right.png" class="bd-arrow"></image>
+        <text class="iconfont icon-arrow-right"></text>
       </view>
     </view>
     <view class="bd-item dir-left-nowrap main-between cross-center" @click="router('/pages/registered/nickname')">
       <text>昵称</text>
       <view>
         <text>{{ userInfo.nickname }}</text>
-        <image src="/static/image/icon/arrow-right.png" class="bd-arrow"></image>
+        <text class="iconfont icon-arrow-right"></text>
       </view>
     </view>
     <view class="bd-btn" @click="logOut">退出登入</view>
@@ -53,7 +61,7 @@ export default defineComponent({
       }).then((res) => {
         if (res.code === 0) {
           this.$store.dispatch('user/logout')
-          uni.navigateBack()
+          uni.navigateBack({})
         }
       })
     }
