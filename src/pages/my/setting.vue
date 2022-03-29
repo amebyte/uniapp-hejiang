@@ -29,7 +29,7 @@
         <text class="iconfont icon-arrow-right"></text>
       </view>
     </view>
-    <view class="bd-item dir-left-nowrap main-between cross-center" @click="router('/pages/registered/nickname')">
+    <view class="bd-item dir-left-nowrap main-between cross-center" @click="router('/pages/my/setNickname')">
       <text>昵称</text>
       <view>
         <text>{{ userInfo.nickname }}</text>

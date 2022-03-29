@@ -213,6 +213,12 @@
           "style": {
             "navigationBarTitleText": "设置中心"
           }
+        },
+        {
+          "path": "setNickname",
+          "style": {
+            "navigationBarTitleText": "修改昵称"
+          }
         }
       ]
     },
