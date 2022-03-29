@@ -125,7 +125,7 @@
     <view class="user-order">
       <view class="box-header two_sides"> 我的设置 </view>
       <view class="box-content row">
-        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
+        <view class="box-item col-3" @click="toPage('/pages/my/setting')">
           <text class="iconfont icon-data icon"></text>
           <text>修改资料</text>
         </view>
@@ -158,9 +158,9 @@ import { store } from '@/store'
 import { fetchLogout } from '@/api/public'
 import { AppMutationTypes } from '@/store/modules/app/mutation-types'
 import { Tips } from '@/utils/util'
-let isLogin = ref(store.getters.isLogin)
-let userInfo = ref(store.state.app.userInfo)
-let orderCounts = ref({}) as any
+const isLogin = ref(store.getters.isLogin)
+const userInfo = ref(store.state.app.userInfo)
+const orderCounts = ref({}) as any
 const toPage = (path) => {
   uni.navigateTo({
     url: path,

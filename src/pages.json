@@ -207,6 +207,12 @@
           "style": {
             "navigationBarTitleText": "我的答疑"
           }
+        },
+        {
+          "path": "setting",
+          "style": {
+            "navigationBarTitleText": "设置中心"
+          }
         }
       ]
     },
