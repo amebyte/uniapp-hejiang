@@ -31,7 +31,7 @@ const getDetail = () => {
   fetchArticleDetail({ article_id: id.value })
     .then((r) => {
       if (r.code === 0) {
-        detail.value = r.data
+        detail.value = r.data.article
       }
     })
     .catch((err) => console.log(err))
