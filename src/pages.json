@@ -215,6 +215,27 @@
           }
         }
       ]
+    },
+    {
+      "root": "pages/article",
+      "pages": [
+        {
+          "path": "partnersList",
+          "style": {
+            "navigationBarTitleText": "合作伙伴",
+            "navigationBarBackgroundColor": "#102c24",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
+          "path": "articleDetail",
+          "style": {
+            "navigationBarTitleText": "文章详情",
+            "navigationBarBackgroundColor": "#102c24",
+            "enablePullDownRefresh": false
+          }
+        }
+      ]
     }
   ],
   "globalStyle": {

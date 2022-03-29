@@ -102,12 +102,12 @@ export default defineComponent({
         {
           url: '../../static/images/skip/brand.png',
           title: '品牌',
-          path: '/pages/news/newsDetail',
+          path: '/pages/article/articleDetail',
         },
         {
           url: '../../static/images/skip/cooperate.png',
           title: '合作',
-          path: '/pages/news/newsDetail',
+          path: '/pages/article/partnersList',
         },
       ],
     })
