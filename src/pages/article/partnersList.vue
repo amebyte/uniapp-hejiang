@@ -12,9 +12,9 @@
       </div>
       <view class="line right"><image src="/static/images/groupLine.png"></image></view>
     </view>
-    <view class="list">
+    <view class="list dir-left-wrap">
       <block v-for="(item, index) in list" :key="index">
-        <AnserItem :item="item" />
+        <Thumb :item="item" />
       </block>
     </view>
   </view>
@@ -23,10 +23,9 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed } from 'vue'
 import AdSwiper from '@/components/ad-swiper/index.vue'
-import AnserItem from '@/components/answer-item/answer-item.vue'
+import Thumb from './components/thumb.vue'
 import { useStore, mapActions } from 'vuex'
 import { BannerActionTypes } from '@/store/modules/banner/action-types'
-import { fetchAnsweringQuestionList } from '@/api/answeringQuestion'
 import { fetchArticleList } from '@/api/article'
 const store = useStore()
 const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
@@ -36,19 +35,6 @@ fetchBanner()
 const indexBanner = computed(() => store.state.banner.indexBanner)
 
 const list = ref([]) as any
-const getAnsweringQuestionList = () => {
-  const params = {
-    page: 1,
-    limit: 10,
-  }
-  fetchAnsweringQuestionList(params)
-    .then((r) => {
-      if (r.code === 0) {
-        list.value = r.data.list
-      }
-    })
-    .catch((err) => console.log(err))
-}
 
 const getArticleList = () => {
   const params = {
@@ -59,14 +45,13 @@ const getArticleList = () => {
   fetchArticleList(params)
     .then((r) => {
       if (r.code === 0) {
-        console.log('rr', r)
+        list.value = r.data.list
       }
     })
     .catch((err) => console.log('fetchArticleList:', err))
 }
 
 onLoad(() => {
-  getAnsweringQuestionList()
   getArticleList()
 })
 </script>
@@ -142,6 +127,7 @@ page {
     padding-left: 20rpx;
     padding-right: 20rpx;
     margin-bottom: 20rpx;
+    padding-top: 10rpx;
   }
 }
 </style>
