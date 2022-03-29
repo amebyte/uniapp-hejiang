@@ -86,10 +86,10 @@ export default defineComponent({
   text-align: center;
 }
 .bd-yes-agree {
-  background: rgba(255, 69, 68, 1);
+  background: rgba(26, 168, 108, 1);
 }
 .bd-no-agree {
-  background: rgba(255, 69, 68, 0.5);
+  background: rgba(26, 168, 108, 0.5);
 }
 
 .bd-comment {
