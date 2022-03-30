@@ -44,9 +44,15 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import { store } from '@/store'
+import { fetchLogout } from '@/api/public'
+import { AppMutationTypes } from '@/store/modules/app/mutation-types'
+import { Tips } from '@/utils/util'
+import { HTTP_REQUEST_URL } from '@/config/app'
+import { fetchUpdateAvatar } from '@/api/user'
 export default defineComponent({
   name: 'SettingPage',
   setup() {
+    const isLogin = ref(store.getters.isLogin)
     const userInfo = ref(store.state.app.userInfo)
 
     const router = (data) => {
@@ -56,14 +62,29 @@ export default defineComponent({
     }
 
     const logOut = () => {
-      this.$request({
-        url: this.$api.registered.logout,
-      }).then((res) => {
-        if (res.code === 0) {
-          this.$store.dispatch('user/logout')
-          uni.navigateBack({})
-        }
-      })
+      if (isLogin.value) {
+        fetchLogout()
+          .then((r) => {
+            if (r.code === 0) {
+              store.commit(AppMutationTypes.LOGOUT)
+              Tips({ title: '退出登录成功' })
+              uni.navigateTo({
+                url: `/pages/my/login`,
+              })
+            }
+          })
+          .catch((err) => console.log('fetchLogout:', fetchLogout))
+      } else {
+        Tips(
+          {
+            title: '您还没登录，请先登录',
+          },
+          {
+            tab: 5,
+            url: '/pages/my/login',
+          }
+        )
+      }
     }
     const setAvatar = () => {
       let _this = this
@@ -73,17 +94,13 @@ export default defineComponent({
         sourceType: ['album', 'camera'],
         success(res) {
           uni.uploadFile({
-            url: _this.$api.upload.file,
+            url: HTTP_REQUEST_URL + '/web/index.php?_mall_id=1&r=api/attachment/upload',
             filePath: res.tempFilePaths[0],
             name: 'file',
             success(response) {
-              _this.userInfo.avatar = JSON.parse(response.data).data.url
-              _this.$request({
-                url: _this.$api.registered.avatar,
-                method: 'post',
-                data: {
-                  avatar: JSON.parse(response.data).data.url,
-                },
+              userInfo.value.avatar = JSON.parse(response.data).data.url
+              fetchUpdateAvatar({
+                avatar: JSON.parse(response.data).data.url,
               })
             },
           })

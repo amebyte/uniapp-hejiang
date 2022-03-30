@@ -177,17 +177,29 @@ const gotoMemberCenter = () => {
   })
 }
 const logout = () => {
-  fetchLogout()
-    .then((r) => {
-      if (r.code === 0) {
-        store.commit(AppMutationTypes.LOGOUT)
-        Tips({ title: '退出登录成功' })
-        uni.navigateTo({
-          url: `/pages/my/login`,
-        })
+  if (isLogin.value) {
+    fetchLogout()
+      .then((r) => {
+        if (r.code === 0) {
+          store.commit(AppMutationTypes.LOGOUT)
+          Tips({ title: '退出登录成功' })
+          uni.navigateTo({
+            url: `/pages/my/login`,
+          })
+        }
+      })
+      .catch((err) => console.log('fetchLogout:', fetchLogout))
+  } else {
+    Tips(
+      {
+        title: '您还没登录，请先登录',
+      },
+      {
+        tab: 5,
+        url: '/pages/my/login',
       }
-    })
-    .catch((err) => console.log('fetchLogout:', fetchLogout))
+    )
+  }
 }
 </script>
 <style lang="scss">
