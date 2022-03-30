@@ -109,6 +109,7 @@ export default defineComponent({
 
       uni.chooseImage({
         count: props.maxNum,
+        sourceType: ['album'],
         success: function (e: any) {
           for (let i in e.tempFilePaths) {
             if (Number(i) >= props.maxNum - imageList.length) {

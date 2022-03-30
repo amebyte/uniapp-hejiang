@@ -15,6 +15,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed } from 'vue'
 import { store } from '@/store'
+import { fetchUpdateNickname } from '@/api/user'
 
 export default defineComponent({
   name: 'SetNickname',
@@ -26,16 +27,12 @@ export default defineComponent({
     const changeName = () => {
       if (!agree.value) return
       nickname.value = nickname.value.trim()
-      this.$request({
-        url: this.$api.registered.nickName,
-        method: 'post',
-        data: {
-          nickname: this.nickname,
-        },
+      fetchUpdateNickname({
+        nickname: nickname.value,
       }).then((response) => {
         if (response.code === 0) {
-          uni.navigateBack()
-          this.userInfo.nickname = this.nickname
+          uni.navigateBack({})
+          userInfo.value.nickname = nickname.value
         } else {
           uni.showToast({
             icon: 'none',

@@ -195,7 +195,7 @@ const logout = () => {
         title: '您还没登录，请先登录',
       },
       {
-        tab: 5,
+        tab: 2,
         url: '/pages/my/login',
       }
     )

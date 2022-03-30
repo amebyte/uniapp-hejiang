@@ -80,7 +80,7 @@ export default defineComponent({
             title: '您还没登录，请先登录',
           },
           {
-            tab: 5,
+            tab: 2,
             url: '/pages/my/login',
           }
         )
@@ -91,7 +91,7 @@ export default defineComponent({
       uni.chooseImage({
         count: 1,
         sizeType: ['original', 'compressed'],
-        sourceType: ['album', 'camera'],
+        sourceType: ['album'],
         success(res) {
           uni.uploadFile({
             url: HTTP_REQUEST_URL + '/web/index.php?_mall_id=1&r=api/attachment/upload',
