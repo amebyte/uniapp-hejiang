@@ -13,7 +13,7 @@ export function fetchUserInfo() {
  *
  */
 export function fetchUpdateAvatar(data) {
-  return request.post!('&r=plugin/mobile/api/user/avatar', data)
+  return request.post!('&r=plugin/mobile/api/user/avatar', data, { noAuth: false }, true)
 }
 
 /**
@@ -21,5 +21,5 @@ export function fetchUpdateAvatar(data) {
  *
  */
 export function fetchUpdateNickname(data) {
-  return request.post!('&r=plugin/mobile/api/user/nickname', data)
+  return request.post!('&r=plugin/mobile/api/user/nickname', data, { noAuth: false }, true)
 }
