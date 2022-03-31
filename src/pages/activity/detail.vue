@@ -18,6 +18,10 @@
           <text class="iconfont icon-people"></text>
           限定 {{ detail.max_num }} 人
         </view>
+        <view class="l">
+          <text class="iconfont icon-booked"></text>
+          已预约 {{ detail.book_count }} 人
+        </view>
       </view>
     </view>
     <view class="detail">
@@ -27,8 +31,10 @@
 
     <view class="footer acea-row row-between-wrapper">
       <view class="bookBtn bg-color" :class="detail.is_booked ? 'booked' : ''" @click="bookingAdd">
-        <text class="iconfont" :class="detail.is_booked ? 'icon-selected' : 'icon-add-bold'"></text>
-        {{ detail.is_booked ? '已经预约' : '立即预约' }}
+        <text v-if="renderBtnText(detail) === '预约成功'" class="iconfont icon-selected"></text>
+        <text v-if="renderBtnText(detail) === '立即预约'" class="iconfont icon-add-bold"></text>
+        <text v-if="renderBtnText(detail) === '人数已满'" class="iconfont icon-booked"></text>
+        {{ renderBtnText(detail) }}
       </view>
     </view>
   </view>
@@ -40,7 +46,7 @@ import { fetchActivityDetail, fetchActivityBookingAdd } from '@/api/activity'
 import { Tips } from '@/utils/util'
 const id = ref('')
 const bookingAdd = () => {
-  if (detail.value.is_booked) {
+  if (detail.value.is_booked || Number(detail.value.max_num) === Number(detail.value.book_count)) {
     return
   }
   fetchActivityBookingAdd({
@@ -64,6 +70,19 @@ const getDetail = () => {
       }
     })
     .catch((err) => console.log(err))
+}
+
+const renderBtnText = (item) => {
+  let txt = ''
+  if (Number(item.book_count) === Number(item.max_num)) {
+    txt = '人数已满'
+  } else if (item.is_booked) {
+    txt = '预约成功'
+  } else {
+    txt = '立即预约'
+  }
+
+  return txt
 }
 
 onShow(() => {
