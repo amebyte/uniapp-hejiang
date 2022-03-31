@@ -6,7 +6,7 @@
         <text class="iconfont icon-search"></text>
       </view>
       <view class="title"></view>
-      <view class="action" @click="gotoPage('/pages/discover/publish')">
+      <view class="action" @click="gotoPublish('/pages/discover/publish')">
         <text>发布</text>
       </view>
     </view>
@@ -14,7 +14,7 @@
     <!--banner-nav start-->
     <view class="banner-nav">
       <view class="content">
-        <view class="item">
+        <view class="item" @click="gotoPage('/pages/article/partnersList')">
           <view class="l">
             <image
               src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
@@ -26,7 +26,7 @@
             <view class="desc">我们的合作伙伴</view>
           </view>
         </view>
-        <view class="item">
+        <view class="item" @click="gotoPage('/pages/article/articleDetail')">
           <view class="l">
             <image
               src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
@@ -60,7 +60,7 @@ import BlogItem from '@/components/blog-item/blog-item.vue'
 
 let isLogin = ref(store.getters.isLogin)
 
-const gotoPage = (url) => {
+const gotoPublish = (url) => {
   if (isLogin.value) {
     uni.navigateTo({
       url: url,
@@ -70,6 +70,12 @@ const gotoPage = (url) => {
       url: '/pages/my/login',
     })
   }
+}
+
+const gotoPage = (url) => {
+  uni.navigateTo({
+    url: url,
+  })
 }
 
 const list = ref([]) as any
