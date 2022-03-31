@@ -16,7 +16,9 @@
       <rich-text :nodes="detail.content"></rich-text>
     </view>
 
-    <view @click="bookingAdd">预约</view>
+    <view class="footer acea-row row-between-wrapper">
+      <view class="bookBtn bg-color" @click="bookingAdd"><text class="iconfont icon-add-bold"></text>预约 </view>
+    </view>
   </view>
 </template>
 <script setup lang="ts">
@@ -58,6 +60,7 @@ onLoad((options) => {
 })
 </script>
 <style lang="scss">
+@import '@/static/css/variable.scss';
 .container {
   padding: 20rpx;
   .header {
@@ -131,6 +134,31 @@ onLoad((options) => {
       width: 100%;
       height: 80rpx;
       display: block;
+    }
+  }
+
+  .footer {
+    position: fixed;
+    width: 100%;
+    background-color: #fff;
+    bottom: 30rpx;
+    height: 106rpx;
+    padding: 0 30rpx;
+    box-sizing: border-box;
+    .bookBtn {
+      width: 100%;
+      height: 76rpx;
+      border-radius: 50rpx;
+      text-align: center;
+      line-height: 76rpx;
+      font-size: 30rpx;
+      color: #fff;
+      background-color: #009688;
+      .iconfont {
+        font-size: 35rpx;
+        margin-right: 8rpx;
+        vertical-align: -1rpx;
+      }
     }
   }
 }
