@@ -9,7 +9,16 @@
           <view class="share"> <text class="iconfont icon-share"></text> 分享 </view>
         </view>
       </view>
-      <view class="sub-info">{{ detail.desc }}</view>
+      <view class="sub-info">
+        <view class="time">
+          <text class="iconfont icon-time"></text>
+          {{ detail.start_time }}-{{ detail.end_time }}
+        </view>
+        <view class="l">
+          <text class="iconfont icon-people"></text>
+          限定 {{ detail.max_num }} 人
+        </view>
+      </view>
     </view>
     <view class="detail">
       <image src="/static/icon/goods-detail.png"></image>
@@ -17,7 +26,7 @@
     </view>
 
     <view class="footer acea-row row-between-wrapper">
-      <view class="bookBtn bg-color" @click="bookingAdd"><text class="iconfont icon-add-bold"></text>预约 </view>
+      <view class="bookBtn bg-color" @click="bookingAdd"><text class="iconfont icon-add-bold"></text>立即预约 </view>
     </view>
   </view>
 </template>
@@ -62,10 +71,10 @@ onLoad((options) => {
 <style lang="scss">
 @import '@/static/css/variable.scss';
 .container {
-  padding: 20rpx;
   .header {
     background-color: #fff;
     border-radius: 15rpx;
+    margin: 20rpx;
     padding-bottom: 20rpx;
     .title {
       font-size: 42rpx;
@@ -128,6 +137,7 @@ onLoad((options) => {
     padding: 20upx 0;
     background-color: #ffffff;
     border-radius: 15upx;
+    margin: 20rpx;
     margin-top: 24upx;
     min-height: 800rpx;
     image {
@@ -141,9 +151,10 @@ onLoad((options) => {
     position: fixed;
     width: 100%;
     background-color: #fff;
-    bottom: 30rpx;
-    height: 106rpx;
+    bottom: 0;
+    height: 136rpx;
     padding: 0 30rpx;
+    padding-bottom: 20rpx;
     box-sizing: border-box;
     .bookBtn {
       width: 100%;
