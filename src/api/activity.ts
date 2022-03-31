@@ -51,7 +51,8 @@ export function fetchActivityList(data) {
  *
  */
 export function fetchActivityDetail(data) {
-  return request.get!('&r=api/activity/detail', data, { noAuth: true })
+  const isLogin = store.state.app.token
+  return request.get!('&r=api/activity/detail', data, { noAuth: isLogin ? false : true })
 }
 
 /**

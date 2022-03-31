@@ -26,7 +26,10 @@
     </view>
 
     <view class="footer acea-row row-between-wrapper">
-      <view class="bookBtn bg-color" @click="bookingAdd"><text class="iconfont icon-add-bold"></text>立即预约 </view>
+      <view class="bookBtn bg-color" :class="detail.is_booked ? 'booked' : ''" @click="bookingAdd">
+        <text class="iconfont" :class="detail.is_booked ? 'icon-selected' : 'icon-add-bold'"></text>
+        {{ detail.is_booked ? '已经预约' : '立即预约' }}
+      </view>
     </view>
   </view>
 </template>
@@ -37,6 +40,9 @@ import { fetchActivityDetail, fetchActivityBookingAdd } from '@/api/activity'
 import { Tips } from '@/utils/util'
 const id = ref('')
 const bookingAdd = () => {
+  if (detail.value.is_booked) {
+    return
+  }
   fetchActivityBookingAdd({
     activity_id: id.value,
   })
@@ -164,11 +170,14 @@ onLoad((options) => {
       line-height: 76rpx;
       font-size: 30rpx;
       color: #fff;
-      background-color: #009688;
+      background: rgba(26, 168, 108, 1);
       .iconfont {
         font-size: 35rpx;
         margin-right: 8rpx;
         vertical-align: -1rpx;
+      }
+      &.booked {
+        background: rgba(26, 168, 108, 0.8);
       }
     }
   }
