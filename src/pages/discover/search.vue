@@ -1,15 +1,7 @@
 <template>
   <view class="container">
     <!--top-bar start-->
-    <view class="top-bar">
-      <view class="search-icon" @click="gotoPage('/pages/discover/search')">
-        <text class="iconfont icon-search"></text>
-      </view>
-      <view class="title"></view>
-      <view class="action" @click="gotoPublish('/pages/discover/publish')">
-        <text>发布</text>
-      </view>
-    </view>
+    <AppSearch />
     <!--top-bar end-->
     <!--banner-nav start-->
     <view class="banner-nav">
@@ -56,6 +48,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { onMounted, ref } from 'vue'
 import { store } from '@/store'
 import { fetchBlogList } from '@/api/blog'
+import AppSearch from '@/components/app-search/app-search.vue'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 
 let isLogin = ref(store.getters.isLogin)

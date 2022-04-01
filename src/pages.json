@@ -58,6 +58,12 @@
       }
     },
     {
+      "path": "pages/discover/search",
+      "style": {
+        "navigationBarTitleText": "作品搜索"
+      }
+    },
+    {
       "path": "pages/discover/publish",
       "style": {
         "navigationBarTitleText": "发布内容"
