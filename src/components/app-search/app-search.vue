@@ -75,7 +75,6 @@ export default defineComponent({
 }
 
 .search-contain .search .input {
-  width: 598rpx;
   background-color: #f7f7f7;
   border-radius: 33rpx;
   padding: 0 35rpx;

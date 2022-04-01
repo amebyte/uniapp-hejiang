@@ -1,39 +1,38 @@
 <template>
   <view class="container">
     <!--top-bar start-->
-    <AppSearch />
+    <AppSearch v-model="keyword" @onSearch="handleSearch" />
     <!--top-bar end-->
-    <!--banner-nav start-->
-    <view class="banner-nav">
-      <view class="content">
-        <view class="item" @click="gotoPage('/pages/article/partnersList')">
-          <view class="l">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
-          <view class="r">
-            <view class="name">合作伙伴</view>
-            <view class="desc">我们的合作伙伴</view>
-          </view>
-        </view>
-        <view class="item" @click="gotoPage('/pages/article/articleDetail')">
-          <view class="l">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
-          </view>
-          <view class="r">
-            <view class="name">品牌中心</view>
-            <view class="desc">诠释我们的品牌</view>
-          </view>
+
+    <template v-if="searchList.length === 0">
+      <view class="no-list">
+        <AppNoGoods background="#fff" :title="'暂无相关搜索结课'" color="#999999" :is-image="1" />
+      </view>
+    </template>
+    <template v-else>
+      <view class="app-top dir-left-nowrap main-center cross-center">
+        <view class="app-content dir-left-nowrap main-between cross-center">
+          <view class="app-line"></view>
+          <view class="app-icon-love iconfont icon-selected"></view>
+          <text class="app-text">搜索结果</text>
+          <view class="app-line"></view>
         </view>
       </view>
-    </view>
-    <!--banner-nav end-->
+      <view class="list">
+        <block v-for="item in searchList" :key="item.id">
+          <BlogItem :item="item" :is-list="true" @get-list="handleSearch" />
+        </block>
+      </view>
+    </template>
     <!--发现列表 start-->
+    <view class="app-top dir-left-nowrap main-center cross-center">
+      <view class="app-content dir-left-nowrap main-between cross-center">
+        <view class="app-line"></view>
+        <view class="app-icon-love iconfont icon-love"></view>
+        <text class="app-text">或您会喜欢</text>
+        <view class="app-line"></view>
+      </view>
+    </view>
     <view class="list">
       <block v-for="item in list" :key="item.id">
         <BlogItem :item="item" :is-list="true" @get-list="getList" />
@@ -50,26 +49,9 @@ import { store } from '@/store'
 import { fetchBlogList } from '@/api/blog'
 import AppSearch from '@/components/app-search/app-search.vue'
 import BlogItem from '@/components/blog-item/blog-item.vue'
+import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 
-let isLogin = ref(store.getters.isLogin)
-
-const gotoPublish = (url) => {
-  if (isLogin.value) {
-    uni.navigateTo({
-      url: url,
-    })
-  } else {
-    uni.navigateTo({
-      url: '/pages/my/login',
-    })
-  }
-}
-
-const gotoPage = (url) => {
-  uni.navigateTo({
-    url: url,
-  })
-}
+const keyword = ref('')
 
 const list = ref([]) as any
 const getList = () => {
@@ -83,6 +65,18 @@ const getList = () => {
     .catch((err) => console.log(err))
 }
 
+const searchList = ref([]) as any
+const handleSearch = () => {
+  const param = { page: 1, limit: 10, keyword: keyword.value }
+  fetchBlogList(param)
+    .then((r) => {
+      if (r.code === 0) {
+        searchList.value = r.data.list
+      }
+    })
+    .catch((err) => console.log(err))
+}
+
 onShow(() => {
   getList()
 })
@@ -90,74 +84,35 @@ onShow(() => {
 <style lang="scss">
 @import '@/static/css/variable.scss';
 .container {
-  margin: 20rpx;
-  .top-bar {
-    display: flex;
-    justify-content: space-between;
-    color: $theme-font-color;
-    margin-bottom: 10rpx;
-    .search-icon {
-      padding-left: 15rpx;
-      .icon-search {
-        font-size: 32rpx;
+  background-color: #fff;
+
+  .app-top {
+    width: 100%;
+    height: 40+32+24rpx;
+    .app-content {
+      height: 24rpx;
+      width: calc(100% - 450rpx);
+      .app-line {
+        width: 56rpx;
+        height: 2rpx;
+        background-color: #bbbbbb;
       }
-    }
-    .title {
-      font-size: 28rpx;
-    }
-    .action {
-      text {
-        border: 2rpx solid #009688;
-        border-radius: 20rpx;
-        font-size: 20rpx;
-        font-family: PingFang SC;
-        font-weight: bold;
-        color: #00796b;
-        padding: 5rpx 20rpx;
+      .app-icon-love {
+        color: #999;
+      }
+      .app-text {
+        font-size: 24rpx;
+        color: #999999;
       }
     }
   }
-  .banner-nav {
-    margin-bottom: 40rpx;
-    .content {
-      display: flex;
-      justify-content: space-between;
-      .item {
-        display: flex;
-        justify-content: flex-start;
-        padding: 30rpx 20rpx;
-        padding-left: 0;
-        > .l {
-          image {
-            width: 66rpx;
-            height: 66rpx;
-            border-radius: 7rpx;
-          }
-        }
-        > .r {
-          padding-left: 20rpx;
-          .name {
-            font-size: 28rpx;
-            font-family: PingFang SC;
-            font-weight: bold;
-            color: #00796b;
-            @extend .line1;
-          }
-          .desc {
-            font-size: 20rpx;
-            font-family: PingFang SC;
-            font-weight: bold;
-            color: #b7b7b7;
-            @extend .line1;
-          }
-        }
-        &:last-child {
-          padding-right: 130rpx;
-        }
-      }
-    }
-  }
+
   .list {
+    margin: 20rpx;
+  }
+
+  .no-list {
+    margin-top: 120rpx;
   }
 }
 </style>
