@@ -21,6 +21,12 @@
       }
     },
     {
+      "path": "pages/goods/curriculum",
+      "style": {
+        "navigationBarTitleText": "精品课程"
+      }
+    },
+    {
       "path": "pages/goods/goodsDetail",
       "style": {
         "navigationBarTitleText": "商品详情"

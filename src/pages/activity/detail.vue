@@ -12,7 +12,7 @@
       <view class="sub-info">
         <view class="row">
           <text class="iconfont icon-time"></text>
-          {{ detail.start_time }}-{{ detail.end_time }}
+          活动时间：{{ detail.datetime }} {{ detail.start_time }}-{{ detail.end_time }}
         </view>
         <view class="row">
           <text class="iconfont icon-people"></text>
@@ -67,6 +67,7 @@ const getDetail = () => {
     .then((r) => {
       if (r.code === 0) {
         detail.value = r.data
+        detail.value.datetime = r.data.date_start_time.slice(0, 10)
       }
     })
     .catch((err) => console.log(err))
@@ -204,7 +205,7 @@ onLoad((options) => {
         vertical-align: -1rpx;
       }
       &.booked {
-        background: rgba(26, 168, 108, 0.8);
+        background: rgba(26, 168, 108, 0.6);
       }
     }
   }

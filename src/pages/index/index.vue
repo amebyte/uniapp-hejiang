@@ -91,8 +91,7 @@ export default defineComponent({
         {
           url: '../../static/images/skip/curriculum.png',
           title: '课程',
-          path: '/pages/goods/index',
-          switchTab: true,
+          path: '/pages/goods/curriculum',
         },
         {
           url: '../../static/images/skip/AAndQ.png',
