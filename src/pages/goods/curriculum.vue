@@ -12,9 +12,7 @@
       </div>
       <view class="line right"><image src="/static/images/groupLine.png"></image></view>
     </view>
-    <view class="list dir-left-wrap">
-      <GoodsListColumnStyle />
-    </view>
+    <GoodsListColumnStyle />
   </view>
 </template>
 <script setup lang="ts">
@@ -123,10 +121,6 @@ page {
     }
   }
   .list {
-    padding-left: 20rpx;
-    padding-right: 20rpx;
-    margin-bottom: 20rpx;
-    padding-top: 10rpx;
   }
 }
 </style>
