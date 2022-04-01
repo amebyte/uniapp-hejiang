@@ -10,15 +10,15 @@
         </view>
       </view>
       <view class="sub-info">
-        <view class="time">
+        <view class="row">
           <text class="iconfont icon-time"></text>
           {{ detail.start_time }}-{{ detail.end_time }}
         </view>
-        <view class="l">
+        <view class="row">
           <text class="iconfont icon-people"></text>
           限定 {{ detail.max_num }} 人
         </view>
-        <view class="l">
+        <view class="row">
           <text class="iconfont icon-booked"></text>
           已预约 {{ detail.book_count }} 人
         </view>
@@ -156,6 +156,14 @@ onLoad((options) => {
       font-size: 24rpx;
       border-radius: 16rpx;
       margin: 0 20rpx;
+      color: $theme-font-color;
+      .row {
+        padding-top: 5rpx;
+        padding-bottom: 5rpx;
+        .iconfont {
+          padding-right: 10rpx;
+        }
+      }
     }
   }
   .detail {
