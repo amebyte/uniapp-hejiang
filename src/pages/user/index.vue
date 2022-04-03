@@ -106,7 +106,7 @@
     <view class="user-order">
       <view class="box-header two_sides"> 我的服务 </view>
       <view class="box-content row">
-        <view class="box-item col-3" @click="toPage('/pages/order/list?status=4')">
+        <view class="box-item col-3" @click="toPage('/pages/order/list')">
           <text class="iconfont icon-subject-talk icon"></text>
           <text>我的课程</text>
         </view>
