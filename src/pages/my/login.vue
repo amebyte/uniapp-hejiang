@@ -2,11 +2,11 @@
   <view class="login-wrap">
     <view class="header">
       <view class="image"></view>
-      <view class="name">开卓教育商城</view>
+      <view class="name">开卓研学商城</view>
     </view>
     <view class="login-submit-wrap">
       <view class="txt">
-        <text class="login-desc">登录即表示同意开卓教育商城</text>
+        <text class="login-desc">登录即表示同意开卓研学商城</text>
         <text class="login-desc-rule" @click="toPage('/pages/my/agreement')">《法律条款与隐私协议》</text>
       </view>
       <view class="login-button" @click="loginHandler">

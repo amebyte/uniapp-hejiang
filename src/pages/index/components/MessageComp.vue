@@ -1,7 +1,7 @@
 <template>
   <view class="wrapper">
     <text class="iconfont icon-message"></text>
-    <view class="content"> 开卓教育推出最新App服务 </view>
+    <view class="content"> 开卓研学推出最新App服务 </view>
     <text class="iconfont icon-close-bold" @click="closeMessage"></text>
   </view>
 </template>

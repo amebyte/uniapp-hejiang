@@ -1,4 +1,4 @@
-export const APP_NAME = '开卓教育'
+export const APP_NAME = '开卓研学'
 
 export const IMAGE_URL = '' // 静态资源的cos地址
 
