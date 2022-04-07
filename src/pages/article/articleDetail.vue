@@ -14,7 +14,7 @@
       <view class="sub-info">{{ detail.desc }}</view>
     </view>
     <view class="detail">
-      <image src="/static/icon/goods-detail.png"></image>
+      <!-- <image src="/static/icon/goods-detail.png"></image> -->
       <rich-text :nodes="detail.content"></rich-text>
     </view>
   </view>
