@@ -141,7 +141,7 @@
     </view>
     <!-- 我的设置 end-->
     <!--客服 start-->
-    <view class="service">
+    <view class="service" style="display: none">
       <view class="btn">
         <text class="iconfont icon-wechat"></text>
         <text>联系客服</text>
