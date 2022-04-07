@@ -16,10 +16,7 @@
       <view class="content">
         <view class="item" @click="gotoPage('/pages/article/partnersList')">
           <view class="l">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
+            <image src="/static/images/skip/cooperate.png" mode="scaleToFill"></image>
           </view>
           <view class="r">
             <view class="name">合作伙伴</view>
@@ -28,10 +25,7 @@
         </view>
         <view class="item" @click="gotoPage('/pages/article/articleDetail')">
           <view class="l">
-            <image
-              src="http://tstatic.mevikycloud.cn/image/product/2021/07/29/12051e1933364cd68168020f923e1a9fsjokznvbvn.jpg"
-              mode="scaleToFill"
-            ></image>
+            <image src="/static/images/skip/brand.png" mode="scaleToFill"></image>
           </view>
           <view class="r">
             <view class="name">品牌中心</view>

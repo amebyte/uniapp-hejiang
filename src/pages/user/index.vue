@@ -20,7 +20,7 @@
           </view>
           <view class="user-right-bottom">
             <view v-if="userInfo.mobile">{{ userInfo.mobile || '' }}</view>
-            <view v-else @click="toPage('/pages/my/setMobile')">设置手机号码</view>
+            <view v-else style="display: none" @click="toPage('/pages/my/setMobile')">设置手机号码</view>
           </view>
         </view>
         <view class="setup" @click="toPage('/pages/my/setting')"><text class="iconfont icon-setting"></text></view>

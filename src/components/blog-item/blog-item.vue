@@ -37,7 +37,7 @@
         <text class="iconfont icon-comment"></text>
         <text class="txt">{{ item.comment_count }}</text>
       </view>
-      <view class="status">
+      <view class="status" style="display: none">
         <text class="iconfont icon-uninterested"></text>
         <text class="txt">不感兴趣</text>
       </view>
