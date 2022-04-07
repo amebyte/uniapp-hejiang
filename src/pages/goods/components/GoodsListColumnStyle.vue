@@ -1,7 +1,7 @@
 <template>
   <view class="list">
     <block v-for="(item, index) in newGoodsList" :key="index">
-      <view class="item">
+      <view class="item" @click="goDetail(item)">
         <view class="tag">限时特惠</view>
         <view class="content">
           <view class="image">
@@ -34,7 +34,7 @@
                 <text>¥{{ item.originalPrice }}</text>
                 <text>¥{{ item.marketPrice }}</text>
               </view>
-              <view class="r" @click="goDetail(item)"> 马上抢购 </view>
+              <view class="r"> 马上抢购 </view>
             </view>
           </view>
         </view>
