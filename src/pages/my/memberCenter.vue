@@ -5,24 +5,37 @@
     </view>
     <!--头像和用户信息 start-->
     <view class="user-info-header" style="">
-      <view class="user-avatar" @click="toPage('/pages/my/edit')">
-        <image :src="userInfo.avatar" />
-      </view>
-      <view class="user-right">
-        <view class="user-right-top">
-          <text class="username">{{ userInfo.nickname }}</text>
-          <view class="user-level"
-            >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
-            <text class="iconfont icon-arrow-right-bold"></text
-          ></view>
-          <view class="user-person">点击刷新</view>
+      <block v-if="isLogin">
+        <view class="user-avatar" @click="toPage('/pages/my/edit')">
+          <image :src="userInfo.avatar" />
         </view>
-        <view class="user-right-bottom">
-          <view v-if="userInfo.mobile">{{ userInfo.mobile || '' }}</view>
-          <view v-else style="display: none" @click="toPage('/pages/my/setMobile')">设置手机号码</view>
+        <view class="user-right">
+          <view class="user-right-top">
+            <text class="username">{{ userInfo.nickname }}</text>
+            <view class="user-level"
+              >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
+              <text class="iconfont icon-arrow-right-bold"></text
+            ></view>
+            <view class="user-person">点击刷新</view>
+          </view>
+          <view class="user-right-bottom">
+            <view v-if="userInfo.mobile">{{ userInfo.mobile || '' }}</view>
+            <view v-else style="display: none" @click="toPage('/pages/my/setMobile')">设置手机号码</view>
+          </view>
         </view>
-      </view>
-      <view class="setup"><text class="txt">等级规则</text></view>
+        <view class="setup"><text class="txt">等级规则</text></view>
+      </block>
+      <block v-else>
+        <view class="user-no-head" @click="goLogin">
+          <text class="iconfont icon-no-head"></text>
+        </view>
+        <view class="user-right">
+          <view class="user-right-top" @click="goLogin">
+            <text class="username">授权登录</text>
+          </view>
+          <view class="user-right-bottom" @click="goLogin">授权登录之后享受更多优惠福利</view>
+        </view>
+      </block>
     </view>
     <!--头像和用户信息 end-->
     <!--会员级别 start-->
@@ -52,6 +65,11 @@ let isLogin = ref(store.getters.isLogin)
 let userInfo = ref(store.state.app.userInfo)
 const toPage = (path) => {
   console.log('toPage')
+}
+const goLogin = () => {
+  uni.navigateTo({
+    url: `/pages/my/login`,
+  })
 }
 </script>
 <style lang="scss">
@@ -170,6 +188,15 @@ page {
         opacity: 0.7;
       }
     }
+
+    .user-no-head {
+      padding-top: 20rpx;
+      .icon-no-head {
+        color: #fff;
+        font-size: 84rpx;
+      }
+    }
+
     .setup {
       position: absolute;
       top: 70rpx;
