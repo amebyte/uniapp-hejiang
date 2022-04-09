@@ -62,7 +62,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
-import { mapState } from 'vuex'
+import { store } from '@/store'
 
 export default defineComponent({
   name: 'MemberUpgrade',
@@ -71,26 +71,17 @@ export default defineComponent({
       auto: false,
       list: [] as any[],
       index: 0,
-      level: 0,
-      other: 0,
+      level: 0 as any,
+      other: 0 as any,
       current: 'wechat',
       detail: {
         price: '',
         money: '',
       } as any,
     })
-
-    return {
-      ...toRefs(state),
-    }
-  },
-  computed: {
-    ...mapState({
-      memberImg: (state) => state.mallConfig.__wxapp_img.member,
-    }),
-  },
-  methods: {
-    payMember(member_level) {
+    const memberImg = store.state.mallConfig.__wxapp_img.member
+    const getPayDataTimer = ref(null) as any
+    const payMember = (member_level) => {
       let that = this
       uni.showLoading({
         mask: true,
@@ -108,11 +99,11 @@ export default defineComponent({
           uni.hideLoading()
           if (response.code === 0) {
             if (response.data.retry && response.data.retry === 1) {
-              that.getPayDataTimer = setTimeout(() => {
-                that.payMember(member_level)
+              getPayDataTimer.value = setTimeout(() => {
+                payMember(member_level)
               }, 1000)
             } else {
-              that.pay(response.data.pay_id, member_level)
+              pay(response.data.pay_id, member_level)
             }
           } else {
             uni.showModal({
@@ -130,9 +121,9 @@ export default defineComponent({
             showCancel: false,
           })
         })
-    },
+    }
 
-    pay(id, level) {
+    const pay = (id, level) => {
       let that = this
       that.$payment
         .pay(id)
@@ -141,7 +132,7 @@ export default defineComponent({
             title: '支付成功',
             duration: 1000,
           })
-          that.level = level
+          state.level = level
         })
         .catch((res) => {
           uni.showToast({
@@ -150,15 +141,14 @@ export default defineComponent({
             duration: 1000,
           })
         })
-    },
+    }
 
-    change(e) {
-      let that = this
-      that.index = e.detail.current
-      that.detail = that.list[that.index]
-    },
+    const change = (e) => {
+      state.index = e.detail.current
+      state.detail = state.list[state.index]
+    }
 
-    getList() {
+    const getList = () => {
       let that = this
       that
         .$request({
@@ -167,24 +157,23 @@ export default defineComponent({
         })
         .then((response) => {
           uni.hideLoading()
-          that.$hideLoading()
           if (response.code == 0) {
-            that.list = response.data.list
-            that.index = 0
-            if (that.other > 0) {
-              for (let i = 0; i < that.list.length; i++) {
-                if (that.other == that.list[i].level) {
-                  that.index = i
+            state.list = response.data.list
+            state.index = 0
+            if (state.other > 0) {
+              for (let i = 0; i < state.list.length; i++) {
+                if (state.other == state.list[i].level) {
+                  state.index = i
                 }
               }
             } else {
-              for (let i = 0; i < that.list.length; i++) {
-                if (that.level == that.list[i].level) {
-                  that.index = i
+              for (let i = 0; i < state.list.length; i++) {
+                if (state.level == state.list[i].level) {
+                  state.index = i
                 }
               }
             }
-            that.detail = that.list[that.index]
+            state.detail = state.list[state.index]
           } else {
             uni.showToast({
               title: response.msg,
@@ -195,23 +184,26 @@ export default defineComponent({
         })
         .catch((response) => {
           uni.hideLoading()
-          that.$hideLoading()
         })
-    },
-  },
-  onLoad(options) {
-    this.$commonLoad.onload(options)
-    let that = this
-    if (options.level) {
-      that.level = options.level
     }
-    if (options.other) {
-      that.other = options.other
-    }
-    that.$showLoading({
-      text: '加载中...',
+
+    onLoad((options) => {
+      if (options.level) {
+        state.level = options.level
+      }
+      if (options.other) {
+        state.other = options.other
+      }
+
+      getList()
     })
-    that.getList()
+
+    return {
+      ...toRefs(state),
+      memberImg,
+      payMember,
+      change,
+    }
   },
 })
 </script>
