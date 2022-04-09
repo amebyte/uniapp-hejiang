@@ -173,6 +173,14 @@
           }
         },
         {
+          "path": "memberUpgrade",
+          "style": {
+            "navigationBarTitleText": "升级会员",
+            "navigationBarBackgroundColor": "#102c24",
+            "enablePullDownRefresh": false
+          }
+        },
+        {
           "path": "address",
           "style": {
             "navigationBarTitleText": "收货地址",

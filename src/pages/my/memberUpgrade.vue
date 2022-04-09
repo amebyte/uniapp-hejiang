@@ -21,7 +21,7 @@
         <view>{{ detail.name }}</view>
       </view>
       <view class="method-title">
-        <image src="./../image/how.png"></image>
+        <text class="iconfont icon-completed"></text>
         <text>如何获得该卡</text>
       </view>
       <view class="method-list">
@@ -44,7 +44,7 @@
     </view>
     <view class="right">
       <view class="method-title">
-        <image src="./../image/right.png"></image>
+        <text class="iconfont icon-member-empty"></text>
         <text>特权说明</text>
       </view>
       <view class="right-list">

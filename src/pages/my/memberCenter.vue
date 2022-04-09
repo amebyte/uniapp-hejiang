@@ -23,7 +23,7 @@
             <view v-else style="display: none" @click="toPage('/pages/my/setMobile')">设置手机号码</view>
           </view>
         </view>
-        <view class="setup"><text class="txt">等级规则</text></view>
+        <view class="setup" @click="toPage('/pages/my/memberUpgrade')"><text class="txt">等级规则</text></view>
       </block>
       <block v-else>
         <view class="user-no-head" @click="goLogin">
