@@ -31,3 +31,11 @@ export function fetchUpdateNickname(data) {
 export function fetchAllMemberRules() {
   return request.get!('&r=api/mall-member/all-member', {}, { noAuth: false }, true)
 }
+
+/**
+ * 购买会员
+ *
+ */
+export function fetchMemberPurchase(data) {
+  return request.post!('&api/mall-member/purchase-member', data, { noAuth: false }, true)
+}

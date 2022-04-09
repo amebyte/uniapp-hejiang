@@ -56,6 +56,7 @@
         <button class="way-btn">￥{{ detail.price }} 立即升级</button>
       </view>
     </view>
+    <AppPayment ref="appPaymentRef" />
   </view>
 </template>
 
@@ -63,10 +64,14 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import { store } from '@/store'
-import { fetchAllMemberRules } from '@/api/user'
+import { fetchAllMemberRules, fetchMemberPurchase } from '@/api/user'
+import AppPayment from '@/components/app-payment/app-payment.vue'
 
 export default defineComponent({
   name: 'MemberUpgrade',
+  components: {
+    AppPayment,
+  },
   setup() {
     const state = reactive({
       auto: false,
@@ -82,20 +87,16 @@ export default defineComponent({
     })
     const memberImg = store.state.mallConfig.__wxapp_img.member
     const getPayDataTimer = ref(null) as any
+    const appPaymentRef = ref(null)
+
     const payMember = (member_level) => {
-      let that = this
       uni.showLoading({
         mask: true,
         title: '领取中...',
       })
-      that
-        .$request({
-          url: that.$api.member.purchase,
-          data: {
-            member_level: member_level,
-          },
-          method: 'post',
-        })
+      fetchMemberPurchase({
+        member_level: member_level,
+      })
         .then((response) => {
           uni.hideLoading()
           if (response.code === 0) {
@@ -125,8 +126,7 @@ export default defineComponent({
     }
 
     const pay = (id, level) => {
-      let that = this
-      that.$payment
+      ;(appPaymentRef.value as any)
         .pay(id)
         .then((res) => {
           uni.showToast({
