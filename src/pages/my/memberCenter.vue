@@ -19,8 +19,7 @@
             <view class="user-person">点击刷新</view>
           </view>
           <view class="user-right-bottom">
-            <view v-if="userInfo.mobile">{{ userInfo.mobile || '' }}</view>
-            <view v-else style="display: none" @click="toPage('/pages/my/setMobile')">设置手机号码</view>
+            <view>{{ userInfo.identity.level_name || '' }}</view>
           </view>
         </view>
         <view class="setup" @click="toPage('/pages/my/memberUpgrade')"><text class="txt">等级规则</text></view>
@@ -42,9 +41,15 @@
     <view class="member-level">
       <view class="title">会员级别</view>
       <view class="bottom">
-        <view class="growth-value"><text class="num">0</text> 成长值</view>
+        <view class="growth-value">
+          <text class="num">{{ state.prop }}</text> 成长值
+          <text v-if="state.nextList.length > 0">
+            消费￥{{ state.list !== null ? state.list.consumption_money : '0' }}/￥
+            {{ state.detail !== null ? state.nextMember.money : '0' }}
+          </text>
+        </view>
         <view class="line"></view>
-        <view class="level-desc">当前是初级等级</view>
+        <view class="level-desc">当前是{{ userInfo.identity.level_name || '初级等级' }}</view>
       </view>
       <view class="bg-image"><image src="../../static/images/skip/vip.png" /></view>
     </view>
@@ -53,26 +58,120 @@
     <view class="preferential-title">会员专享特惠商品</view>
     <!--特惠标题 end-->
     <!--特惠商品列表 start-->
-    <ProductListGrid />
+    <ProductListGrid :is_level="1" />
     <!--特惠商品列表 end-->
   </view>
 </template>
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, toRefs } from 'vue'
 import ProductListGrid from '@/components/product-list-grid/index.vue'
 import { store } from '@/store'
-let isLogin = ref(store.getters.isLogin)
-let userInfo = ref(store.state.app.userInfo)
+import { onLoad, onShow } from '@dcloudio/uni-app'
+import { fetchMemberLevelInfo, fetchMemberRechargeSetting } from '@/api/user'
+
+const state = reactive({
+  tabbarbool: false,
+  detail: {
+    rules: '',
+    level: 0,
+  },
+  list: [] as any,
+  nextList: [],
+  goods: [],
+  first: false,
+  haveBackground: false,
+  coupon: [],
+  balance: 0,
+  loading: false,
+  member_pic_url: null,
+  nextMember: {
+    money: 0,
+  },
+  recharge: false,
+  current: 'wechat',
+  prop: 0,
+  page_loading: true,
+  level: 0,
+})
+
+const isLogin = ref(store.getters.isLogin)
+const userInfo = ref(store.state.app.userInfo)
+
 const toPage = (path) => {
   uni.navigateTo({
     url: path,
   })
 }
+
 const goLogin = () => {
   uni.navigateTo({
     url: `/pages/my/login`,
   })
 }
+
+const getList = () => {
+  let that = this
+  fetchMemberLevelInfo()
+    .then((response) => {
+      if (response.code == 0) {
+        state.list = response.data
+        state.detail = state.list.mall_member
+        state.goods = state.list.member_goods
+        state.coupon = state.list.member_coupons
+        state.nextMember = state.list.next_consume_upgrade_member
+        state.member_pic_url = state.list.member_pic_url
+        state.nextList = state.list.next_mall_member
+        if (state.recharge) {
+          state.balance = state.list.user_info.balance
+        }
+        if (state.detail != null) {
+          state.level = state.detail.level
+        }
+        if (state.nextMember) {
+          state.prop = (state.list.consumption_money / state.nextMember.money) * 100
+          if (state.prop > 100) {
+            state.prop = 100
+          }
+        }
+        if (state.detail == null && state.nextList && state.nextList.length > 0) {
+          state.detail = state.nextList[0]
+        }
+      } else {
+        uni.showToast({
+          title: response.msg,
+          icon: 'none',
+          duration: 1000,
+        })
+      }
+    })
+    .catch((response) => {
+      console.log('fetchMemberLevelInfo:', response)
+    })
+}
+
+onShow(() => {
+  getList()
+})
+
+onLoad(() => {
+  fetchMemberRechargeSetting()
+    .then((response) => {
+      if (response.code == 0) {
+        if (Number(response.data.setting.status) === 1) {
+          state.recharge = true
+        }
+      } else {
+        uni.showToast({
+          title: response.msg,
+          icon: 'none',
+          duration: 1000,
+        })
+      }
+    })
+    .catch((response) => {
+      console.log('fetchMemberRechargeSetting:', response)
+    })
+})
 </script>
 <style lang="scss">
 @import '@/static/css/variable.scss';

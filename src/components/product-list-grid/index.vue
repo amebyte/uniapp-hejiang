@@ -32,7 +32,8 @@ import { onMounted, ref } from 'vue'
 import { fetchGoodsList } from '@/api/goods'
 import { goodsType } from '@/types'
 const props = defineProps({
-  catId: { type: String, required: true },
+  catId: { type: String, required: false },
+  is_level: { type: Number, required: false },
 })
 let goodsList = ref<Array<goodsType>>([])
 const getNewGoodsList = () => {
@@ -40,6 +41,7 @@ const getNewGoodsList = () => {
     pageNum: 0,
     pageSize: 10,
     cat_id: props.catId,
+    is_level: props.is_level,
   }
   fetchGoodsList(params)
     .then((r: any) => {

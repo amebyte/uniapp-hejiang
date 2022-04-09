@@ -39,3 +39,19 @@ export function fetchAllMemberRules() {
 export function fetchMemberPurchase(data) {
   return request.post!('&r=api/mall-member/purchase-member', data, { noAuth: false }, true)
 }
+
+/**
+ * 会员等级信息
+ *
+ */
+export function fetchMemberLevelInfo() {
+  return request.get!('&r=api/mall-member/index', {}, { noAuth: false }, true)
+}
+
+/**
+ * 会员充值信息
+ *
+ */
+export function fetchMemberRechargeSetting() {
+  return request.get!('&r=api/recharge/setting', {}, { noAuth: false }, true)
+}
