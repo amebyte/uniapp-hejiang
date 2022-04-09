@@ -23,3 +23,11 @@ export function fetchUpdateAvatar(data) {
 export function fetchUpdateNickname(data) {
   return request.post!('&r=plugin/mobile/api/user/nickname', data, { noAuth: false }, true)
 }
+
+/**
+ * 获取全部会员规则
+ *
+ */
+export function fetchAllMemberRules() {
+  return request.get!('&r=api/mall-member/all-member', {}, { noAuth: false }, true)
+}

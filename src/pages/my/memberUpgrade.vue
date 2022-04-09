@@ -63,6 +63,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import { store } from '@/store'
+import { fetchAllMemberRules } from '@/api/user'
 
 export default defineComponent({
   name: 'MemberUpgrade',
@@ -149,12 +150,7 @@ export default defineComponent({
     }
 
     const getList = () => {
-      let that = this
-      that
-        .$request({
-          url: that.$api.member.all,
-          method: 'get',
-        })
+      fetchAllMemberRules()
         .then((response) => {
           uni.hideLoading()
           if (response.code == 0) {
