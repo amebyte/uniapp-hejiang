@@ -46,14 +46,17 @@
       @confirm="confirm"
     />
     <!--规格属性 end-->
+    <ShareBar ref="shareBar" :only-h5-share-box="onlyH5ShareBox" @closeShare="closeShare" />
   </view>
 </template>
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { useStore, mapGetters } from 'vuex'
+import Auth from '@/libs/wechat'
 import ProductDetailSwiper from '@/components/product-detail-swiper/index.vue'
 import AttrWindow from '@/components/attr-window/index.vue'
+import ShareBar from '@/components/share-bar/ShareBar.vue'
 import GoodsInfo from './components/GoodsInfo.vue'
 import GoodsContent from './components/GoodsContent.vue'
 import DetailFooterBar from './components/DetailFooterBar.vue'
@@ -63,6 +66,7 @@ import GoodsTeacher from './components/GoodsTeacher.vue'
 import { fetchGoodsDetail } from '@/api/goods'
 import { fetchUserInfo } from '@/api/user'
 import { minHeap } from '@/utils/util'
+import { toLogin } from '@/libs/login'
 export default defineComponent({
   name: 'GoodsDetail',
   components: {
@@ -74,6 +78,7 @@ export default defineComponent({
     GoodsCurriculum,
     GoodsTeacher,
     GoodsSpecs,
+    ShareBar,
   },
   setup() {
     const store = useStore()
@@ -314,8 +319,32 @@ export default defineComponent({
       state.attr.productSelect.cart_num = e || 1
     }
 
+    const isShowShare = ref(false)
+    const wechatH5Status = ref(false)
+    const onlyH5ShareBox = ref(false)
+    /**
+     * 分享打开
+     */
     const openShare = () => {
-      console.log('openShare')
+      if (isLogin.value == false) {
+        toLogin()
+      } else {
+        // #ifdef H5
+        if (Auth.isWeixin() === true) {
+          wechatH5Status.value = true
+          onlyH5ShareBox.value = true
+        }
+        // #endif
+        isShowShare.value = true
+      }
+    }
+
+    /**
+     * 分享关闭
+     */
+    const closeShare = () => {
+      isShowShare.value = false
+      onlyH5ShareBox.value = false
     }
 
     onShow(() => {
@@ -329,6 +358,9 @@ export default defineComponent({
     return {
       ...toRefs(state),
       detailFooterBarRef,
+      isShowShare,
+      wechatH5Status,
+      onlyH5ShareBox,
       setIsOpenAttrWindow,
       setIsBuyNow,
       iptCartNum,
@@ -337,6 +369,7 @@ export default defineComponent({
       closeWindow,
       confirm,
       openShare,
+      closeShare,
       createCartParam,
     }
   },

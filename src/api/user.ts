@@ -37,5 +37,5 @@ export function fetchAllMemberRules() {
  *
  */
 export function fetchMemberPurchase(data) {
-  return request.post!('&api/mall-member/purchase-member', data, { noAuth: false }, true)
+  return request.post!('&r=api/mall-member/purchase-member', data, { noAuth: false }, true)
 }

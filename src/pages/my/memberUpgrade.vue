@@ -196,6 +196,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      appPaymentRef,
       memberImg,
       payMember,
       change,
@@ -256,9 +257,15 @@ export default defineComponent({
 
 .method-title {
   height: 48rpx;
+  line-height: 48rpx;
   font-size: 32rpx;
   color: #353535;
   padding: 0 55rpx;
+  .iconfont {
+    font-size: 42rpx;
+    color: #1aa86c;
+    padding-right: 10rpx;
+  }
 }
 
 .method-title image {
@@ -293,7 +300,7 @@ export default defineComponent({
 
 .way-money text {
   font-size: 36rpx;
-  color: #b4914f;
+  color: #1aa86c;
 }
 
 .right {
@@ -320,7 +327,7 @@ export default defineComponent({
     height: 80rpx;
     line-height: 80rpx;
     width: 640rpx;
-    background-color: #b4914f;
+    background-color: #1aa86c;
     border-radius: 40rpx;
     font-size: 32rpx;
     color: #ffffff;
