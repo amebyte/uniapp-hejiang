@@ -64,7 +64,9 @@ import { store } from '@/store'
 let isLogin = ref(store.getters.isLogin)
 let userInfo = ref(store.state.app.userInfo)
 const toPage = (path) => {
-  console.log('toPage')
+  uni.navigateTo({
+    url: path,
+  })
 }
 const goLogin = () => {
   uni.navigateTo({
