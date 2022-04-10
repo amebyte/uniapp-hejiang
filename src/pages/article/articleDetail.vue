@@ -111,7 +111,7 @@ onLoad((options) => {
     }
   }
   .detail {
-    padding: 20upx 0;
+    padding: 20upx;
     background-color: #ffffff;
     border-radius: 15upx;
     margin-top: 24upx;

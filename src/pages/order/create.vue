@@ -74,10 +74,10 @@
           </view>
           <view class="label">
             <view class="title">
-              <text class="txt">运费</text>
+              <text class="txt">会员优惠总价格</text>
             </view>
             <view class="value">
-              <text class="txt highlight">¥：0.00</text>
+              <text class="txt highlight">¥：{{ mch.member_discount }}</text>
             </view>
           </view>
           <view class="label" style="display: none">
@@ -88,6 +88,14 @@
             <view class="value" @click="openCouponsWindow">
               <text class="txt highlight">{{ choiceCoupon ? '-￥' + choiceCoupon.faceValue : '请选择优惠劵' }}</text>
               <text class="iconfont icon-arrow-right-bold"></text>
+            </view>
+          </view>
+          <view class="label">
+            <view class="title">
+              <text class="txt">运费</text>
+            </view>
+            <view class="value">
+              <text class="txt highlight">¥：{{ mch.express_price }}</text>
             </view>
           </view>
           <view class="label orderLabelMargin">

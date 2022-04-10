@@ -17,10 +17,11 @@
               {{ goodsInfo.price_member_min }}
             </text>
           </view>
-          <view class="goods-obtain-type">
+          <view class="member-price">会员价</view>
+          <view v-if="goodsInfo.is_time === 1" class="goods-obtain-type">
             <view class="goods-obtain-wrap">
               <text class="iconfont icon-add-cart-fill"></text>
-              <view class="txt">会员价格</view>
+              <view class="txt">限时销售</view>
             </view>
           </view>
         </view>
@@ -49,10 +50,10 @@
               {{ goodsInfo.minprice }}
             </text>
           </view>
-          <view v-if="goodsInfo.level_show" class="goods-obtain-type">
+          <view v-if="goodsInfo.is_time === 1" class="goods-obtain-type">
             <view class="goods-obtain-wrap">
               <text class="iconfont icon-add-cart-fill"></text>
-              <view class="txt">会员价格</view>
+              <view class="txt">限时销售</view>
             </view>
           </view>
         </view>
@@ -158,6 +159,15 @@ const openShare = () => {
         color: $theme-font-color;
         line-height: 44rpx;
       }
+    }
+
+    .member-price {
+      border: 1rpx solid #1aa86c;
+      border-radius: 8rpx;
+      font-size: 20rpx;
+      color: #1aa86c;
+      margin-right: 20rpx;
+      margin-left: 20rpx;
     }
 
     .goods-obtain-type {
