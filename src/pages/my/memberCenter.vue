@@ -19,10 +19,13 @@
             <view class="user-person">点击刷新</view>
           </view>
           <view class="user-right-bottom">
-            <view>{{ userInfo.identity.level_name || '' }}</view>
+            <image class="level-icon" load-lazy="true" :src="state.member_pic_url"></image>
+            <view class="level-name">{{ userInfo.identity.level_name || '' }}</view>
           </view>
         </view>
-        <view class="setup" @click="toPage('/pages/my/memberUpgrade')"><text class="txt">等级规则</text></view>
+        <view v-if="state.detail.rules != '' && state.level > 0" class="setup" @click="toPage('/pages/my/memberRules')"
+          ><text class="txt">等级规则</text></view
+        >
       </block>
       <block v-else>
         <view class="user-no-head" @click="goLogin">
@@ -39,17 +42,20 @@
     <!--头像和用户信息 end-->
     <!--会员级别 start-->
     <view class="member-level">
-      <view class="title">会员级别</view>
+      <view class="title">
+        会员级别
+        <text class="upgrade" @click="toPage('/pages/my/memberUpgrade')">升级会员</text>
+      </view>
       <view class="bottom">
         <view class="growth-value">
           <text class="num">{{ state.prop }}</text> 成长值
-          <text v-if="state.nextList.length > 0">
+          <text v-if="state.nextList.length > 0" class="progress">
             消费￥{{ state.list !== null ? state.list.consumption_money : '0' }}/￥
             {{ state.detail !== null ? state.nextMember.money : '0' }}
           </text>
         </view>
         <view class="line"></view>
-        <view class="level-desc">当前是{{ userInfo.identity.level_name || '初级等级' }}</view>
+        <view class="level-desc"> 当前是{{ userInfo.identity.level_name || '初级等级' }} </view>
       </view>
       <view class="bg-image"><image src="../../static/images/skip/vip.png" /></view>
     </view>
@@ -285,8 +291,18 @@ page {
       }
 
       .user-right-bottom {
+        display: flex;
         color: #fff;
         opacity: 0.7;
+        .level-icon {
+          border-radius: 50%;
+          margin-bottom: -3rpx;
+          height: 44rpx;
+          width: 44rpx;
+        }
+        .level-name {
+          padding-left: 10rpx;
+        }
       }
     }
 
@@ -327,6 +343,13 @@ page {
       font-family: PingFang SC;
       font-weight: 400;
       color: #fcb81d;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .upgrade {
+        font-size: 24rpx;
+        color: #fff;
+      }
     }
     .bottom {
       margin-top: 100rpx;
@@ -337,6 +360,9 @@ page {
         color: #ffffff;
         .num {
           font-size: 50rpx;
+        }
+        .progress {
+          font-size: 24rpx;
         }
       }
       .line {

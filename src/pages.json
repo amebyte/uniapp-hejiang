@@ -181,6 +181,12 @@
           }
         },
         {
+          "path": "memberRules",
+          "style": {
+            "navigationBarTitleText": "规则"
+          }
+        },
+        {
           "path": "address",
           "style": {
             "navigationBarTitleText": "收货地址",
@@ -266,7 +272,10 @@
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "开卓研学",
     "navigationBarBackgroundColor": "#1aa86c",
-    "backgroundColor": "#1aa86c"
+    "backgroundColor": "#1aa86c",
+    // #ifdef H5
+    "navigationStyle": "custom"
+    // #endif
   },
   "tabBar": {
     "color": "#1AA86C",
