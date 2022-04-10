@@ -19,7 +19,7 @@
             <view class="user-person" @click="loginHandler">点击刷新</view>
           </view>
           <view class="user-right-bottom">
-            <image class="level-icon" load-lazy="true" :src="state.member_pic_url"></image>
+            <image class="level-icon" load-lazy="true" :src="state.member_pic_url" mode="aspectFill"></image>
             <view class="level-name">{{ userInfo.identity.level_name || '' }}</view>
           </view>
         </view>

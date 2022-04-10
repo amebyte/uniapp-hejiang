@@ -5,7 +5,9 @@
       <view class="title-bar">
         <view class="title-bar-left"><text class="iconfont icon-calendar"></text>{{ detail.created_at }}</view>
         <view class="title-bar-right">
-          <view class="favorite"> <text class="iconfont icon-hits"></text> 浏览：{{ detail.hits }} </view>
+          <view class="favorite" style="display: none">
+            <text class="iconfont icon-hits"></text> 浏览：{{ detail.hits }}
+          </view>
           <view class="share"> <text class="iconfont icon-share"></text> 分享 </view>
         </view>
       </view>

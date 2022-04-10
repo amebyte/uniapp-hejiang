@@ -19,7 +19,15 @@
             <view class="user-person" @click="loginHandler">点击刷新</view>
           </view>
           <view class="user-right-bottom">
-            <view>{{ userInfo.identity.level_name || '' }}</view>
+            <block v-if="mall.setting.is_icon_members_grade == 1">
+              <image
+                class="level-icon"
+                load-lazy="true"
+                :src="userInfo.identity.member_pic_url"
+                mode="aspectFill"
+              ></image>
+              <view class="level-name">{{ userInfo.identity.level_name || '' }}</view>
+            </block>
           </view>
         </view>
         <view class="setup" @click="toPage('/pages/my/setting')"><text class="iconfont icon-setting"></text></view>
@@ -160,6 +168,8 @@ import { Tips } from '@/utils/util'
 import { getUserProfile, wechatH5Login } from '@/hooks/useLogin'
 const isLogin = ref(store.getters.isLogin)
 const userInfo = ref(store.state.app.userInfo)
+const mall = store.state.mallConfig.mall
+
 const orderCounts = ref({}) as any
 const toPage = (path) => {
   uni.navigateTo({
@@ -324,8 +334,18 @@ page {
       }
 
       .user-right-bottom {
+        display: flex;
         color: #fff;
         opacity: 0.7;
+        .level-icon {
+          border-radius: 50%;
+          margin-bottom: -3rpx;
+          height: 44rpx;
+          width: 44rpx;
+        }
+        .level-name {
+          padding-left: 10rpx;
+        }
       }
     }
 
