@@ -16,7 +16,7 @@
               >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
               <text class="iconfont icon-arrow-right-bold"></text
             ></view>
-            <view class="user-person">点击刷新</view>
+            <view class="user-person" @click="loginHandler">点击刷新</view>
           </view>
           <view class="user-right-bottom">
             <image class="level-icon" load-lazy="true" :src="state.member_pic_url"></image>
@@ -44,7 +44,7 @@
     <view class="member-level">
       <view class="title">
         会员级别
-        <text class="upgrade" @click="toPage('/pages/my/memberUpgrade')">升级会员</text>
+        <text class="upgrade" @click="goUpgrade">升级会员</text>
       </view>
       <view class="bottom">
         <view class="growth-value">
@@ -74,6 +74,7 @@ import ProductListGrid from '@/components/product-list-grid/index.vue'
 import { store } from '@/store'
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import { fetchMemberLevelInfo, fetchMemberRechargeSetting } from '@/api/user'
+import { getUserProfile, wechatH5Login } from '@/hooks/useLogin'
 
 const state = reactive({
   tabbarbool: false,
@@ -113,6 +114,21 @@ const goLogin = () => {
   uni.navigateTo({
     url: `/pages/my/login`,
   })
+}
+
+const goUpgrade = () => {
+  uni.navigateTo({
+    url: `/pages/my/memberUpgrade?level=${state.level}`,
+  })
+}
+
+const loginHandler = () => {
+  // #ifdef MP-WEIXIN
+  getUserProfile()
+  // #endif
+  // #ifdef H5
+  wechatH5Login()
+  // #endif
 }
 
 const getList = () => {

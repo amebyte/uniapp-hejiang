@@ -51,7 +51,7 @@
         <view v-for="item in detail.rights" :key="item.id">{{ item.content }}</view>
       </view>
     </view>
-    <view v-if="detail.is_purchase == 1 && detail.level > level" class="right-away">
+    <view v-if="Number(detail.is_purchase) == 1 && Number(detail.level) > Number(level)" class="right-away">
       <view class="to-recharge" @click="payMember(detail.level)">
         <button class="way-btn">￥{{ detail.price }} 立即升级</button>
       </view>
@@ -64,8 +64,9 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import { store } from '@/store'
-import { fetchAllMemberRules, fetchMemberPurchase } from '@/api/user'
+import { fetchAllMemberRules, fetchMemberPurchase, fetchUserInfo } from '@/api/user'
 import AppPayment from '@/components/app-payment/app-payment.vue'
+import { AppMutationTypes } from '@/store/modules/app/mutation-types'
 
 export default defineComponent({
   name: 'MemberUpgrade',
@@ -134,6 +135,7 @@ export default defineComponent({
             duration: 1000,
           })
           state.level = level
+          getUserInfo()
         })
         .catch((res) => {
           uni.showToast({
@@ -142,6 +144,12 @@ export default defineComponent({
             duration: 1000,
           })
         })
+    }
+
+    const getUserInfo = () => {
+      fetchUserInfo().then((res) => {
+        store.commit(AppMutationTypes.SET_USER_INFO, res.data)
+      })
     }
 
     const change = (e) => {
@@ -185,7 +193,7 @@ export default defineComponent({
 
     onLoad((options) => {
       if (options.level) {
-        state.level = options.level
+        state.level = Number(options.level)
       }
       if (options.other) {
         state.other = options.other

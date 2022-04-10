@@ -16,7 +16,7 @@
               >{{ userInfo.identity ? `LV${userInfo.identity.member_level}` : 'LV0' }}
               <text class="iconfont icon-arrow-right-bold"></text
             ></view>
-            <view class="user-person">点击刷新</view>
+            <view class="user-person" @click="loginHandler">点击刷新</view>
           </view>
           <view class="user-right-bottom">
             <view>{{ userInfo.identity.level_name || '' }}</view>
@@ -157,6 +157,7 @@ import { store } from '@/store'
 import { fetchLogout } from '@/api/public'
 import { AppMutationTypes } from '@/store/modules/app/mutation-types'
 import { Tips } from '@/utils/util'
+import { getUserProfile, wechatH5Login } from '@/hooks/useLogin'
 const isLogin = ref(store.getters.isLogin)
 const userInfo = ref(store.state.app.userInfo)
 const orderCounts = ref({}) as any
@@ -175,6 +176,16 @@ const gotoMemberCenter = () => {
     url: `/pages/my/memberCenter`,
   })
 }
+
+const loginHandler = () => {
+  // #ifdef MP-WEIXIN
+  getUserProfile()
+  // #endif
+  // #ifdef H5
+  wechatH5Login()
+  // #endif
+}
+
 const logout = () => {
   if (isLogin.value) {
     fetchLogout()
