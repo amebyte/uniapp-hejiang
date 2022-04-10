@@ -5,6 +5,9 @@ export type goodsType = {
   marketPrice: number
   minprice?: number
   prevPrice?: number
+  level_price?: number
+  price_member_min?: number
+  price_member_max?: number
   sliderImage?: string[]
   content?: string
   skus?: any[]
@@ -23,4 +26,7 @@ export type goodsType = {
   sales?: number
   subtitle?: string
   favorite?: boolean
+  level_show?: number
+  sell_time?: number
+  is_time?: number
 }

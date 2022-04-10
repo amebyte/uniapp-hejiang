@@ -7,9 +7,19 @@
         </view>
         <view class="text">
           <view class="name line1">{{ item.productName }}</view>
+          <view v-if="is_level" class="app-member-price dir-left-nowrap cross-center">
+            <view class="box-grow-0">
+              <view class="member dir-left-nowrap cross-center main-center">会员价</view>
+            </view>
+            <view class="box-grow-1 price">
+              <view class="money font-color">
+                ￥<text class="num">{{ item.level_price }}</text>
+              </view>
+            </view>
+          </view>
           <view class="vip acea-row row-between-wrapper">
-            <view class="money font-color"
-              >￥<text class="num">{{ item.marketPrice }}</text>
+            <view class="money font-color">
+              ￥<text class="num">{{ item.marketPrice }}</text>
             </view>
             <view class="add-cart">
               <text class="iconfont icon-add-cart-fill"></text>
@@ -106,7 +116,7 @@ const goDetail = (item) => {
 .product-list-grid .list .item .text .money {
   font-size: 26rpx;
   font-weight: bold;
-  margin-top: 8rpx;
+  //   margin-top: 8rpx;
   color: #1aa86c;
 }
 
@@ -114,14 +124,22 @@ const goDetail = (item) => {
   font-size: 34rpx;
 }
 
+.product-list-grid .list .item .text .app-member-price .box-grow-0 .member {
+  border: 1rpx solid #1aa86c;
+  border-radius: 8rpx;
+  font-size: 20rpx;
+  color: #1aa86c;
+  margin-right: 10rpx;
+}
+
 .product-list-grid .list .item .text .vip {
   font-size: 22rpx;
   color: #aaa;
-  margin-top: 7rpx;
+  //   margin-top: 7rpx;
 }
 
 .product-list-grid .list .item .text .vip .add-cart {
-  margin-top: 10rpx;
+  //   margin-top: 10rpx;
 }
 
 .product-list-grid .list .item .text .vip .add-cart .iconfont {

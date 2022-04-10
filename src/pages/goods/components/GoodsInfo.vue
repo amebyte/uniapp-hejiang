@@ -8,30 +8,66 @@
         <view class="r">{{ goodsInfo.curriculum_type === 1 ? '线下课程' : '线上课程' }}</view>
       </view>
     </view>
-    <view class="acea-row row-between row-bottom">
-      <view class="good-price">
+    <template v-if="goodsInfo.level_show === 1">
+      <view class="acea-row row-between row-bottom">
+        <view class="good-price">
+          <view class="price">
+            <text class="rmb">¥</text>
+            <text class="num">
+              {{ goodsInfo.price_member_min }}
+            </text>
+          </view>
+          <view class="goods-obtain-type">
+            <view class="goods-obtain-wrap">
+              <text class="iconfont icon-add-cart-fill"></text>
+              <view class="txt">会员价格</view>
+            </view>
+          </view>
+        </view>
+        <view class="share" @click="openShare">
+          <text class="iconfont icon-share"></text>
+        </view>
+      </view>
+
+      <view class="good-market-price">
         <view class="price">
           <text class="rmb">¥</text>
           <text class="num">{{ goodsInfo.minprice }}</text>
         </view>
-        <view class="goods-obtain-type">
-          <view class="goods-obtain-wrap">
-            <text class="iconfont icon-add-cart-fill"></text>
-            <view class="txt">限时优惠</view>
-          </view>
+        <view class="price line-through">
+          <text class="rmb">¥</text>
+          <text class="num">{{ goodsInfo.originalPrice }}</text>
         </view>
       </view>
-      <view class="share" @click="openShare">
-        <text class="iconfont icon-share"></text>
+    </template>
+    <template v-else>
+      <view class="acea-row row-between row-bottom">
+        <view class="good-price">
+          <view class="price">
+            <text class="rmb">¥</text>
+            <text class="num">
+              {{ goodsInfo.minprice }}
+            </text>
+          </view>
+          <view v-if="goodsInfo.level_show" class="goods-obtain-type">
+            <view class="goods-obtain-wrap">
+              <text class="iconfont icon-add-cart-fill"></text>
+              <view class="txt">会员价格</view>
+            </view>
+          </view>
+        </view>
+        <view class="share" @click="openShare">
+          <text class="iconfont icon-share"></text>
+        </view>
       </view>
-    </view>
 
-    <view class="good-market-price">
-      <view class="price line-through">
-        <text class="rmb">¥</text>
-        <text class="num">{{ goodsInfo.prevPrice }}</text>
+      <view class="good-market-price">
+        <view class="price line-through">
+          <text class="rmb">¥</text>
+          <text class="num">{{ goodsInfo.originalPrice }}</text>
+        </view>
       </view>
-    </view>
+    </template>
 
     <view class="good-title">
       <text class="txt">{{ goodsInfo.productName }}</text>
@@ -138,8 +174,8 @@ const openShare = () => {
         border-radius: 20rpx;
         padding-left: 20rpx;
         padding-right: 20rpx;
-        color: #d20012;
-        background-color: rgba(230, 0, 18, 0.2);
+        color: $theme-font-color;
+        background-color: rgba(26, 168, 108, 0.2);
 
         .image {
           width: 20rpx;
@@ -162,11 +198,18 @@ const openShare = () => {
   }
 
   .good-market-price {
-    display: inline-block;
+    display: flex;
     padding: 16rpx 0 20rpx 30rpx;
     font-size: 24rpx;
-    color: #6ebcb5;
-    text-decoration: line-through;
+    color: $theme-font-color;
+
+    .price {
+      margin-right: 20rpx;
+    }
+    .line-through {
+      color: #6ebcb5;
+      text-decoration: line-through;
+    }
   }
 
   .good-title {

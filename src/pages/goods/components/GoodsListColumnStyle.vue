@@ -2,7 +2,7 @@
   <view class="list">
     <block v-for="(item, index) in newGoodsList" :key="index">
       <view class="item" @click="goDetail(item)">
-        <view class="tag">限时特惠</view>
+        <view v-if="item.is_time" class="tag">限时特惠</view>
         <view class="content">
           <view class="image">
             <image :src="item.thumb" mode="scaleToFill"></image>
