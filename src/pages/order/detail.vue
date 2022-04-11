@@ -348,11 +348,11 @@
         <view
           v-if="orderDetail.platform"
           class="order-label"
-          style="font-weight: normal; border-top: 1rpx solid #e2e2e2; padding: 30rpx 24rpx"
+          style="font-weight: normal; border-top: 1rpx solid #e2e2e2; padding: 30rpx 24rpx; display: none"
         >
           {{ orderDetail.platform }}
         </view>
-        <view v-if="sign == 'composition'" class="goods-box composition">
+        <view v-if="sign == 'composition'" class="goods-box composition" style="display: none">
           <view v-for="(list, idx) in orderDetail.composition_list" :key="idx" class="composition-item">
             <view class="main-between composition-title">
               <view v-if="list.type == 1" class="composition-type">固定套餐</view>
@@ -370,7 +370,7 @@
                 :plugin-index="index"
               ></app-order-goods-info>
               <block v-if="orderDetail.is_send == 1 && (list.show || index == 0)">
-                <view class="dir-left-nowrap sale-box" style="display: none">
+                <view class="dir-left-nowrap sale-box">
                   <view class="box-grow-1"></view>
                   <view class="box-grow-0 dir-top-nowrap">
                     <!-- 无售后记录 且 未超过售后时间 才可申请售后 -->
@@ -399,7 +399,7 @@
             </view>
           </view>
         </view>
-        <view v-else class="goods-box">
+        <view v-else class="goods-box" style="display: none">
           <view v-for="(item, index) in orderDetail.detail" :key="index">
             <app-jump-button :url="item.goods_info.page_url">
               <app-order-goods-info
