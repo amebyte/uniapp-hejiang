@@ -370,7 +370,7 @@
                 :plugin-index="index"
               ></app-order-goods-info>
               <block v-if="orderDetail.is_send == 1 && (list.show || index == 0)">
-                <view class="dir-left-nowrap sale-box">
+                <view class="dir-left-nowrap sale-box" style="display: none">
                   <view class="box-grow-1"></view>
                   <view class="box-grow-0 dir-top-nowrap">
                     <!-- 无售后记录 且 未超过售后时间 才可申请售后 -->
