@@ -2,7 +2,7 @@
 import TencentMap from '../plugin/qqmap-wx-jssdk.min.js'
 
 // 腾讯地图的密钥
-const key = 'D75BZ-2MJ65-4H2I4-QDIKP-HT5R2-RMB6Y'
+const key = 'XX4BZ-VIVLW-OYXRL-RWJTO-4UMDH-KUFSW'
 
 // 获取用户是否开启定位权限
 export function getLoactionAuth() {
