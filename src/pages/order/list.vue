@@ -143,23 +143,27 @@
         </scroll-view>
       </swiper-item>
     </swiper>
+    <AppPayment ref="appPaymentRef" />
   </view>
 </template>
 
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { fetchOrderList } from '@/api/order'
+import { fetchOrderCancel, fetchOrderList, fetchOrderListPayData } from '@/api/order'
 import { orderStatusEnum } from '@/utils/constant'
 import { Debounce } from '@/utils/util'
+import AppPayment from '@/components/app-payment/app-payment.vue'
 import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 
 export default defineComponent({
   name: 'OrderList',
   components: {
+    AppPayment,
     AppNoGoods,
   },
   setup() {
+    const appPaymentRef = ref(null)
     const state = reactive({
       tabBars: [
         { name: '全部', status: 0 },
@@ -339,9 +343,64 @@ export default defineComponent({
       })
     }
 
-    const orderPay = () => {}
+    const orderPay = (item) => {
+      fetchOrderListPayData({
+        id: item.id,
+      })
+        .then((response) => {
+          if (response.code === 0) {
+            ;(appPaymentRef.value as any)
+              .pay(response.data.id)
+              .then(() => {
+                // 支付成功
+                uni.redirectTo({
+                  url: '/pages/order/list?status=2',
+                })
+              })
+              .catch((e) => {
+                // 支付失败
+                uni.showModal({
+                  title: '',
+                  content: e.errMsg,
+                  showCancel: false,
+                })
+              })
+          }
+        })
+        .catch(() => {})
+    }
 
-    const cancel = () => {}
+    const cancel = (item) => {
+      uni.showModal({
+        title: '提示',
+        content: '是否取消订单？',
+        success: function (res) {
+          if (res.confirm) {
+            uni.showLoading({ title: '取消中' })
+            fetchOrderCancel({
+              id: item.id,
+            })
+              .then((response) => {
+                uni.hideLoading()
+                if (response.code == 0) {
+                  uni.redirectTo({
+                    url: '/pages/order/list?status=' + state.tabIndex,
+                  })
+                } else {
+                  uni.showModal({
+                    title: '',
+                    content: response.msg,
+                    showCancel: false,
+                  })
+                }
+              })
+              .catch(() => {
+                uni.hideLoading()
+              })
+          }
+        },
+      })
+    }
 
     onLoad((options) => {
       if (options.status) state.tabIndex = Number(options.status)
@@ -361,6 +420,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      appPaymentRef,
       clickHandlerTab,
       onTabChange,
       isShowExpressButton,
