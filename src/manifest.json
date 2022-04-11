@@ -56,6 +56,49 @@
     },
     "usingComponents": true
   },
+  "h5": {
+    "devServer": {
+      "https": false,
+      "port": 80,
+      "disableHostCheck": true,
+      "proxy": {
+        // 可代理多个
+        "/TencentGet": {
+          "target": "https://apis.map.qq.com/ws/geocoder/v1/", // 腾讯地图逆地址解析
+          "changeOrigin": true,
+          "secure": false,
+          "pathRewrite": {
+            "^/TencentGet": ""
+          }
+        }
+      }
+    },
+    // "router": {
+    //   "mode": "history",
+    //   "base": "/addons/kaizhuo/h5/"
+    // },
+    "router": {
+      "mode": "history",
+      "base": "/addons/kaizhuo/h5/"
+    },
+    "domain": "",
+    "sdkConfigs": {
+      "maps": {
+        "qqmap": {
+          "key": "D75BZ-2MJ65-4H2I4-QDIKP-HT5R2-RMB6Y"
+        }
+      }
+    },
+    "optimization": {
+      "treeShaking": {
+        "enable": true
+      }
+    },
+    "async": {
+      "timeout": 200000
+    },
+    "title": "开卓研学"
+  },
   "mp-alipay": {
     "usingComponents": true
   },

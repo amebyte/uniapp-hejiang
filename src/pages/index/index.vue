@@ -81,7 +81,7 @@ export default defineComponent({
       display: 'block',
       navTop: 0,
       navHeight: 40,
-      currentCity: '佛山市',
+      currentCity: uni.getStorageSync('city'),
       quickMenu: [
         {
           url: '../../static/images/skip/activity.png',

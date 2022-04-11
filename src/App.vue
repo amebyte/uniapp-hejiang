@@ -6,6 +6,7 @@ import { checkLogin } from '@/libs/login'
 import Wechat from '@/libs/wechat'
 import Cache from '@/utils/cache'
 import { parseQuery } from '@/utils'
+import { getLocation, getLocationCity } from './utils/location.js'
 onLaunch((option) => {
   const isLogin = store.state.app.token
   store.dispatch(MallConfigActionTypes.ACTION_MALL_GET_CONFIG)
@@ -38,6 +39,13 @@ onLaunch((option) => {
     }
   }
   // #endif
+
+  getLocation().then((res) => {
+    getLocationCity(res.latitude, res.longitude).then((res) => {
+      console.log('city', res)
+      uni.setStorageSync('city', res.address_component.city)
+    })
+  })
 })
 onShow(() => {
   console.log('App Show')
