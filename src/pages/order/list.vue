@@ -150,7 +150,7 @@
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
-import { fetchOrderCancel, fetchOrderList, fetchOrderListPayData } from '@/api/order'
+import { fetchOrderCancel, fetchOrderConfirm, fetchOrderList, fetchOrderListPayData } from '@/api/order'
 import { orderStatusEnum } from '@/utils/constant'
 import { Debounce } from '@/utils/util'
 import AppPayment from '@/components/app-payment/app-payment.vue'
@@ -370,6 +370,39 @@ export default defineComponent({
         .catch(() => {})
     }
 
+    // 确认收货
+    const confirm = (item) => {
+      uni.showModal({
+        title: '提示',
+        content: '是否确认收货?',
+        success: function (res) {
+          if (res.confirm) {
+            uni.showLoading({ title: '确认收货中' })
+            fetchOrderConfirm({
+              id: item.id,
+            })
+              .then((response) => {
+                uni.hideLoading()
+                if (response.code === 0) {
+                  uni.redirectTo({
+                    url: '/pages/order/list?status=' + 4,
+                  })
+                } else {
+                  uni.showModal({
+                    title: '',
+                    content: response.msg,
+                    showCancel: false,
+                  })
+                }
+              })
+              .catch(() => {
+                uni.hideLoading()
+              })
+          }
+        },
+      })
+    }
+
     const cancel = (item) => {
       uni.showModal({
         title: '提示',
@@ -432,6 +465,7 @@ export default defineComponent({
       toDetail,
       orderPay,
       cancel,
+      confirm,
     }
   },
 })

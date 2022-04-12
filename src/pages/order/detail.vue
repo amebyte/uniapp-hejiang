@@ -11,8 +11,8 @@
               <app-order-express
                 :page-url="getPageUrl"
                 :express="orderDetail.detailExpress[0].express"
-                :express_no="orderDetail.detailExpress[0].express_no"
-                :merchant_remark="orderDetail.detailExpress[0].merchant_remark"
+                :express-no="orderDetail.detailExpress[0].express_no"
+                :merchant-remark="orderDetail.detailExpress[0].merchant_remark"
               >
               </app-order-express>
             </template>
