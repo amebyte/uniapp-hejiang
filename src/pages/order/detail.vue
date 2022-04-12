@@ -7,7 +7,15 @@
           v-if="orderDetail.is_send == 1 && orderDetail.detailExpress.length == 1 && orderDetail.send_type != 2"
         >
           <view class="express-box">
-            <template v-if="orderDetail.detailExpress[0].send_type == 1"> app-order-express </template>
+            <template v-if="orderDetail.detailExpress[0].send_type == 1">
+              <app-order-express
+                :page-url="getPageUrl"
+                :express="orderDetail.detailExpress[0].express"
+                :express_no="orderDetail.detailExpress[0].express_no"
+                :merchant_remark="orderDetail.detailExpress[0].merchant_remark"
+              >
+              </app-order-express>
+            </template>
             <template v-else> 物流信息: 其它方式({{ orderDetail.detailExpress[0].express_content }}) </template>
           </view>
         </template>
@@ -524,12 +532,14 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { ref, getCurrentInstance, reactive, toRef, computed, defineComponent, toRefs } from 'vue'
 import { fetchOrderDetail } from '@/api/order'
+import AppOrderExpress from '@/components/app-order-express/app-order-express.vue'
 import GoodsInfo from './component/GoodsInfo.vue'
 import { uniCopy } from '@/utils/util'
 export default defineComponent({
   name: 'OrderDetail',
   components: {
     OrderGoodsInfo: GoodsInfo,
+    AppOrderExpress,
   },
   setup() {
     const state = reactive({
@@ -622,6 +632,36 @@ export default defineComponent({
         })
     }
 
+    const getPageUrl = () => {
+      let orderDetail = state.orderDetail
+      if (orderDetail.is_send == 1 && orderDetail.detailExpress.length == 0) {
+        let coverPic = ''
+        orderDetail.detail.forEach(function (item, index) {
+          if (index === 0) {
+            coverPic = item.goods_info.pic_url
+          }
+        })
+        return `/pages/order/express-detail/express-detail?express=${orderDetail.express}&customer_name=${orderDetail.customer_name}&express_no=${orderDetail.express_no}&cover_pic=${coverPic}`
+      } else if (orderDetail.is_send == 1 && orderDetail.detailExpress.length == 1) {
+        let express = orderDetail.detailExpress[0].express
+        let express_no = orderDetail.detailExpress[0].express_no
+        let customer_name = orderDetail.detailExpress[0].customer_name
+        let cover_pic = orderDetail.detailExpress[0].expressRelation[0].orderDetail.goods_info.goods_attr.cover_pic
+        return (
+          `/pages/order/express-detail/express-detail?express=` +
+          express +
+          `&customer_name=` +
+          customer_name +
+          `&express_no=` +
+          express_no +
+          `&cover_pic=` +
+          cover_pic
+        )
+      } else if (orderDetail.detailExpress.length >= 1) {
+        return '/pages/order/express-list/express-list?order_id=' + orderDetail.id
+      }
+    }
+
     onShow(() => {
       getOrderDetail()
     })
@@ -637,6 +677,7 @@ export default defineComponent({
       formList,
       copyText,
       cancel,
+      getPageUrl,
     }
   },
 })
