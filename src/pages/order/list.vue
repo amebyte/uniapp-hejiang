@@ -300,7 +300,7 @@ export default defineComponent({
           orderDetail.detail[0].goods_info.pic_url,
         ]
         uni.navigateTo({
-          url: `/pages/order/express-detail/express-detail?id=${id}&express=${express}&express_no=${express_no}&customer_name=${customer_name}&cover_pic=${cover_pic}`,
+          url: `/pages/order/expressDetail?id=${id}&express=${express}&express_no=${express_no}&customer_name=${customer_name}&cover_pic=${cover_pic}`,
         })
       } else if (orderDetail.is_send == 1 && orderDetail.detailExpress.length == 1 && orderDetail.send_type != 2) {
         let express = orderDetail.detailExpress[0].express
@@ -309,7 +309,7 @@ export default defineComponent({
         let cover_pic = orderDetail.detailExpress[0].expressRelation[0].orderDetail.goods_info.goods_attr.cover_pic
         uni.navigateTo({
           url:
-            `/pages/order/express-detail/express-detail?express=` +
+            `/pages/order/expressDetail?express=` +
             express +
             `&customer_name=` +
             customer_name +

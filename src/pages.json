@@ -158,6 +158,13 @@
             "navigationBarTitleText": "订单详情",
             "enablePullDownRefresh": false
           }
+        },
+        {
+          "path": "expressDetail",
+          "style": {
+            "navigationBarTitleText": "物流详情",
+            "enablePullDownRefresh": false
+          }
         }
       ]
     },

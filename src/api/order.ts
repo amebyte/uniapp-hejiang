@@ -43,3 +43,7 @@ export function fetchOrderListPayData(data) {
 export function fetchOrderCancel(data) {
   return request.get!('&r=api/order/cancel', data, { noAuth: false }, false)
 }
+
+export function fetchOrderExpressDetail(data) {
+  return request.get!('&r=api/order/express-detail', data, { noAuth: false }, false)
+}
