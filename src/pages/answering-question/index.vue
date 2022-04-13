@@ -25,6 +25,7 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed } from 'vue'
+import LoadBar from '@/components/load-bar/load-bar.vue'
 import AdSwiper from '@/components/ad-swiper/index.vue'
 import AnserItem from '@/components/answer-item/answer-item.vue'
 import { useStore, mapActions } from 'vuex'

@@ -17,12 +17,16 @@
           <AppNoGoods background="#f7f7f7" :title="'暂无相关答疑'" color="#999999" :is-image="1" />
         </view>
       </template>
+      <block v-if="list.length > 0">
+        <LoadBar :txt="loadTitle" :loading="loading" />
+      </block>
     </view>
   </view>
 </template>
 <script lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed, watch } from 'vue'
+import LoadBar from '@/components/load-bar/load-bar.vue'
 import MessageModal from './component/MessageModal.vue'
 import moveBox from '@/components/move-box/index.vue'
 import AnserItem from '@/components/answer-item/answer-item.vue'
@@ -34,6 +38,7 @@ import { fetchAnsweringQuestionLikeDelete } from '@/api/answeringQuestion'
 export default defineComponent({
   name: 'FavoritePage',
   components: {
+    LoadBar,
     MessageModal,
     moveBox,
     AnserItem,
@@ -57,15 +62,26 @@ export default defineComponent({
       moveName.value = name
     }
 
+    const loading = ref(true)
+    const loadTitle = ref('加载更多')
     const page = ref(1)
     const getList = (bool?) => {
       fetchMyAnsweringQuestionLikeList({ page: page.value })
         .then((r) => {
-          if (!bool) {
-            list.value = r.data.list
-          } else {
-            list.value.push(...r.data.list)
+          if (r.code === 0) {
+            if (r.data.list.length !== 0) {
+              page.value++
+              list.value = list.value.concat(r.data.list)
+            } else {
+              loading.value = false
+              loadTitle.value = '已经到底了~'
+            }
           }
+          //   if (!bool) {
+          //     list.value = r.data.list
+          //   } else {
+          //     list.value.push(...r.data.list)
+          //   }
         })
         .catch((err) => console.log('fetchMyAnsweringQuestionLikeList:', err))
     }
@@ -99,11 +115,16 @@ export default defineComponent({
       isShowMessage.value = flag === 'false' ? false : true
       getList()
     })
+    onReachBottom(() => {
+      getList()
+    })
     return {
       total_count,
       list,
       isShowMessage,
       moveName,
+      loading,
+      loadTitle,
       closeMessage,
       changeMoveName,
       deleteByMove,
