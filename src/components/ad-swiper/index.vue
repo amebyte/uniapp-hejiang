@@ -34,7 +34,7 @@ import { imgUrlsType } from '@/store/modules/banner'
 interface bannerType {
   id: number
   title: string
-  pic_url: string
+  thumb: string
   open_type: string
   page_url: string
   params: any[]

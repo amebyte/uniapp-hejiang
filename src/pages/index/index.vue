@@ -13,7 +13,7 @@
     </view>
     <view class="content">
       <!--轮播图 start-->
-      <ad-swiper :img-urls="banner" img-key="pic_url"></ad-swiper>
+      <ad-swiper :img-urls="banner" img-key="thumb"></ad-swiper>
       <!--轮播图 end-->
       <!--搜索 start-->
       <view class="header-search" :style="{ display: state.display }">
@@ -59,6 +59,7 @@ import EventReservation from './components/EventReservation.vue'
 import QuestionsAndAnswers from './components/QuestionsAndAnswers.vue'
 import { IMAGE_URL, APP_NAME } from '@/config/app'
 import { fetchTpl } from '@/api/tpl'
+import { fetchBannerList } from '@/api/banner'
 export default defineComponent({
   name: 'IndexPage',
   components: {
@@ -123,6 +124,7 @@ export default defineComponent({
     const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
       $store: store,
     })
+
     // fetchBanner()
 
     const indexBanner = computed(() => store.state.banner.indexBanner)
@@ -134,18 +136,28 @@ export default defineComponent({
     const { proxy } = getCurrentInstance() as any
     // console.log('ctx', proxy, proxy.$StatusBar, proxy.$test)
     let banner = ref([])
-    fetchTpl({})
-      .then((r) => {
-        console.log('fetchTpl', r)
-        if (r.code === 0) {
-          r.data.home_pages.forEach((o) => {
-            if (o.key === 'banner') {
-              banner.value = o.banners
-            }
-          })
-        }
-      })
-      .catch((err) => console.log(err))
+    // fetchTpl({})
+    //   .then((r) => {
+    //     console.log('fetchTpl', r)
+    //     if (r.code === 0) {
+    //       r.data.home_pages.forEach((o) => {
+    //         if (o.key === 'banner') {
+    //           banner.value = o.banners
+    //         }
+    //       })
+    //     }
+    //   })
+    //   .catch((err) => console.log(err))
+
+    const getBanner = () => {
+      fetchBannerList({ catid: 1 })
+        .then((r) => {
+          if (r.code === 0) {
+            banner.value = r.data.list
+          }
+        })
+        .catch((err) => console.log('fetchBannerList:', err))
+    }
 
     const scroll = function (e) {
       const scrollY = e.scrollTop
@@ -167,6 +179,8 @@ export default defineComponent({
       // #ifdef MP-WEIXIN
       state.navHeight = proxy.$CustomBar
       // #endif
+
+      getBanner()
     })
     return {
       state,
