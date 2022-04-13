@@ -29,7 +29,7 @@
       </view>
     </view>
     <view v-if="goodsList.length > 0" class="loadingicon acea-row row-center-wrapper">
-      <text class="loading iconfont icon-jiazai" :hidden="loading == false"></text>{{ loadTitle }}
+      <text v-if="loading" class="iconfont icon-jiazai"></text>{{ loadTitle }}
     </view>
     <block v-if="!goodsList.length">
       <view class="empty-img">暂无数据</view>
@@ -45,34 +45,43 @@ const props = defineProps({
   catId: { type: String, required: false },
   is_level: { type: Number, required: false },
 })
-let goodsList = ref<Array<goodsType>>([])
+const loading = ref(true)
+const loadTitle = ref('加载更多')
+const goodsList = ref<Array<goodsType>>([])
+const page = ref(1)
 const getNewGoodsList = () => {
   const params = {
-    pageNum: 0,
-    pageSize: 10,
+    page: page.value,
+    limit: 10,
     cat_id: props.catId,
     is_level: props.is_level,
   }
   fetchGoodsList(params)
     .then((r: any) => {
-      console.log('r', r)
-      goodsList.value = r
-      console.log('newGoodsList', goodsList.value)
+      console.log('rrr', r)
+      if (r.length !== 0) {
+        goodsList.value = goodsList.value.concat(r)
+        page.value++
+      } else {
+        loading.value = false
+        loadTitle.value = '已经到底了~'
+      }
     })
     .catch((err) => console.log(err))
 }
-onMounted(() => {
-  getNewGoodsList()
-})
-
-let loading = ref(false)
-let loadTitle = ref('加载更多')
 
 const goDetail = (item) => {
   uni.navigateTo({
     url: `/pages/goods/goodsDetail?productId=${item.id}&shopId=${item.shopId}`,
   })
 }
+onMounted(() => {
+  getNewGoodsList()
+})
+
+onReachBottom(() => {
+  getNewGoodsList()
+})
 </script>
 <style lang="scss" scoped>
 .product-list-grid {

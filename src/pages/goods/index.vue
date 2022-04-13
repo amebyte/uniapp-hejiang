@@ -12,20 +12,20 @@
       <ad-swiper :img-urls="banner" :image-h="173"></ad-swiper>
     </view>
     <!--轮播图 end-->
-    <view v-show="currNavId === 1">
+    <view v-if="currNavId === 1">
       <GoodsListColumnStyle />
     </view>
-    <view v-show="currNavId === 2">
+    <view v-if="currNavId === 2">
       <ProductListGrid cat-id="6" />
     </view>
-    <view v-show="currNavId === 3">
+    <view v-if="currNavId === 3">
       <ProductListGrid cat-id="7" />
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { onLoad } from '@dcloudio/uni-app'
+import { onLoad, onPageScroll, onReachBottom } from '@dcloudio/uni-app'
 import { ref, computed } from 'vue'
 import { useStore, mapActions } from 'vuex'
 import { BannerActionTypes } from '@/store/modules/banner/action-types'
@@ -60,6 +60,10 @@ const getBanner = () => {
     })
     .catch((err) => console.log('fetchBannerList:', err))
 }
+
+onReachBottom(() => {
+  console.log('onReachBottom111')
+})
 
 onLoad(() => {
   getBanner()

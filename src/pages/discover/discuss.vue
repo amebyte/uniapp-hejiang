@@ -71,7 +71,7 @@ const comment_total_count = ref(0)
 const getList = () => {
   const param = {
     page: 1,
-    limit: 10,
+    limit: 20,
     blog_id: id.value,
   }
   fetchBlogCommentList(param)

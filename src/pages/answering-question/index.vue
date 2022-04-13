@@ -35,16 +35,25 @@ import { fetchBannerList } from '@/api/banner'
 // fetchBanner()
 // const indexBanner = computed(() => store.state.banner.indexBanner)
 
+const loading = ref(true)
+const loadTitle = ref('加载更多')
+const page = ref(1)
 const list = ref([]) as any
 const getAnsweringQuestionList = () => {
   const params = {
-    page: 1,
+    page: page.value,
     limit: 10,
   }
   fetchAnsweringQuestionList(params)
     .then((r) => {
       if (r.code === 0) {
-        list.value = r.data.list
+        if (r.data.list.length !== 0) {
+          list.value = list.value.concat(r.data.list)
+          page.value++
+        } else {
+          loading.value = false
+          loadTitle.value = '已经到底了~'
+        }
       }
     })
     .catch((err) => console.log(err))
@@ -64,6 +73,10 @@ const getBanner = () => {
 onMounted(() => {
   getAnsweringQuestionList()
   getBanner()
+})
+
+onReachBottom(() => {
+  getAnsweringQuestionList()
 })
 </script>
 <style lang="scss">

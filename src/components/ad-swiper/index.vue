@@ -67,7 +67,7 @@ export default defineComponent({
     },
     imgKey: {
       type: String,
-      default: 'src',
+      default: 'thumb',
     },
     indicatorDots: {
       type: Boolean,

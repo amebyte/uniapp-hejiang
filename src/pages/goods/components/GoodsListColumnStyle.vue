@@ -47,20 +47,28 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { onMounted, ref } from 'vue'
 import { fetchGoodsList } from '@/api/goods'
 import { goodsType } from '@/types'
-let newGoodsList = ref<Array<goodsType>>([])
+
+const loading = ref(true)
+const loadTitle = ref('加载更多')
+const page = ref(1)
+const newGoodsList = ref<Array<goodsType>>([])
 const getNewGoodsList = () => {
   const params = {
-    pageNum: 0,
-    pageSize: 10,
+    page: page.value,
+    limit: 10,
     cat_id: 5,
   }
   fetchGoodsList(params)
     .then((r: any) => {
-      console.log('r', r)
-      newGoodsList.value = r
-      console.log('newGoodsList', newGoodsList)
+      if (r.length !== 0) {
+        newGoodsList.value = newGoodsList.value.concat(r)
+        page.value++
+      } else {
+        loading.value = false
+        loadTitle.value = '已经到底了~'
+      }
     })
-    .catch((err) => console.log(err))
+    .catch((err) => console.log('fetchGoodsList:', err))
 }
 
 const goDetail = (item) => {
@@ -70,6 +78,9 @@ const goDetail = (item) => {
 }
 
 onMounted(() => {
+  getNewGoodsList()
+})
+onReachBottom(() => {
   getNewGoodsList()
 })
 </script>
