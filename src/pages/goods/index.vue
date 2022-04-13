@@ -9,7 +9,7 @@
     </view>
     <!--轮播图 start-->
     <view class="ad-banner">
-      <ad-swiper :img-urls="indexBanner" :image-h="173"></ad-swiper>
+      <ad-swiper :img-urls="banner" :image-h="173"></ad-swiper>
     </view>
     <!--轮播图 end-->
     <view v-show="currNavId === 1">
@@ -25,12 +25,14 @@
 </template>
 
 <script setup lang="ts">
+import { onLoad } from '@dcloudio/uni-app'
 import { ref, computed } from 'vue'
 import { useStore, mapActions } from 'vuex'
 import { BannerActionTypes } from '@/store/modules/banner/action-types'
 import AdSwiper from '@/components/ad-swiper/index.vue'
 import ProductListGrid from '@/components/product-list-grid/index.vue'
 import GoodsListColumnStyle from './components/GoodsListColumnStyle.vue'
+import { fetchBannerList } from '@/api/banner'
 const navList = ref([
   { name: '精品课程', id: 1 },
   { name: '水培商品', id: 2 },
@@ -41,12 +43,27 @@ const navHandler = (id) => {
   currNavId.value = id
 }
 
-const store = useStore()
-const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
-  $store: store,
+// const store = useStore()
+// const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
+//   $store: store,
+// })
+// fetchBanner()
+// const indexBanner = computed(() => store.state.banner.indexBanner)
+
+const banner = ref([])
+const getBanner = () => {
+  fetchBannerList({ catid: 5 })
+    .then((r) => {
+      if (r.code === 0) {
+        banner.value = r.data.list
+      }
+    })
+    .catch((err) => console.log('fetchBannerList:', err))
+}
+
+onLoad(() => {
+  getBanner()
 })
-fetchBanner()
-const indexBanner = computed(() => store.state.banner.indexBanner)
 </script>
 
 <style lang="scss" scoped>
