@@ -2,7 +2,7 @@
   <view class="container">
     <!--轮播图 start-->
     <view class="ad-banner">
-      <ad-swiper :img-urls="indexBanner" :image-h="173"></ad-swiper>
+      <ad-swiper :img-urls="banner" :image-h="173"></ad-swiper>
     </view>
     <view class="group-title acea-row row-center-wrapper">
       <view class="line"><image src="/static/images/groupLine.png"></image></view>
@@ -24,12 +24,13 @@ import GoodsListColumnStyle from './components/GoodsListColumnStyle.vue'
 import { useStore, mapActions } from 'vuex'
 import { BannerActionTypes } from '@/store/modules/banner/action-types'
 import { fetchArticleList } from '@/api/article'
+import { fetchBannerList } from '@/api/banner'
 const store = useStore()
-const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
-  $store: store,
-})
-fetchBanner()
-const indexBanner = computed(() => store.state.banner.indexBanner)
+// const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
+//   $store: store,
+// })
+// fetchBanner()
+// const indexBanner = computed(() => store.state.banner.indexBanner)
 
 const list = ref([]) as any
 
@@ -47,9 +48,20 @@ const getArticleList = () => {
     })
     .catch((err) => console.log('fetchArticleList:', err))
 }
+const banner = ref([])
+const getBanner = () => {
+  fetchBannerList({ catid: 2 })
+    .then((r) => {
+      if (r.code === 0) {
+        banner.value = r.data.list
+      }
+    })
+    .catch((err) => console.log('fetchBannerList:', err))
+}
 
 onLoad(() => {
   getArticleList()
+  getBanner()
 })
 </script>
 <style lang="scss">
