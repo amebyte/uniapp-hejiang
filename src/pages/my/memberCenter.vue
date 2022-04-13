@@ -72,7 +72,7 @@
 import { reactive, ref, toRefs } from 'vue'
 import ProductListGrid from '@/components/product-list-grid/index.vue'
 import { store } from '@/store'
-import { onLoad, onShow } from '@dcloudio/uni-app'
+import { onLoad, onReachBottom, onShow } from '@dcloudio/uni-app'
 import { fetchMemberLevelInfo, fetchMemberRechargeSetting } from '@/api/user'
 import { getUserProfile, wechatH5Login } from '@/hooks/useLogin'
 
@@ -194,6 +194,7 @@ onLoad(() => {
       console.log('fetchMemberRechargeSetting:', response)
     })
 })
+onReachBottom(() => {})
 </script>
 <style lang="scss">
 @import '@/static/css/variable.scss';
