@@ -40,6 +40,9 @@
         </view>
       </view>
     </block>
+    <block v-if="newGoodsList.length > 0">
+      <LoadBar :txt="loadTitle" :loading="loading" />
+    </block>
   </view>
 </template>
 <script setup lang="ts">
@@ -47,6 +50,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { onMounted, ref } from 'vue'
 import { fetchGoodsList } from '@/api/goods'
 import { goodsType } from '@/types'
+import LoadBar from '@/components/load-bar/load-bar.vue'
 
 const loading = ref(true)
 const loadTitle = ref('加载更多')

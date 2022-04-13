@@ -42,6 +42,9 @@
       </block>
     </view>
     <!--发现列表 end-->
+    <block v-if="list.length > 0">
+      <LoadBar :txt="loadTitle" :loading="loading" />
+    </block>
   </view>
 </template>
 
@@ -50,6 +53,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { onMounted, ref } from 'vue'
 import { store } from '@/store'
 import { fetchBlogList } from '@/api/blog'
+import LoadBar from '@/components/load-bar/load-bar.vue'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 
 let isLogin = ref(store.getters.isLogin)
@@ -77,7 +81,7 @@ const loadTitle = ref('加载更多')
 const page = ref(1)
 const list = ref([]) as any
 const getList = () => {
-  const param = { page: 1, limit: 10 }
+  const param = { page: page.value, limit: 10 }
   fetchBlogList(param)
     .then((r) => {
       if (r.code === 0) {

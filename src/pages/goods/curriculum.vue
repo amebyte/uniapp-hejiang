@@ -63,6 +63,7 @@ onLoad(() => {
   getArticleList()
   getBanner()
 })
+onReachBottom(() => {})
 </script>
 <style lang="scss">
 page {

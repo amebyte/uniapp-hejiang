@@ -48,6 +48,9 @@
       </template>
     </view>
     <!--发现列表 end-->
+    <block v-if="list.length > 0">
+      <LoadBar :txt="loadTitle" :loading="loading" />
+    </block>
   </view>
 </template>
 
@@ -55,6 +58,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
 import { fetchBlogMyList } from '@/api/blog'
+import LoadBar from '@/components/load-bar/load-bar.vue'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 import AppNoGoods from '@/components/app-no-goods/app-no-goods.vue'
 import { store } from '@/store'
@@ -68,22 +72,31 @@ const gotoPage = (url) => {
   })
 }
 
+const loading = ref(true)
+const loadTitle = ref('加载更多')
+const page = ref(1)
 const list = ref([]) as any
 const getList = () => {
-  const param = { page: 1, limit: 10, userid: userid.value }
+  const param = { page: page.value, limit: 10, userid: userid.value }
   fetchBlogMyList(param)
     .then((r) => {
       if (r.code === 0) {
-        list.value = r.data.list
-        const member = r.data.member
-        if (member) {
-          userInfo.value = {
-            avatar: member.userInfo.avatar,
-            nickname: member.nickname,
-            identity: { member_level: member.identity.member_level },
+        if (r.data.list.length !== 0) {
+          page.value++
+          list.value = list.value.concat(r.data.list)
+          const member = r.data.member
+          if (member) {
+            userInfo.value = {
+              avatar: member.userInfo.avatar,
+              nickname: member.nickname,
+              identity: { member_level: member.identity.member_level },
+            }
+          } else {
+            userInfo.value = store.state.app.userInfo
           }
         } else {
-          userInfo.value = store.state.app.userInfo
+          loading.value = false
+          loadTitle.value = '已经到底了~'
         }
       }
     })
@@ -103,6 +116,9 @@ onShow(() => {
 onLoad((options) => {
   userid.value = options.userid || ''
   isDel.value = options.userid ? false : true
+})
+onReachBottom(() => {
+  getList()
 })
 </script>
 <style lang="scss">

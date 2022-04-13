@@ -28,9 +28,9 @@
         </view>
       </view>
     </view>
-    <view v-if="goodsList.length > 0" class="loadingicon acea-row row-center-wrapper">
-      <text v-if="loading" class="iconfont icon-jiazai"></text>{{ loadTitle }}
-    </view>
+    <block v-if="goodsList.length > 0">
+      <LoadBar :txt="loadTitle" :loading="loading" />
+    </block>
     <block v-if="!goodsList.length">
       <view class="empty-img">暂无数据</view>
     </block>
@@ -41,6 +41,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { onMounted, ref } from 'vue'
 import { fetchGoodsList } from '@/api/goods'
 import { goodsType } from '@/types'
+import LoadBar from '@/components/load-bar/load-bar.vue'
 const props = defineProps({
   catId: { type: String, required: false },
   is_level: { type: Number, required: false },

@@ -30,6 +30,9 @@
           <AppNoGoods background="#f7f7f7" :title="'暂无相关评论'" color="#999999" :is-image="1" />
         </view>
       </template>
+      <block v-if="list.length > 0">
+        <LoadBar :txt="loadTitle" :loading="loading" />
+      </block>
     </view>
   </view>
 </template>
@@ -38,6 +41,7 @@ import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/u
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
 import BlogItem from '@/components/blog-item/blog-item.vue'
 import moveBox from '@/components/move-box/index.vue'
+import LoadBar from '@/components/load-bar/load-bar.vue'
 import { fetchBlogCommentMyList, fetchBlogCommentDelete } from '@/api/blog'
 import { Tips } from '@/utils/util'
 import MessageModal from './component/MessageModal.vue'
@@ -53,18 +57,27 @@ const changeMoveName = (name) => {
   moveName.value = name
 }
 
+const loading = ref(true)
+const loadTitle = ref('加载更多')
+const page = ref(1)
 const list = ref([]) as any
 const comment_total_count = ref(0)
 const getList = () => {
   const param = {
-    page: 1,
+    page: page.value,
     limit: 10,
   }
   fetchBlogCommentMyList(param)
     .then((r) => {
       if (r.code === 0) {
-        list.value = r.data.list
-        comment_total_count.value = r.data.pagination.total_count
+        if (r.data.list.length !== 0) {
+          page.value++
+          list.value = list.value.concat(r.data.list)
+          comment_total_count.value = r.data.pagination.total_count
+        } else {
+          loading.value = false
+          loadTitle.value = '已经到底了~'
+        }
       }
     })
     .catch((err) => console.log(err))
@@ -107,6 +120,9 @@ onLoad((options) => {
   getList()
   const flag = Cache.get('isShowMessageMyComment')
   isShowMessage.value = flag === 'false' ? false : true
+})
+onReachBottom(() => {
+  getList()
 })
 </script>
 <style lang="scss">

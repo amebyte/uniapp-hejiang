@@ -17,6 +17,9 @@
         <AnserItem :item="item" />
       </block>
     </view>
+    <block v-if="list.length > 0">
+      <LoadBar :txt="loadTitle" :loading="loading" />
+    </block>
   </view>
 </template>
 <script setup lang="ts">

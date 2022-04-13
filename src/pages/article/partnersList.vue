@@ -17,11 +17,15 @@
         <Thumb :item="item" />
       </block>
     </view>
+    <block v-if="list.length > 0">
+      <LoadBar :txt="loadTitle" :loading="loading" />
+    </block>
   </view>
 </template>
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed } from 'vue'
+import LoadBar from '@/components/load-bar/load-bar.vue'
 import AdSwiper from '@/components/ad-swiper/index.vue'
 import Thumb from './components/thumb.vue'
 import { useStore, mapActions } from 'vuex'
