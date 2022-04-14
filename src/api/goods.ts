@@ -67,6 +67,7 @@ export function fetchGoodsList(data) {
               level_price: o.level_price,
               sell_time: o.sell_time,
               is_time: o.is_time,
+              catnames: o.catnames,
               salesNum,
               curriculum_content: curriculumContentParse,
               curriculum_datetime: curriculumDatetimeParse,

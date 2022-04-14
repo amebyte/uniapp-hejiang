@@ -29,4 +29,5 @@ export type goodsType = {
   level_show?: number
   sell_time?: number
   is_time?: number
+  catnames?: any[]
 }
