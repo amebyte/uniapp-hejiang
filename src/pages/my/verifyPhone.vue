@@ -2,7 +2,7 @@
   <view class="bd-verify-phone">
     <view class="bd-content dir-top-nowrap cross-center">
       <image src="./images/phone-1.png" class="bd-iphone"></image>
-      <text class="bd-iphone-text"> 验证新手机号 </text>
+      <text class="bd-iphone-text"> 绑定手机号码 </text>
     </view>
     <view class="bd-item dir-left-nowrap cross-center">
       <image src="./images/earth.png" class="bd-label box-grow-0"></image>
@@ -12,7 +12,7 @@
       <image src="./images/phone.png" class="bd-label box-grow-0"></image>
       <input v-model="mobile" class="bd-input box-grow-1" placeholder="请输入手机号" type="text" />
     </view>
-    <view class="bd-item dir-left-nowrap cross-center">
+    <view class="bd-item dir-left-nowrap cross-center" style="display: none">
       <image src="./images/image.png" class="bd-label box-grow-0"></image>
       <input v-model="pic_captcha" class="bd-input box-grow-1" placeholder="请输入图形验证码" type="text" />
       <image :src="imageUrl" class="bd-image box-grow-0" @click="getImageUrl"></image>
@@ -31,7 +31,7 @@
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted, computed, watch } from 'vue'
 import { store } from '@/store'
-import { fetchBindingMobile, fetchCaptcha, fetchSmsCaptcha } from '@/api/public'
+import { fetchPhoneCode, fetchPhoneEmpower } from '@/api/public'
 
 export default defineComponent({
   name: 'VerifyPhone',
@@ -39,18 +39,12 @@ export default defineComponent({
     const userInfo = ref(store.state.app.userInfo)
     const state = reactive({
       mobile: '',
-      pic_captcha: '',
       sms_captcha: '',
-      validate_code_id: '',
-      imageUrl: '',
       isSend: false,
-      timeNum: 60,
-      timeIng: 0,
-      key: '' as any,
     })
 
     const agree = computed(() => {
-      if (state.pic_captcha && state.sms_captcha && state.mobile) {
+      if (state.sms_captcha && state.mobile) {
         return true
       } else {
         return false
@@ -59,16 +53,13 @@ export default defineComponent({
 
     const getVerCode = () => {
       state.timeNum = 60
-      fetchSmsCaptcha({
+      fetchPhoneCode({
         mobile: state.mobile,
-        pic_captcha: state.pic_captcha,
       }).then((response) => {
         if (response.code === 0) {
           state.isSend = true
           state.validate_code_id = response.data.validate_code_id
-          change()
         } else {
-          getImageUrl()
           uni.showToast({
             icon: 'none',
             title: response.msg,
@@ -76,38 +67,17 @@ export default defineComponent({
         }
       })
     }
-    const getImageUrl = () => {
-      fetchCaptcha({
-        refresh: true,
-      }).then((response) => {
-        state.imageUrl = response.url
-      })
-    }
-
-    const change = () => {
-      clearInterval(state.timeIng)
-      state.timeIng = setInterval(() => {
-        state.timeNum--
-        if (state.timeNum === 0) {
-          clearInterval(state.timeIng)
-          state.isSend = false
-        }
-      }, 1000)
-    }
 
     const confirm = () => {
       if (!agree.value) return
       let data = {
         mobile: state.mobile,
-        validate_code_id: state.validate_code_id,
-        key: state.key,
-        sms_captcha: state.sms_captcha,
+        code: state.sms_captcha,
       }
-      fetchBindingMobile(data).then((response) => {
+      fetchPhoneEmpower(data).then((response) => {
         if (response.code === 0) {
           console.log('response', response)
         } else {
-          getImageUrl()
           uni.showToast({
             icon: 'none',
             title: response.msg,
@@ -118,14 +88,13 @@ export default defineComponent({
 
     onLoad((options) => {
       state.key = options.key
-      getImageUrl()
+      //   getImageUrl()
     })
     return {
       ...toRefs(state),
       confirm,
       agree,
       getVerCode,
-      getImageUrl,
     }
   },
 })

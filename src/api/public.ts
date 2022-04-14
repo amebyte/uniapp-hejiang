@@ -79,8 +79,8 @@ export function fetchCaptcha(data) {
  *
  *	smsCode
  */
-export function fetchSmsCaptcha(data) {
-  return request.post!('&r=plugin/mobile/api/passport/sms-captcha', data, { noAuth: true }, true)
+export function fetchPhoneCode(data) {
+  return request.get!('&r=api/user/phone-code', data, { noAuth: false })
 }
 
 /**
@@ -89,6 +89,6 @@ export function fetchSmsCaptcha(data) {
  *
  *	smsCode
  */
-export function fetchBindingMobile(data) {
-  return request.post!('&r=plugin/mobile/api/user/mobile', data, { noAuth: true }, true)
+export function fetchPhoneEmpower(data) {
+  return request.post!('&r=api/user/phone-empower', data, { noAuth: false }, true)
 }

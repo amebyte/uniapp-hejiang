@@ -31,7 +31,9 @@ export default defineComponent({
         nickname: nickname.value,
       }).then((response) => {
         if (response.code === 0) {
-          uni.navigateBack({})
+          uni.navigateBack({
+            delta: 1,
+          })
           userInfo.value.nickname = nickname.value
         } else {
           uni.showToast({
