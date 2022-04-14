@@ -252,6 +252,12 @@
           "style": {
             "navigationBarTitleText": "修改昵称"
           }
+        },
+        {
+          "path": "verifyPhone",
+          "style": {
+            "navigationBarTitleText": "手机号码验证"
+          }
         }
       ]
     },

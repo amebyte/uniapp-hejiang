@@ -1,10 +1,6 @@
 <template>
   <view class="bd-setting">
-    <view
-      class="bd-item dir-left-nowrap main-between cross-center"
-      style="display: none"
-      @click="router('/pages/registered/authentication')"
-    >
+    <view class="bd-item dir-left-nowrap main-between cross-center" @click="router('/pages/my/verifyPhone')">
       <text>手机号</text>
       <view>
         <text>{{ setIphone(userInfo.mobile) }}</text>
