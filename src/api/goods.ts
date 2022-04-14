@@ -156,6 +156,7 @@ export function fetchGoodsDetail(data) {
               // 库存
               o['stock'] = o.stock
               o['skuUniqueIds'] = o.sign_id
+              o['thumb'] = o.pic_url
               return o
             })
           }

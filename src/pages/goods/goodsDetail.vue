@@ -16,7 +16,7 @@
       <!--老师信息 end-->
     </template>
     <template v-else>
-      <GoodsSpecs />
+      <GoodsSpecs :attr-txt="attrTxt" />
     </template>
     <!--商品详情 start-->
     <GoodsContent :goods-info="goodsInfo" />
@@ -109,7 +109,7 @@ export default defineComponent({
           state.sliderImage = state.goodsInfo.sliderImage
           state.attr.productAttr = state.goodsInfo.attrGroups
           const minPrice = minHeap(state.goodsInfo.skus, 'marketPrice')
-
+          console.log('minPrice', minPrice)
           setDefaultAttrSelect(minPrice)
         })
         .catch((err) => console.log('err', err))
@@ -122,7 +122,7 @@ export default defineComponent({
     const setDefaultAttrSelect = (data) => {
       state.attr.productSelect.productName = state.goodsInfo.productName
       state.attr.productSelect.image = data.thumb || state.goodsInfo.thumb
-      state.attr.productSelect.price = data.marketprice
+      state.attr.productSelect.price = data.marketPrice
       state.attr.productSelect.stock = data.stock
       state.attr.productSelect.limits = data.limits
       state.attr.productSelect.cart_num = 1

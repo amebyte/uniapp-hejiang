@@ -3,18 +3,27 @@
     <view class="content">
       <view class="item">
         <view class="label"> 规格： </view>
-        <view class="info">颜色-红色</view>
+        <view class="info">{{ attrTxt }}</view>
       </view>
       <view class="item">
         <view class="label"> 运费： </view>
         <view class="info">
-          <text class="txt">¥：6</text>
+          <text class="txt">¥：0.00</text>
         </view>
       </view>
     </view>
   </view>
 </template>
-<script setup lang="ts"></script>
+<script setup lang="ts">
+const props = defineProps({
+  attrTxt: {
+    type: String,
+    default: () => {
+      return ''
+    },
+  },
+})
+</script>
 <style scoped lang="scss">
 .goods-specs-wrap {
   margin: 20rpx;
