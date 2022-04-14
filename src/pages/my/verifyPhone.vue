@@ -60,7 +60,7 @@ export default defineComponent({
     const getVerCode = () => {
       state.timeNum = 60
       fetchSmsCaptcha({
-        mobile: userInfo.value.mobile,
+        mobile: state.mobile,
         pic_captcha: state.pic_captcha,
       }).then((response) => {
         if (response.code === 0) {

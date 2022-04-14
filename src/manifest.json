@@ -73,14 +73,14 @@
         }
       }
     },
+    "router": {
+      "mode": "hash",
+      "base": ""
+    },
     // "router": {
     //   "mode": "history",
     //   "base": "/addons/kaizhuo/h5/"
     // },
-    "router": {
-      "mode": "history",
-      "base": "/addons/kaizhuo/h5/"
-    },
     "domain": "",
     "sdkConfigs": {
       "maps": {
