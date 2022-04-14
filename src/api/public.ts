@@ -62,3 +62,33 @@ export function getWechatConfig() {
   )
 }
 // #endif
+
+/**
+ * 验证码图片
+ * @param data object
+ *
+ *	smsCode
+ */
+export function fetchCaptcha(data) {
+  return request.get!('&r=site/pic-captcha', data, { noAuth: true })
+}
+
+/**
+ * 验证码
+ * @param data object
+ *
+ *	smsCode
+ */
+export function fetchSmsCaptcha(data) {
+  return request.post!('&r=plugin/mobile/api/passport/sms-captcha', data, { noAuth: true }, true)
+}
+
+/**
+ * 绑定手机号码
+ * @param data object
+ *
+ *	smsCode
+ */
+export function fetchBindingMobile(data) {
+  return request.post!('&r=plugin/mobile/api/user/mobile', data, { noAuth: true }, true)
+}
