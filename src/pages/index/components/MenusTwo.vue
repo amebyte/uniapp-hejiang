@@ -42,7 +42,7 @@ const gotoShop = () => {
     align-items: center;
     flex: 1;
     height: 187rpx;
-    background: linear-gradient(0deg, #72d7cc 0%, #28cfb3 100%);
+    background: linear-gradient(45deg, #cac531 0%, #f3f9a7 100%);
     box-shadow: 0px 5rpx 5rpx 0px rgba(29, 233, 182, 0.32);
     border-radius: 13rpx;
     margin-right: 40rpx;

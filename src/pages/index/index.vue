@@ -120,7 +120,7 @@ export default defineComponent({
     }
 
     const store = useStore()
-
+    const mallConfig = computed(() => store.state.mallConfig)
     const fetchBanner = mapActions(['banner', BannerActionTypes.ACTION_GET_BANNER]).ACTION_GET_BANNER.bind({
       $store: store,
     })
@@ -179,7 +179,7 @@ export default defineComponent({
       // #ifdef MP-WEIXIN
       state.navHeight = proxy.$CustomBar
       // #endif
-
+      uni.setNavigationBarTitle({ title: mallConfig.value.name })
       getBanner()
     })
     return {
