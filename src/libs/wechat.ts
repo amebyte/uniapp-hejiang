@@ -336,6 +336,7 @@ class AuthWechat {
       }
       Object.assign(configDefault, config)
       that.wechat().then((wx) => {
+        console.log('wechatEvevtwxwx', wx)
         if (typeof name === 'object') {
           name.forEach((item) => {
             wx[item] && wx[item](configDefault)

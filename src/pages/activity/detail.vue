@@ -44,6 +44,7 @@
 <script setup lang="ts">
 import { onPageScroll, onLoad, onShow, onHide, onReachBottom } from '@dcloudio/uni-app'
 import { PropType, ref, toRefs, defineComponent, reactive, onMounted } from 'vue'
+import Auth from '@/libs/wechat'
 import { fetchActivityDetail, fetchActivityBookingAdd } from '@/api/activity'
 import { Tips } from '@/utils/util'
 const id = ref('')
@@ -70,10 +71,31 @@ const getDetail = () => {
       if (r.code === 0) {
         detail.value = r.data
         detail.value.datetime = r.data.date_start_time.slice(0, 10)
+        // #ifdef H5
+        setShare()
+        // #endif
       }
     })
     .catch((err) => console.log(err))
 }
+
+// #ifdef H5
+const setShare = () => {
+  Auth.isWeixin() &&
+    Auth.wechatEvevt(['updateAppMessageShareData', 'updateTimelineShareData'], {
+      desc: '',
+      title: detail.value.title,
+      link: location.href,
+      imgUrl: detail.value.thumb,
+    })
+      .then((res) => {
+        console.log(res)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+}
+// #endif
 
 const renderBtnText = (item) => {
   let txt = ''

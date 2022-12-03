@@ -111,9 +111,30 @@ export default defineComponent({
           const minPrice = minHeap(state.goodsInfo.skus, 'marketPrice')
           console.log('minPrice', minPrice)
           setDefaultAttrSelect(minPrice)
+          // #ifdef H5
+          setShare()
+          // #endif
         })
         .catch((err) => console.log('err', err))
     }
+
+    // #ifdef H5
+    const setShare = () => {
+      Auth.isWeixin() &&
+        Auth.wechatEvevt(['updateAppMessageShareData', 'updateTimelineShareData'], {
+          desc: state.goodsInfo.subtitle,
+          title: state.goodsInfo.productName,
+          link: location.href,
+          imgUrl: state.goodsInfo.thumb,
+        })
+          .then((res) => {
+            console.log('wechatEvevt', res)
+          })
+          .catch((err) => {
+            console.log(err)
+          })
+    }
+    // #endif
 
     /**
      * 设置默认选中属性
