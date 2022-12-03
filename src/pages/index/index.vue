@@ -179,7 +179,8 @@ export default defineComponent({
       // #ifdef MP-WEIXIN
       state.navHeight = proxy.$CustomBar
       // #endif
-      uni.setNavigationBarTitle({ title: mallConfig.value.name })
+      uni.setNavigationBarTitle({ title: mallConfig.value.mall.name })
+      title.value = mallConfig.value.mall.name
       getBanner()
     })
     return {

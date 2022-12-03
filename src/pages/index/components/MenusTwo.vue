@@ -72,7 +72,7 @@ const gotoShop = () => {
     }
     &:last-child {
       margin-right: 0;
-      background: linear-gradient(0deg, #88dad5 0%, #5fcec8 100%);
+      background: linear-gradient(45deg, #cac531 0%, #f3f9a7 100%);
       box-shadow: 0px 5px 5px 0px rgba(29, 233, 182, 0.32);
     }
   }
