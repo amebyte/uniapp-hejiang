@@ -11,7 +11,7 @@
     </view>
     <view class="box" @click="gotoShop">
       <view class="l">
-        <view class="title">开卓商城</view>
+        <view class="title">开盈商城</view>
         <view class="desc">不错过每一件精品</view>
       </view>
       <view class="r">
